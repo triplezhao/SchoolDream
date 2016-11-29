@@ -5,5 +5,10 @@
   font-size: 33rpx;
 }
 
+/*中间文字样式*/
+.inputs{
+  font-size: 50rpx;
+  padding:10px;
+}
 
 
