@@ -10,14 +10,13 @@
   <form  bindsubmit="formSubmit" bindreset="formReset">
     
       <view>title</view>
-      <input  class="inputs" placeholder="please input title"  />
+      <input name="title" class="inputs" placeholder="please input title"  />
       <View style="height: 1px;background-color: gray;"></View>
+
       <view >content</view>
-      <input  class="inputs" placeholder="please input content" />
+      <input name="content" class="inputs" placeholder="please input content" />
       <View style="height: 1px;background-color: gray;"></View>
-    
-   
-    
+        
         <text   style="width: 80rpx; ">选择图片:</text>  
         <image  bindtap="chooseImage" src="{{tempFilePaths}}"  style="width: 80rpx; height: 80rpx;padding:10px; background-image:url( ../../image/imageN.png);"/>  
   
