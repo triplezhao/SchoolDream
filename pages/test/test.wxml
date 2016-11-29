@@ -1,0 +1,54 @@
+<!--pages/leantest/test.wxml-->
+<!--<loading hidden="{{loadingHidden}}">正在加载...</loading>-->
+ <view style="margin:30rpx;" class="navimian" bindtap="tap2mian">
+        <button class="xxxx">进入主页</button>
+        </view>
+
+<View style="height: 1px;background-color: green;"></View>
+<view style="margin:30rpx;" >
+
+  <form  bindsubmit="formSubmit" bindreset="formReset">
+    
+      <view>title</view>
+      <input  name="title" placeholder="please input title"  />
+      <View style="height: 1px;background-color: gray;"></View>
+      <view >content</view>
+      <input name="content" placeholder="please input content" />
+      <View style="height: 1px;background-color: gray;"></View>
+    
+      <button style="margin:30rpx;" bindtap="chooseImage">选择图片</button>  
+        <image  src="{{tempFilePaths}}" mode="aspecFill" style="width: 80rpx; height: 80rpx"/>  
+      <View style="height: 1px;background-color: gray;"></View> 
+
+      <view style="margin:30rpx;" class="btn-area">
+      <button formType="submit">提交</button> </view>
+      
+  </form>
+</view>
+<View style="height: 1px;background-color: green;"></View>
+
+<scroll-view scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower" style="height: 100%">
+   <block wx:for="{{list}}" >
+    <!-- 分割线 -->
+    <view class="divLine"></view>
+    <!-- 整体item样式 -->
+    <view data-objectid="{{item.objectId}}" bindtap="delobj" class="containsView"  >
+    <!--顶部样式-->
+      <view class="topContainsView">
+        <image class="profileImage" src="{{item.url}}" />
+        <view class="topRightView">
+          <text class="title">{{item.title}}</text>
+          <!--<text class="oid">{{item.objectId}}</text>-->
+          <text class="time">{{item.updatedAt}}</text>
+        </view>
+      </view>
+      <!-- 中间内容 -->
+      <text class="centerContent">{{item.content}}</text>
+      <!-- 分割线 -->
+    <view class="divLine"></view>
+      <!-- 图片资源 -->
+        <image class="centerContent1" src="{{item.url}}" mode="scaleToFill" />
+           
+    </view>
+  </block>
+</scroll-view>

@@ -1,0 +1,41 @@
+<loading hidden="{{loadingHidden}}">正在加载...</loading>
+<scroll-view scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower" style="height: 100%">
+   <block wx:for="{{list}}" >
+    <!-- 分割线 -->
+    <view class="divLine"></view>
+    <!-- 整体item样式 -->
+    <view class="containsView">
+    <!--顶部样式-->
+      <view class="topContainsView">
+        <image class="profileImage" src="{{item.image_url}}" />
+        <view class="topRightView">
+          <text class="topRightName">{{item.abs}}</text>
+          <text class="topRightTime">{{item.date}}</text>
+        </view>
+      </view>
+      <!-- 中间内容 -->
+      <text class="centerContent">{{item.desc}}</text>
+      <!-- 图片资源 -->
+        <image class="centerContent1" src="{{item.thumbnail_url}}" mode="aspectFill" />
+      <!-- 底部view样式 -->
+      <view class="bottomView">
+        <view class="bottomItemView">
+          <image class="bottomItemImage" src="../../image/ding.png" />
+          <text class="bottomItemText">顶</text>
+        </view>
+        <view class="bottomItemView">
+          <image class="bottomItemImage" src="../../image/cai.png" />
+          <text class="bottomItemText">踩</text>
+        </view>
+        <view class="bottomItemView">
+          <image class="bottomItemImage" src="../../image/share.png" />
+          <text class="bottomItemText">分享</text>
+        </view>
+        <view class="bottomItemView">
+          <image class="bottomItemImage" src="../../image/comment.png" />
+          <text class="bottomItemText">评论</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</scroll-view>
