@@ -1,5 +1,15 @@
-<view class="container">
-  <view class="textContainer">
-    <text class="textStyle">{{text}}</text>
-  </view>
-</view>
+
+<loading hidden="{{loadingHidden}}">正在加载...</loading>
+<scroll-view scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
+             style="height: 100%">
+  <View class="flex-wrp-column" style="height: 260rpx;background-color: green;">
+    <View >
+      <View class="flex-wrp-row">
+        <image class="avatarImage" src="{{student.avatarUrl}}"  />
+      </View>
+      <View class="flex-wrp-row">
+        <text class="nickName">{{student.nickName}}</text>
+      </View>
+    </View>
+  </View>
+</scroll-view>

@@ -1,10 +1,11 @@
 {
   "pages": [
-    "pages/test/test",
+  
     "pages/blackboard/blackboard",
     "pages/notice/notice",
     "pages/playground/playground",
     "pages/wode/wode",
+      "pages/test/test",
     "pages/jionclassroom/jionclassroom",
     "pages/createclassroom/createclassroom",
     "pages/word/word",
