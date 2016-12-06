@@ -7,8 +7,30 @@
 
 /*中间文字样式*/
 .inputs{
-  font-size: 50rpx;
-  padding:10px;
+  font-size: 40rpx;
+}
+.flex-wrp{
+  height: 100px;
+  display:flex;
+  flex-direction:row;
+  justify-content: center;
+  align-items: center;
+}
+.flex-wrp1{
+  height: 100px;
+  display:flex;
+  flex-direction:row;
+ flex-flow: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.flex-item{
+  flex-wrap: wrap;
+  color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 

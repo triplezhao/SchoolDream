@@ -1,5 +1,5 @@
-var detail = '../detail/detail'
-Page({
+
+var pageContent ={
   data: {
     list: [],
     maxtime: '',
@@ -99,4 +99,5 @@ Page({
   onUnload: function () {
     // 页面关闭
   }
-})
+}
+Page(pageContent)

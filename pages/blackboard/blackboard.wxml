@@ -1,4 +1,4 @@
-<loading hidden="{{loadingHidden}}">正在加载...</loading>
+
 <scroll-view scroll-y="true" bindscrolltolower="bindscrolltolower" style="height: 100%">
   <block wx:for-items="{{list}}">
     <!-- 分割线 -->
@@ -12,10 +12,22 @@
           <text class="topRightTime">{{item.passtime}}</text>
         </view>
       </view>
-      <!-- 描述 -->
       <text style="font-size: 30rpx">{{item.text}}</text>
-      <!-- 视频组件 -->
-      <video src="{{item.videouri}}" binderror="error" style="width: 100%; height: 50%; margin-top: 15rpx" />
+      <!-- 当时gif图 -->
+      <view wx:if="{{item.is_gif != 0}}" style="position: relative;">
+        <image class="centerContent" src="{{item.cdn_img}}" mode="aspectFill" />
+      </view>
+      <!-- 普通大图 可点击查看全部图片 -->
+      <view data-url="{{item.cdn_img}}" data-height="{{item.height}}" data-width="{{item.width}}"
+            bindtap="lookBigPicture" wx:elif="{{item.is_gif == 0}}" style="position: relative;">
+        <!-- 图片资源 -->
+        <image class="centerContent" src="{{item.cdn_img}}" mode="aspectFill" />
+        <!-- 图片上浮动的点击查看详情图片view -->
+        <view class="flexView">
+          <image src="../../image/seeBigPicture.png" style="width: 60rpx; height: 60rpx;" />
+          <text class="flexText">点击查看全图</text>
+        </view>
+      </view>
       <!-- 底部view样式 -->
       <view class="bottomView">
         <view class="bottomItemView">
@@ -37,4 +49,9 @@
       </view>
     </view>
   </block>
+  <view class="tips1">
+      <view wx:if="{{hasMore}}" style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
+      <icon type="waiting" size="20"/><text>加载中...</text></view>
+      <view wx:else style="display: flex;justify-content:center;" ><text >没有更多内容了</text></view>
+    </view>
 </scroll-view>
