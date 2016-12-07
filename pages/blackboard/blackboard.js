@@ -8,9 +8,11 @@ Page({
     total: 0,
     // size: 20,
     hasMore: true,
-    isLoading: false
+    isLoading: false,
+    room_now: null,
+    hideContent: false,
+    hideError: true
   },
-
 
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
@@ -33,7 +35,7 @@ Page({
     var that = this;
     that.setData({
       isLoading: true,
-      list : []
+      list: []
     });
 
     var query = new AV.Query('Todo');
@@ -53,7 +55,7 @@ Page({
       },
       function (error) {
         console.log('requestData error ');
-         that.setData({
+        that.setData({
           isLoading: false
         })
         wx.showToast({
@@ -130,14 +132,46 @@ Page({
 
   onReady: function () {
     // 页面渲染完成
+    console.log("onReady");
+    // this.onShow();
   },
   onShow: function () {
     // 页面显示
+    console.log("onShow");
+    var that = this;
+
+    //app房间为空，则提示错误信息
+    if (!getApp().globalData.room_now) {
+      that.setData({
+        hideContent: true,
+        hideError: false,
+      })
+      return;
+    }
+
+    //当前page房间为空，或者 从我的页面进行了切换房间。则重新赋值
+    if (!that.data.room_now || getApp().globalData.room_now_change_1) {
+
+      getApp().globalData.room_now_change_1=false;
+
+      that.setData({
+        room_now: getApp().globalData.room_now,
+        hideContent: false,
+        hideError: true
+      })
+
+      wx.setNavigationBarTitle({
+        title: getApp().globalData.room_now.room.roomname,
+      });
+    }
+
   },
   onHide: function () {
     // 页面隐藏
+    console.log("onHide");
   },
   onUnload: function () {
     // 页面关闭
+    console.log("onUnload");
   }
 })

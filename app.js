@@ -12,14 +12,46 @@ const KEY_LOGINED_STUDENT = 'KEY_LOGINED_STUDENT';
 
 App({
 
+  globalData: {
+    logined_student: null,
+    room_now: null,
+    room_now_change_1: false,
+    room_now_change_2: false,
+    room_now_change_3: false,
+    room_now_change_4: false,
+  },
   onLaunch: function () {
     //调用API从本地缓存中获取数据
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
+    this.syncRoomNow();
 
   },
 
+  syncRoomNow: function (cb) {
+    console.log('syncRoomNow');
+
+    this.globalData.room_now = wx.getStorageSync('room_now');
+    this.globalData.logined_student = this.getStudentInfoFromLocal();
+
+    if(!this.globalData.room_now){
+      console.log('is not in room')
+      return;
+    }
+    
+    if(!this.globalData.logined_student){
+      console.log('is not login')
+      return;
+    }
+
+    //如果登录用户与本地的room的student指针指向的不一样，则设置本地为null
+    if (this.globalData.room_now.student.objectId != this.globalData.logined_student.objectId) {
+      console.log('room与登录用户不相等');
+      this.globalData.room_now = null;
+      wx.removeStorageSync('room_now');
+    }
+  },
 
   // getUserInfo: function (cb) {
   //   var that = this;
@@ -33,7 +65,7 @@ App({
   logout: function (cb) {
     var that = this;
     //清除内存
-    this.globalData.logined_student=null;
+    this.globalData.logined_student = null;
     that.clearStudentFromLocal();
   },
 
@@ -54,28 +86,28 @@ App({
     } else {
       //重新登录
       that.weixinlogin(function (res, data) {
-        console.log('收到回调',res);
+        console.log('收到回调', res);
         if (res == 1) {
           //存储student到local
-           
+
           var student = new Student();
-          
+
 
           //查询下是否已经注册了
           var query = new AV.Query(Student);
           query.equalTo('openId', data.openId);
-          
+
           query.first().then(function (results) {
-            
-            if(results==undefined){
+
+            if (results == undefined) {
               //没有注册，则添加新用户，
               student.set('phone', '0');
               console.log('未注册的用户: ');
-            }else{
-                console.log('已经注册的用户: ', results);
-                //已经注册了的话，则更新
-                student = results;
-              
+            } else {
+              console.log('已经注册的用户: ', results);
+              //已经注册了的话，则更新
+              student = results;
+
             }
 
             student.set('openId', data.openId);
@@ -196,11 +228,8 @@ App({
         console.log("decode失败," + err);
         cb(0, '授权登录失败');
       });
-  },
-
-  globalData: {
-    logined_student: null
   }
+
 })
 
 

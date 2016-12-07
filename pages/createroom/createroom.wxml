@@ -1,0 +1,29 @@
+
+  <view style="margin:30rpx;">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <view class="flex-wrp-row" style="justify-content:  flex-start;margin:10rpx;">
+       <view style="width:100rpx">名字:</view>
+        <view style="flex-grow: 1;">
+          <input name="name" class="inputs" placeholder-style="color:gray;font-size:12px;padding:0px 0px 0px 5px;"
+                 placeholder=" 输入名字"  />
+          <View style="height: 1px;background-color: gray;"></View>
+        </view>
+      </view>
+      <view class="flex-wrp-row" style="justify-content:  flex-start; margin:10rpx;">
+        <view style="width:100rpx">描述:</view>
+        <view style="flex-grow: 1;">
+          <input name="desc" class="inputs" placeholder-style="color:gray;font-size:12px;padding:0px 0px 0px 5px;"
+                 placeholder=" 输入描述"  />
+          <View style="height: 1px;background-color: gray;"></View>
+        </view>
+      </view>
+      <view class="flex-wrp-row" style="justify-content:  flex-start; margin:10rpx;">
+        <text style="">选择图片:</text>
+        <image bindtap="chooseImage" src="{{tempFilePaths}}"
+               style="width: 80rpx; height: 80rpx;padding:10px; background-image:url( ../../image/imageN.png);"  />
+      </view>
+      <view class="btn-area">
+        <button formType="submit" type="primary">提交</button>
+      </view>
+    </form>
+  </view>

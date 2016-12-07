@@ -3,14 +3,8 @@ const AV = require('../utils/leancloud-storage');
 
 class Room extends AV.Object {
   
-// roomname
-// picurl
-// desc
-// creater   Pointer
-// province
-// city
-// dist
-// entryyear
+// article  Pointer 赞的帖子
+// fromuser   Pointer 本条回复的发布者
 
 }
 

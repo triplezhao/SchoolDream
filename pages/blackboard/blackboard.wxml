@@ -1,5 +1,7 @@
 
-<scroll-view scroll-y="true" bindscrolltolower="bindscrolltolower" style="height: 100%">
+<view  wx:if="{{!hideError}}" style="display: flex;justify-content:center;" ><text >请先去选择一个班级</text></view>
+
+<scroll-view  wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower" style="height: 100%" >
   <block wx:for-items="{{list}}">
     <!-- 分割线 -->
     <view class="divLine"></view>

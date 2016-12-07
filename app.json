@@ -6,8 +6,8 @@
     "pages/playground/playground",
     "pages/wode/wode",
       "pages/test/test",
-    "pages/jionclassroom/jionclassroom",
-    "pages/createclassroom/createclassroom",
+    "pages/jionroom/jionroom",
+    "pages/createroom/createroom",
     "pages/word/word",
     "pages/image/image"
   ],
@@ -49,11 +49,11 @@
       }
     ]
   },
-  "window": {
-    "enablePullDownRefresh": true,
-    "backgroundTextStyle": "dark",
-    "backgroundColor": "#f2f2f2",
-    "navigationBarBackgroundColor": "#fbfbf",
-    "navigationBarTextStyle": "white"
+   "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "green",
+    "navigationBarTitleText": "test",
+    "navigationBarTextStyle":"white",
+    "enablePullDownRefresh":true
   }
 }

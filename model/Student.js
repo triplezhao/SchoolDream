@@ -3,6 +3,7 @@ const AV = require('../utils/leancloud-storage');
 
 class Student extends AV.Object {
 //  phone
+//  rooms[]  在加入班级的时候，记得给这个用户的数组add这个班级
 // "openId": "OPENID",
 // "nickName": "NICKNAME",
 // "gender": GENDER,

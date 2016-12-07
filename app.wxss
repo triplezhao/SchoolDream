@@ -1,7 +1,22 @@
-page {
-  background-color: #fbf9fe;
-  height: 100%;
+
+/*横向居中布局*/
+
+.flex-wrp-row{
+  display:flex;
+  flex-direction:row;
+  justify-content: center;
+  align-items: center;
 }
+
+/*纵向居中布局*/
+.flex-wrp-column{
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+}
+
+
 .container {
   display: flex;
   flex-direction: column;
@@ -164,6 +179,22 @@ page {
     background-color: #C9C9C9;
 }
 
+.b_green{
+    background: #09BB07;
+}
+.b_red{
+    background: #F76260;
+}
+.b_blue{
+    background: #10AEFF;
+}
+.b_yellow{
+    background: #FFBE00;
+}
+.b_gray{
+    background: #C9C9C9;
+}
+
 .tc{
     text-align: center;
 }
@@ -229,101 +260,137 @@ checkbox, radio{
 
 }
 
-
-
-
-/*整体view样式*/
-.containsView{
-  padding: 15rpx 15rpx 15rpx 15rpx;
-  margin-top: 15rpx;
-  margin-bottom: 15rpx;
-  background-color: white;
-}
-/*头部整体样式*/
-.topContainsView{
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 18rpx;
-}
-
-/**
- * 头像样式
-*/
-.avatarImage{
-  width: 80rpx;
-  height: 80rpx;
-  border-radius: 30rpx;
-}
-
-/*头部显示名字和时间整体样式*/
-.topRightView{
-  margin-left: 15rpx;
+/*//知乎的css*/
+/**app.wxss**/
+.container {
+  height: 100%;
   display: flex;
   flex-direction: column;
-}
-/*用户名称样式*/
-.topRightName{
-  font-size: 18rpx;
-}
-/*时间样式*/
-.topRightTime{
-  font-size: 14rpx;
-  color: #b8b2b2;
-  margin-top: 10rpx;
-}
-
-/*因为中间部分不一样不放在整体样式中*/
-
-/*底部view整体样式*/
-.bottomView{
-  display: flex;
-  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
+  /*padding: 200rpx 0;*/
+  box-sizing: border-box;
+  background: #F0F4F3;
 }
-/*每个Item样式*/
-.bottomItemView{
+
+.container.withtab{
+  margin: 105rpx 0 0 0;
+  /*top: 105rpx;*/
+}
+.flex-wrp{
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  margin-top: 18rpx;
-  padding-left: 10rpx;
-  padding-right: 10rpx;
 }
-/*Item样式中的图标样式 顶 踩 分享 评论*/
-.bottomItemImage{
+.flex-tab{
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: stretch;
+}
+.flex-item{
+  flex-grow: 1;
+  text-align: center;
+}
+.top-tab{
+  width: 750rpx;
+  height: 100rpx;
+  background: #298DE5;
+  color: #8CCEFD;
+  font-size: 28rpx;
+  line-height: 100rpx;
+  box-shadow: 0 2px 2px #bebebe;
+  margin: 0 0 8rpx 0;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+.toptab.active{
+  color: #ffffff;
+  border-bottom: solid 2px #ffffff;
+}
+.container{
+  padding: 0;
+  font-size: 14rpx;
+  color: #000;
+}
+.container .feed-item{
+  width: 690rpx;
+  padding: 30rpx 30rpx 20rpx;
+  margin: 7rpx 0 6rpx 0;
+  background: #ffffff;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 5px #eeeeee;
+}
+.container .feed-item .feed-source{
+  width: 690rpx;
+  left: 0;
+  height: 50rpx;
+}
+.container .feed-item .feed-source .avatar{
+  position: relative;
+  display: inline-block;
+}
+.container .feed-item .feed-source a{
+  display: inline-block;
+  height: 40rpx;
+}
+.container .feed-item .feed-source .avatar image{
+  /*position: absolute;*/
+  display: inline-block;
   width: 45rpx;
   height: 45rpx;
+  border-radius: 45rpx;
+  top: 10rpx;
+  vertical-align: middle;
 }
-/*Item中的文字样式  顶 踩 分享 评论*/
-.bottomItemText{
-  font-size: 15rpx;
-  color: #b8b2b2;
-  margin-left: 10rpx;
-  margin-top: 8rpx;
+.container .feed-item .feed-source text{
+  /*position: absolute;*/
+  display: inline-block;
+  height: 40rpx;
+  line-height: 40rpx;
+  vertical-align: middle;
+  margin: 0 0 0 15rpx;
+  color: #a0acac;
+  font-size: 26rpx;
+}
+.container .feed-item .feed-source .item-more{
+  display: inline-block;
+  width: 40rpx;
+  height: 45rpx;
+  float: right;
+}
+.container .feed-item .feed-content{
+  padding: 10rpx 0 0 0;
+}
+.container .feed-item .feed-content .question text{
+  font-size: 28rpx;
+  font-weight: 600px;
+  line-height: 40rpx;
+  text-space: 5rpx;
+}
+.container .feed-item .feed-content .answer-body{
+  padding: 10rpx 0 0 0;
+  /*height: 10rpx;*/
+  font-size: 24rpx;
+  line-height: 28rpx;
+  color: #5b5b5b;
+}
+.container .feed-item .feed-content .answer-actions{
+  width: 690rpx;
+  padding: 10rpx 0  0;
+  color: #a0acac;
+}
+.container .feed-item .feed-content .answer-actions view{
+  display: inline-block;
+  vertical-align: text-bottom;
+  padding: 0 10rpx 0 0;
+  font-size: 24rpx;
+}
+.container .feed-item .feed-content .answer-actions .dot ::after{
+  content: "•";
 }
 
-/*分割线样式*/
-.divLine{
-  background: #f3f3f3;
-  width: 100%;
-  height: 15rpx;
-}
+/*知乎样式end*/
 
-/*横向居中布局*/
 
-.flex-wrp-row{
-  display:flex;
-  flex-direction:row;
-  justify-content: center;
-  align-items: center;
-}
-/*纵向居中布局*/
-.flex-wrp-column{
-  display:flex;
-  flex-direction:column;
-  justify-content: center;
-  align-items: center;
-}
+
+
