@@ -2,6 +2,8 @@ const AV = require('../../utils/leancloud-storage.js');
 const QN = require('../../utils/qiniuutil.js');
 const utils = require('../../utils/util.js');
 
+const pageSize = 5;
+
 Page({
   data: {
     list: [],
@@ -81,7 +83,7 @@ Page({
     query.equalTo('room', room);
 
     query.descending('createdAt');
-    query.limit(3);
+    query.limit(pageSize);
     query.include('creater,room');
    
     query.lessThanOrEqualTo('createdAt', new Date());
@@ -151,7 +153,7 @@ Page({
     query.equalTo('room', room);
 
     query.descending('createdAt');
-    query.limit(3);
+    query.limit(pageSize);
     query.include('creater,room');
 
     var oldest = new Date(that.data.maxtime);
