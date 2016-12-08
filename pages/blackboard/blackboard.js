@@ -50,6 +50,7 @@ Page({
           // 拼接数组
           list: results,
           isLoading: false,
+          maxtime:results[results.length-1]
           // total: res.data.info.count
         })
       },
@@ -64,31 +65,6 @@ Page({
           duration: 2000
         })
       });
-
-    // wx.request({
-    //   url: 'https://api.budejie.com/api/api_open.php',
-    //   data: {
-    //     a: 'list',
-    //     c: 'data',
-    //     // 上一页的maxtime作为加载下一页的条件，
-    //     maxtime: this.data.maxtime,
-    //     type: '10',
-    //   },
-    //   method: 'GET',
-    //   success: function (res) {
-    //     console.log(res)
-    //     that.setData({
-    //       // list: res.data.result.list,
-    //       // page: 1,
-    //       // isLoading: false,
-    //       // 拼接数组
-    //       list: res.data.list,
-    //       isLoading: true,
-    //       maxtime: res.data.info.maxtime,
-    //       total: res.data.info.count,
-    //     });
-    //   }
-    // })
 
   },
 

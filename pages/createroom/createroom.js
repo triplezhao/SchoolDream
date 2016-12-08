@@ -45,9 +45,16 @@ Page({
     var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
     room.set('creater', student);
     
+    
+
     room.save().then(function (room) {
       // 成功保存之后，执行其他逻辑.
       console.log('room created with objectId: ' + room.id);
+
+      console.log('av1',room);
+      console.log('av to json',room.toJSON());
+      var room2 = new Room(room.toJSON(), {parse: true})
+      console.log('av 2 ',room2);
 
       wx.showToast({
         title: '添加数据成功',

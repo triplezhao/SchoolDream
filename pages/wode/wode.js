@@ -10,22 +10,35 @@ Page({
     student: null,
     loadingHidden: false,
     list: [],
-    room_now: Student2Room,
+    room_now: null,
+    islogin: false,
   },
   onLoad: function (options) {
+    wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
     var that = this;
+    if (getApp().globalData.logined_student && getApp().globalData.room_now) {
+      //改本业内存
+      that.setData({
+        room_now: getApp().globalData.room_now,
+        islogin: true,
+      })
+      wx.setNavigationBarTitle({
+        title: getApp().globalData.room_now.room.roomname,
+      });
+      that.update();
+    }
+
+
     getApp().checkLoginStatus(function (code, data) {
       if (code == 1) {
         that.setData({
-          loadingHidden: true,
           text: 'sadfasdf',
           student: data
         })
         that.loadRooms();
       } else {
         that.setData({
-          loadingHidden: true,
         })
       }
 
@@ -66,19 +79,26 @@ Page({
         student2Rooms.forEach(function (scm, i, a) {
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
           scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+          // scm=JSON.parse(JSON.stringify(scm));
         });
         console.log('before JSON.parse', student2Rooms);
 
+        //解析成json标准对象存储
         student2Rooms = JSON.parse(JSON.stringify(student2Rooms));
 
         console.log('after JSON.parse', student2Rooms);
+
         //更新界面
         that.setData({
-          list: student2Rooms
+          list: student2Rooms,
+          islogin: true,
         })
 
+
         //如果当前roomNow不存在，则切换到列表第一个加入的room，
-        that.enter2Rooom(student2Rooms[student2Rooms.length - 1]);
+        if (!that.data.room_now || that.data.room_now.student.objectId != student.id) {
+          that.enter2Rooom(student2Rooms[student2Rooms.length - 1]);
+        }
 
       }
     });
@@ -90,7 +110,7 @@ Page({
     getApp().globalData.room_now = student2room;
     //改本业内存
     that.setData({
-      room_now: Student2Room,
+      room_now: student2room,
     })
     //存储到本地
     console.log('存储到本地setStorageSync', student2room);
@@ -102,9 +122,9 @@ Page({
     getApp().globalData.room_now_change_3 = true;
     getApp().globalData.room_now_change_4 = true;
 
-     wx.setNavigationBarTitle({
-        title: student2room.room.roomname,
-      });
+    wx.setNavigationBarTitle({
+      title: student2room.room.roomname,
+    });
   },
 
 
@@ -119,7 +139,17 @@ Page({
         if (!res.cancel) {
           console.log(res.tapIndex)
           switch (res.tapIndex) {
-            case 0: that.enter2Rooom(that.data.list[index]);
+            case 0:
+              if (that.data.list[index].objectId == that.data.room_now.objectId) {
+                wx.showToast({
+                  title: '已经在这个room',
+                  duration: 2000
+                })
+              } else {
+                that.enter2Rooom(that.data.list[index]);
+              }
+
+              break;
             case 1:
             case 2:
           }
@@ -135,6 +165,12 @@ Page({
     })
 
   },
+  //跳转到加入页面
+  tapJionRoom: function () {
+    wx.navigateTo({
+      url: '../jionroom/jionroom'
+    })
 
+  },
 
 })

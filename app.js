@@ -122,15 +122,13 @@ App({
             //存储student到leancloud
             return student.save();
 
-          }, function (error) {
-            cb(0, "网络失败")
-            //return student.save();
           }).then(function (saved) {
             //更新内存
-            that.globalData.logined_student = saved;
+            that.globalData.logined_student = JSON.parse(JSON.stringify(saved));
             //无论是更新还是注册，都把返回的对象保存到本地
             that.saveStudent2Local(saved);
             console.log('注册或者更新完成，保存到本地: ', saved);
+            cb(1, saved);
           }, function (error) {
             cb(0, "保存失败")
           });
