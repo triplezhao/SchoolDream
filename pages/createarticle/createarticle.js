@@ -8,7 +8,7 @@ const Article = require('../../model/Article');
 Page({
   data: {
     text: "Page createarticle",
-    tempFilePaths: ''
+    tempFilePaths: []
   },
 
   onLoad: function (options) {

@@ -42,7 +42,7 @@ Page({
       that.data.list = [];
     }
     var query = new AV.Query('Todo');
-    query.limit(10);
+    query.limit(2);
     // 查询 priority 是 0 的 Todo
     // query.equalTo('priority', 0);
     // 按时间，降序排列

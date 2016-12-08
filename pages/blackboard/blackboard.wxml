@@ -4,7 +4,7 @@
     <button bindtap="tapCreateArticle" style="font-size:12px">新建</button>
    
   </View>
-<scroll-view  class="container" wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower" style="height: 100%" >
+<scroll-view  class="container" wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower" bindscrolltoupper="bindscrolltoupper" style="height: 100vh" >
   <block wx:for="{{list}}" wx:for-index="idx" wx:for-item="item" data-idx="{{idx}}">
       <view class="feed-item">
         <view class="feed-source">
@@ -36,7 +36,7 @@
     </block>
   <view class="tips1">
       <view wx:if="{{hasMore}}" style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
-      <icon type="waiting" size="20"/><text>加载中...</text></view>
+      <text>上拉加载更多</text></view>
       <view wx:else style="display: flex;justify-content:center;" ><text >没有更多内容了</text></view>
     </view>
 </scroll-view>

@@ -1,13 +1,14 @@
 const AV = require('../../utils/leancloud-storage.js');
 const QN = require('../../utils/qiniuutil.js');
+const utils = require('../../utils/util.js');
 
 Page({
   data: {
     list: [],
-    maxtime: 0,
+    maxtime: utils.getTs(new Date()),
     total: 0,
     // size: 20,
-    hasMore: false,
+    hasMore: true,
     isLoading: false,
     room_now: null,
     hideContent: false,
@@ -16,11 +17,11 @@ Page({
 
   onLoad: function (options) {
 
-    //app房间为空，则提示错误信息
-    this.checkLogin();
-    
+    // //app房间为空，则提示错误信息
+    // this.checkLogin();
+
     // 页面初始化 options为页面跳转所带来的参数
-    this.refesh();
+    // this.refesh();
 
   },
 
@@ -64,18 +65,26 @@ Page({
 
   //刷新处理
   refesh: function (e) {
+
     var that = this;
+
+
     that.setData({
-      isLoading: true
+      isLoading: true,
+      maxtime: utils.getTs(new Date()),
     });
     // 
     var query = new AV.Query('Article');
-    var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
+    var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
 
     // 查询当前登录用户加入的room
     query.equalTo('room', room);
 
+    query.descending('createdAt');
+    query.limit(3);
     query.include('creater,room');
+   
+    query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
     query.find().then(function (results) {
@@ -92,16 +101,21 @@ Page({
         results = JSON.parse(JSON.stringify(results));
 
         console.log('after JSON.parse', results);
-      var maxtime = that.data.maxtime;
-            if(results.length>0){
-                maxtime=results[results.length - 1].createAt;
-            }
+
+        var maxtime = that.data.maxtime;
+        if (results.length > 0) {
+          maxtime = utils.getTs(results[results.length - 1].createdAt);
+          console.log('time ts', maxtime);
+        }
+         console.log('maxtime', maxtime);
+         console.log('that.data.maxtime', that.data.maxtime);
 
         //更新界面
         that.setData({
           // 拼接数组
           list: results,
           isLoading: false,
+          hasMore: maxtime < that.data.maxtime,
           maxtime: maxtime,
           // total: res.data.info.count
         })
@@ -115,44 +129,63 @@ Page({
   loadMore: function (e) {
 
     var that = this;
+
+
+    if (!that.data.hasMore) {
+      wx.showToast({
+        title: '没有更多了',
+        icon: 'fail',
+        duration: 500
+      })
+      return;
+    }
+
+
     that.setData({
       isLoading: true,
-      list: []
     });
-    // 
     var query = new AV.Query('Article');
-    var room = AV.Object.createWithoutData('Room', that.data.room_now.objectId);
+    var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
 
     // 查询当前登录用户加入的room
     query.equalTo('room', room);
+
+    query.descending('createdAt');
+    query.limit(3);
+    query.include('creater,room');
+
+    var oldest = new Date(that.data.maxtime);
+    query.lessThanOrEqualTo('createdAt', oldest);
 
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
       if (results) {
-        // results.forEach(function (scm, i, a) {
-        //   // scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
-        //   // scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
-        //   // scm=JSON.parse(JSON.stringify(scm));
-        // });
+        results.forEach(function (scm, i, a) {
+          scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
+          scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+          // scm=JSON.parse(JSON.stringify(scm));
+        });
         console.log('before JSON.parse', results);
 
         //解析成json标准对象存储
         results = JSON.parse(JSON.stringify(results));
 
         console.log('after JSON.parse', results);
-
         var maxtime = that.data.maxtime;
-        if(results.length>0){
-            maxtime=results[results.length - 1].createAt;
+        if (results.length > 0) {
+          maxtime = utils.getTs(results[results.length - 1].createdAt);
+          console.log('time ts', maxtime);
         }
-
+        console.log('maxtime', maxtime);
+         console.log('that.data.maxtime', that.data.maxtime);
         //更新界面
         that.setData({
           // 拼接数组
           list: that.data.list.concat(results),
+          hasMore: maxtime < that.data.maxtime,
           maxtime: maxtime,
-          isLoading: false
+          isLoading: false,
         })
       }
     });
@@ -160,8 +193,8 @@ Page({
 
 
 
-  checkLogin:function(){
-      var that = this;
+  checkLogin: function () {
+    var that = this;
     //app房间为空，则提示错误信息
     if (!getApp().globalData.room_now) {
       that.setData({
@@ -189,8 +222,8 @@ Page({
       that.refesh();
     }
   },
-   //跳转到新建页面
-  tapCreateArticle:function(e){
+  //跳转到新建页面
+  tapCreateArticle: function (e) {
     wx.navigateTo({
       url: '../createarticle/createarticle'
     })

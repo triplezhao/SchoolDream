@@ -11,11 +11,19 @@ function formatTime(date) {
   return [year, month, day].map(formatNumber).join('/') + ' ' + [hour, minute, second].map(formatNumber).join(':')
 }
 
+
+
+
 function formatNumber(n) {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
+function getTs(stringTime) {
+  var timestamp2 = Date.parse(new Date(stringTime));
+  return timestamp2;
+}
 
 module.exports = {
-  formatTime: formatTime
+  formatTime: formatTime,
+  getTs: getTs
 }
