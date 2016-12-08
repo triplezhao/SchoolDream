@@ -35,6 +35,10 @@ Page({
   onShow: function () {
     // 页面显示
     console.log("onShow");
+    if(getApp().globalData.refesh_change_1){
+        getApp().globalData.refesh_change_1=false;
+        this.refesh();
+    }
     this.checkLogin();
 
   },
@@ -218,7 +222,7 @@ Page({
       })
 
       wx.setNavigationBarTitle({
-        title: getApp().globalData.room_now.room.roomname,
+        title: '当前班级：'+getApp().globalData.room_now.room.roomname,
       });
 
       that.refesh();
@@ -230,5 +234,13 @@ Page({
       url: '../createarticle/createarticle'
     })
   },
+  previewImage: function (e) {
+    var current = e.target.dataset.src
+
+    wx.previewImage({
+      current: current,
+      urls: [current]
+    })
+  }
 
 })

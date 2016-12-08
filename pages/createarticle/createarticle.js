@@ -54,6 +54,7 @@ Page({
           icon: 'success',
           duration: 2000
         })
+        getApp().globalData.refesh_change_1=true;
         wx.navigateBack();
       }else{
           // 异常处理

@@ -24,7 +24,7 @@ Page({
         islogin: true,
       })
       wx.setNavigationBarTitle({
-        title: getApp().globalData.room_now.room.roomname,
+        title: '当前班级：'+getApp().globalData.room_now.room.roomname,
       });
       that.update();
     }
@@ -52,6 +52,9 @@ Page({
   },
   onShow: function () {
     // 页面显示
+    if(getApp().globalData.refesh_change_4){
+        this.loadRooms();
+    }
   },
   onHide: function () {
     // 页面隐藏
@@ -60,6 +63,13 @@ Page({
     // 页面关闭
   },
 
+ /**
+   * 上拉刷新
+   */
+  onPullDownRefresh: function () {
+    //加载最新
+    this.loadRooms();
+  },
 
   loadRooms: function () {
     var that = this;
@@ -123,7 +133,7 @@ Page({
     getApp().globalData.room_now_change_4 = true;
 
     wx.setNavigationBarTitle({
-      title: student2room.room.roomname,
+      title: '当前班级：'+student2room.room.roomname,
     });
   },
 

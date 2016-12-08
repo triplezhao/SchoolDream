@@ -19,6 +19,10 @@ App({
     room_now_change_2: false,
     room_now_change_3: false,
     room_now_change_4: false,
+    refesh_change_1: false,
+    refesh_change_2: false,
+    refesh_change_3: false,
+    refesh_change_4: false,
   },
   onLaunch: function () {
     //调用API从本地缓存中获取数据

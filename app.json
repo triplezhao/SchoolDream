@@ -41,18 +41,14 @@
         "text": "4",
         "iconPath": "image/videoN.png",
         "selectedIconPath": "image/videoS.png"
-      },
-      {
-        "pagePath": "pages/test/test",
-        "text": "5",
-        "iconPath": "image/imageN.png",
-        "selectedIconPath": "image/imageS.png"
       }
+      
+     
     ]
   },
    "window":{
     "backgroundTextStyle":"dark",
-    "navigationBarBackgroundColor": "green",
+    "navigationBarBackgroundColor": "black",
     "navigationBarTitleText": "test",
     "navigationBarTextStyle":"white",
     "enablePullDownRefresh":true

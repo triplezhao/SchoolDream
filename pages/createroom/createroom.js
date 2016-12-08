@@ -62,6 +62,7 @@ Page({
         duration: 2000
       })
 
+      getApp().globalData.refesh_change_4=true;
       wx.navigateBack();
 
     }, function (error) {

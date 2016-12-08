@@ -1,42 +1,45 @@
 
-<view  wx:if="{{!hideError}}" style="display: flex;justify-content:center;" ><text >请先去选择一个班级</text></view>
-<View class="btn-area" style="display:flex;  flex-direction:row; ">
-    <button bindtap="tapCreateArticle" style="font-size:12px">新建</button>
-   
-  </View>
-<scroll-view  class="container" wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower" bindscrolltoupper="bindscrolltoupper" style="height: 100vh" >
+<view wx:if="{{!hideError}}" style="display: flex;justify-content:center;">
+  <text >请先去选择一个班级</text>
+</view>
+<View  wx:if="{{!hideContent}}" class="btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
+  <button bindtap="tapCreateArticle" style="font-size:12px;">发帖子</button>
+</View>
+<scroll-view class="container" wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
+             bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
   <block wx:for="{{list}}" wx:for-index="idx" wx:for-item="item" data-idx="{{idx}}">
-      <view class="feed-item">
-        <view class="feed-source">
-          <a class="">
-            <view class="avatar">
-              <image src="{{item.creater.avatarUrl}}"></image>
+    <view class="feed-item">
+      <view class="feed-source">
+        <a class="">
+          <view  class="avatar">
+            <image src="{{item.creater.avatarUrl}}" data-src="{{item.creater.avatarUrl}}" bindtap="previewImage" ></image>
+          </view>
+          <text>{{item.creater.nickName}}</text>
+        </a>
+      </view>
+      <view class="feed-content">
+        <view class="answer-body">
+          <view bindtap="bindItemTap">
+            <text class="answer-txt" aid="{{answer_id}}">{{item.content}}</text>
+          </view>
+          <image src="{{item.pics[0]}}"  data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
+          <view class="answer-actions" bindtap="bindItemTap">
+            <view class="like dot">
+              <a>{{item.good_num}} 赞</a>
             </view>
-            <text>{{item.creater.nickName}}</text>
-          </a>
-        </view>
-        <view class="feed-content">
-         
-          <view class="answer-body">
-            <view bindtap="bindItemTap">
-              <text class="answer-txt" aid="{{answer_id}}">{{item.content}}</text>
-            </view>
-            <image src="{{item.pics[0]}}"></image>
-            <view class="answer-actions" bindtap="bindItemTap">
-              <view class="like dot">
-                <a>{{item.good_num}} 赞 </a>
-              </view>
-              <view class="comments dot">
-                {{item.comment_num}} 评论 
-              </view>
-            </view>
+            <view class="comments dot">{{item.comment_num}} 评论</view>
           </view>
         </view>
       </view>
-    </block>
-  <view class="tips1">
-      <view wx:if="{{hasMore}}" style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
-      <text>上拉加载更多</text></view>
-      <view wx:else style="display: flex;justify-content:center;" ><text >没有更多内容了</text></view>
     </view>
+  </block>
+  <view class="tips1">
+    <view wx:if="{{hasMore}}"
+          style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
+      <text>上拉加载更多</text>
+    </view>
+    <view wx:else style="display: flex;justify-content:center;">
+      <text >没有更多内容了</text>
+    </view>
+  </view>
 </scroll-view>

@@ -2,7 +2,8 @@
 <!--<loading hidden="{{islogin}}">
 正在加载...</loading>-->
 
-<scroll-view wx:if="{{islogin}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
+<!--<scroll-view wx:if="{{islogin}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"-->
+<scroll-view wx:if="{{student}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
              style="height: 100%">
   <view class="user flex-wrp">
     <view class="avatar flex-item ">
@@ -13,11 +14,11 @@
       <text wx:if="{{room_now}}" class="edit ">当前所在班级：{{room_now.room.roomname}}</text>
     </view>
   </view>
-  <View class="btn-area" style="display:flex;  flex-direction:row; ">
-    <button bindtap="loadRooms" style="font-size:12px">我的黑板</button>
-    <button bindtap="xxxx" style="font-size:12px">我的公告</button>
-    <button bindtap="tapCreateRoom" type="warn" style="font-size:12px">创建班级</button>
-    <button bindtap="tapJionRoom" style="font-size:12px">加入班级</button>
+  <View  style="display:flex;  flex-direction:row; padding:10rpx">
+    <button bindtap="loadRooms" style="font-size:10px">我的黑板</button>
+    <button bindtap="xxxx" style="font-size:10px">我的公告</button>
+    <button bindtap="tapCreateRoom" type="warn" style="font-size:10px">创建班级</button>
+    <button bindtap="tapJionRoom" style="font-size:10px">加入班级</button>
   </View>
   <View class="flex-wrp-row" style="background:skyblue;">
     <text style="color:white;font-size:12px; padding:4px;">已经加入的班级</text>
