@@ -7,7 +7,7 @@ const Room = require('../../model/Room');
 Page({
   data: {
     text: "Page createroom",
-    tempFilePaths: ''
+    tempFilePaths: []
   },
  
   onLoad: function (options) {
@@ -31,7 +31,6 @@ Page({
 
     var name=e.detail.value.name;
     var desc=e.detail.value.desc;
-    var picurl=that.data.tempFilePaths;
   
     // 新建一个 AV 对象
     var room = new Room();
@@ -84,7 +83,7 @@ Page({
 
         var that = this;
         that.setData({
-          tempFilePaths: res.tempFilePaths[0]
+          tempFilePaths: res.tempFilePaths
         })
 
         var uptoken = QN.genUpToken();
@@ -106,7 +105,7 @@ Page({
             var data = JSON.parse(res.data);
 
             that.setData({
-              tempFilePaths: QN.getImageUrl(data.key)
+              tempFilePaths: [QN.getImageUrl(data.key)]
             })
             that.update();
             wx.showToast({
@@ -126,5 +125,13 @@ Page({
       },
     });
   },
+   previewImage: function (e) {
+    var current = e.target.dataset.src
+
+    wx.previewImage({
+      current: current,
+      urls: this.data.imageList
+    })
+  }
  
 })

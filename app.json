@@ -9,6 +9,7 @@
     "pages/jionroom/jionroom",
     "pages/createroom/createroom",
     "pages/createarticle/createarticle",
+    "pages/invite/invite",
     "pages/word/word",
     "pages/image/image"
   ],

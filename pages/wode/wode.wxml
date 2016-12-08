@@ -26,7 +26,7 @@
   <block wx:for="{{list}}">
     <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
       <view class="avatar flex-item">
-        <image src="{{item.room.picurl}}"></image>
+        <image src="{{item.room.picurl[0]}}"></image>
       </view>
       <view class="chat-content flex-item">
         <view class="chat-source">

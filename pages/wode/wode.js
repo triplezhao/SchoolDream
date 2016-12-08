@@ -144,7 +144,7 @@ Page({
     console.log('点击了列表的：', index)
     var that = this;
     wx.showActionSheet({
-      itemList: ['切换到', '退出', '解散'],
+      itemList: ['切换到', '退出', '复制邀请码'],
       success: function (res) {
         if (!res.cancel) {
           console.log(res.tapIndex)
@@ -161,7 +161,14 @@ Page({
 
               break;
             case 1:
+
             case 2:
+                 // that.data.list[index].room.objectId;
+              wx.navigateTo({
+                url:'../invite/invite?invitecode='+that.data.list[index].room.objectId
+              })
+
+              break;
           }
         }
       },

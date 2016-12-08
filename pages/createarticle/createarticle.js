@@ -72,7 +72,7 @@ Page({
   // 从相册选择照片或拍摄照片
   chooseImage() {
     wx.chooseImage({
-      count: 1,
+      count:3,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
 
@@ -122,18 +122,18 @@ Page({
       },
     });
   },
-  chooseImage2: function () {
-    var that = this
-    wx.chooseImage({
+  // chooseImage2: function () {
+  //   var that = this
+  //   wx.chooseImage({
 
-      success: function (res) {
-        console.log(res)
-        that.setData({
-          imageList: res.tempFilePaths
-        })
-      }
-    })
-  },
+  //     success: function (res) {
+  //       console.log(res)
+  //       that.setData({
+  //         imageList: res.tempFilePaths
+  //       })
+  //     }
+  //   })
+  // },
   previewImage: function (e) {
     var current = e.target.dataset.src
 
