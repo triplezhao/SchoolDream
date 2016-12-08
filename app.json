@@ -5,9 +5,10 @@
     "pages/notice/notice",
     "pages/playground/playground",
     "pages/wode/wode",
-      "pages/test/test",
+    "pages/test/test",
     "pages/jionroom/jionroom",
     "pages/createroom/createroom",
+    "pages/createarticle/createarticle",
     "pages/word/word",
     "pages/image/image"
   ],
@@ -50,7 +51,7 @@
     ]
   },
    "window":{
-    "backgroundTextStyle":"light",
+    "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "green",
     "navigationBarTitleText": "test",
     "navigationBarTextStyle":"white",

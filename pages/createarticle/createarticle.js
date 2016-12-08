@@ -3,13 +3,14 @@ const QN = require('../../utils/qiniuutil.js');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
+const Article = require('../../model/Article');
 
 Page({
   data: {
-    text: "Page createroom",
+    text: "Page createarticle",
     tempFilePaths: ''
   },
- 
+
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
   },
@@ -29,40 +30,35 @@ Page({
     var that = this;
     console.log('form发生了submit事件，携带数据为：', e.detail.value)
 
-    var name=e.detail.value.name;
-    var desc=e.detail.value.desc;
-    var picurl=that.data.tempFilePaths;
-  
+    var content = e.detail.value.content;
+    var picurl = that.data.tempFilePaths;
+
     // 新建一个 AV 对象
-    var room = new Room();
-    room.set('roomname', name);
-    room.set('desc', desc);
-    room.set('picurl', that.data.tempFilePaths);
-    room.set('province', '');
-    room.set('city', '');
-    room.set('dist', '');
-    room.set('entryyear', '');
-    var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
-    room.set('creater', student);
-    
-    
+    var article = new Article();
+    article.set('title', 'title');
+    article.set('content', content);
+    article.set('pics', that.data.tempFilePaths);
 
-    room.save().then(function (room) {
+    var creater = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
+    article.set('creater', creater);
+
+    var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
+    article.set('room', room);
+
+    article.save().then(function (res) {
       // 成功保存之后，执行其他逻辑.
-      console.log('room created with objectId: ' + room.id);
-
-      console.log('av1',room);
-      console.log('av to json',room.toJSON());
-      var room2 = new Room(room.toJSON(), {parse: true})
-      console.log('av 2 ',room2);
-
-      wx.showToast({
-        title: '添加数据成功',
-        icon: 'success',
-        duration: 2000
-      })
-
-      wx.navigateBack();
+      console.log('article created with objectId: ' + article.id);
+      if (res) {
+        wx.showToast({
+          title: '添加数据成功',
+          icon: 'success',
+          duration: 2000
+        })
+        wx.navigateBack();
+      }else{
+          // 异常处理
+      console.error('发布失败: ' + error.message);
+      }
 
     }, function (error) {
       // 异常处理
@@ -83,7 +79,7 @@ Page({
 
         var that = this;
         that.setData({
-          tempFilePaths: res.tempFilePaths[0]
+          tempFilePaths: res.tempFilePaths
         })
 
         var uptoken = QN.genUpToken();
@@ -105,7 +101,7 @@ Page({
             var data = JSON.parse(res.data);
 
             that.setData({
-              tempFilePaths: QN.getImageUrl(data.key)
+              tempFilePaths: [QN.getImageUrl(data.key)]
             })
             that.update();
             wx.showToast({
@@ -125,5 +121,25 @@ Page({
       },
     });
   },
- 
+  chooseImage2: function () {
+    var that = this
+    wx.chooseImage({
+
+      success: function (res) {
+        console.log(res)
+        that.setData({
+          imageList: res.tempFilePaths
+        })
+      }
+    })
+  },
+  previewImage: function (e) {
+    var current = e.target.dataset.src
+
+    wx.previewImage({
+      current: current,
+      urls: this.data.imageList
+    })
+  }
+
 })

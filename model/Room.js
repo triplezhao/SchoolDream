@@ -11,6 +11,7 @@ class Room extends AV.Object {
 // city
 // dist
 // entryyear
+// teacher
 
 }
 
