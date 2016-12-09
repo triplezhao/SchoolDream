@@ -8,7 +8,8 @@ const Article = require('../../model/Article');
 Page({
   data: {
     text: "Page createarticle",
-    tempFilePaths: []
+    tempFilePaths: [],
+    disabled: true
   },
 
   onLoad: function (options) {
@@ -28,10 +29,27 @@ Page({
   },
   formSubmit: function (e) {
     var that = this;
-    console.log('form发生了submit事件，携带数据为：', e.detail.value)
+    console.log('form发生了submit事件，携带数据为：', e.detail.value);
 
     var content = e.detail.value.content;
     var picurl = that.data.tempFilePaths;
+
+     if(!content){
+        wx.showToast({
+          title: '内容不能为空',
+          icon: 'success',
+          duration: 1000
+        })
+        return;
+    }
+     if(!picurl){
+        wx.showToast({
+          title: '图片不能为空',
+          icon: 'success',
+          duration: 1000
+        })
+         return;
+    }
 
     // 新建一个 AV 对象
     var article = new Article();
@@ -54,11 +72,11 @@ Page({
           icon: 'success',
           duration: 2000
         })
-        getApp().globalData.refesh_change_1=true;
+        getApp().globalData.refesh_change_1 = true;
         wx.navigateBack();
-      }else{
-          // 异常处理
-      console.error('发布失败: ' + error.message);
+      } else {
+        // 异常处理
+        console.error('发布失败: ' + error.message);
       }
 
     }, function (error) {
@@ -72,7 +90,7 @@ Page({
   // 从相册选择照片或拍摄照片
   chooseImage() {
     wx.chooseImage({
-      count:3,
+      count: 3,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
 
@@ -80,7 +98,7 @@ Page({
 
         var that = this;
         that.setData({
-          tempFilePaths: res.tempFilePaths
+          disabled: true
         })
 
         var uptoken = QN.genUpToken();
@@ -102,13 +120,14 @@ Page({
             var data = JSON.parse(res.data);
 
             that.setData({
-              tempFilePaths: [QN.getImageUrl(data.key)]
+              tempFilePaths: [QN.getImageUrl(data.key)],
+              disabled: false
             })
             that.update();
             wx.showToast({
               title: data.key,
               icon: 'success',
-              duration: 2000
+              duration: 1000
             })
           },
           fail(error) {
@@ -137,9 +156,18 @@ Page({
   previewImage: function (e) {
     var current = e.target.dataset.src
 
+    if(!current){
+        wx.showToast({
+          title: '图片异常',
+          icon: 'success',
+          duration: 1000
+        })
+        return;
+    }
+
     wx.previewImage({
       current: current,
-      urls: this.data.imageList
+      urls: this.data.tempFilePaths
     })
   }
 

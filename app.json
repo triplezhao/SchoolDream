@@ -1,52 +1,16 @@
 {
   "pages": [
   
+    "pages/home/home",
     "pages/blackboard/blackboard",
-    "pages/notice/notice",
-    "pages/playground/playground",
-    "pages/wode/wode",
-    "pages/test/test",
-    "pages/jionroom/jionroom",
+    "pages/roomsetting/roomsetting",
     "pages/createroom/createroom",
     "pages/createarticle/createarticle",
+    "pages/jionroom/jionroom",
     "pages/invite/invite",
-    "pages/word/word",
-    "pages/image/image"
+    "pages/test/test"
   ],
-  "tabBar": {
-    "color": "#a9b7b7",
-    "selectedColor": "#eb4f38",
-    "borderStyle": "white",
-    "backgroundColor": "#ffffff",
-    "list": [
-      {
-        "pagePath": "pages/blackboard/blackboard",
-        "text": "1",
-        "iconPath": "image/imageN.png",
-        "selectedIconPath": "image/imageS.png"
-      },
-      {
-        "pagePath": "pages/notice/notice",
-        "text": "2",
-        "iconPath": "image/wordN.png",
-        "selectedIconPath": "image/wordS.png"
-      },
-      {
-        "pagePath": "pages/playground/playground",
-        "text": "3",
-        "iconPath": "image/voiceN.png",
-        "selectedIconPath": "image/voiceS.png"
-      },
-      {
-        "pagePath": "pages/wode/wode",
-        "text": "4",
-        "iconPath": "image/videoN.png",
-        "selectedIconPath": "image/videoS.png"
-      }
-      
-     
-    ]
-  },
+
    "window":{
     "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "black",

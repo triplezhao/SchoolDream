@@ -7,9 +7,10 @@ const Room = require('../../model/Room');
 Page({
   data: {
     text: "Page createroom",
-    tempFilePaths: []
+    tempFilePaths: [],
+    disabled: true
   },
- 
+
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
   },
@@ -26,12 +27,33 @@ Page({
     // 页面关闭
   },
   formSubmit: function (e) {
+
+
     var that = this;
     console.log('form发生了submit事件，携带数据为：', e.detail.value)
 
-    var name=e.detail.value.name;
-    var desc=e.detail.value.desc;
-  
+    var name = e.detail.value.name;
+    var desc = e.detail.value.desc;
+
+
+    if (!name) {
+      wx.showToast({
+        title: 'name不能为空',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
+    }
+    if (!desc) {
+      wx.showToast({
+        title: 'desc不能为空',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
+    }
+
+
     // 新建一个 AV 对象
     var room = new Room();
     room.set('roomname', name);
@@ -43,17 +65,17 @@ Page({
     room.set('entryyear', '');
     var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
     room.set('creater', student);
-    
-    
+
+
 
     room.save().then(function (room) {
       // 成功保存之后，执行其他逻辑.
       console.log('room created with objectId: ' + room.id);
 
-      console.log('av1',room);
-      console.log('av to json',room.toJSON());
-      var room2 = new Room(room.toJSON(), {parse: true})
-      console.log('av 2 ',room2);
+      console.log('av1', room);
+      console.log('av to json', room.toJSON());
+      var room2 = new Room(room.toJSON(), { parse: true })
+      console.log('av 2 ', room2);
 
       wx.showToast({
         title: '添加数据成功',
@@ -61,7 +83,7 @@ Page({
         duration: 2000
       })
 
-      getApp().globalData.refesh_change_4=true;
+      getApp().globalData.refesh_change_home = true;
       wx.navigateBack();
 
     }, function (error) {
@@ -83,7 +105,7 @@ Page({
 
         var that = this;
         that.setData({
-          tempFilePaths: res.tempFilePaths
+          disabled: true
         })
 
         var uptoken = QN.genUpToken();
@@ -104,14 +126,15 @@ Page({
           success: function (res) {
             var data = JSON.parse(res.data);
 
-            that.setData({
-              tempFilePaths: [QN.getImageUrl(data.key)]
+             that.setData({
+              tempFilePaths: [QN.getImageUrl(data.key)],
+              disabled: false
             })
             that.update();
             wx.showToast({
               title: data.key,
               icon: 'success',
-              duration: 2000
+              duration: 1000
             })
           },
           fail(error) {
@@ -125,13 +148,23 @@ Page({
       },
     });
   },
-   previewImage: function (e) {
+  previewImage: function (e) {
     var current = e.target.dataset.src
+
+    if (!current) {
+      wx.showToast({
+        title: '图片异常',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
+    }
 
     wx.previewImage({
       current: current,
-      urls: this.data.imageList
+      urls: this.data.tempFilePaths
     })
   }
- 
+
+
 })

@@ -15,14 +15,8 @@ App({
   globalData: {
     logined_student: null,
     room_now: null,
-    room_now_change_1: false,
-    room_now_change_2: false,
-    room_now_change_3: false,
-    room_now_change_4: false,
-    refesh_change_1: false,
-    refesh_change_2: false,
-    refesh_change_3: false,
-    refesh_change_4: false,
+    refesh_change_home: false,
+  
   },
   onLaunch: function () {
     //调用API从本地缓存中获取数据

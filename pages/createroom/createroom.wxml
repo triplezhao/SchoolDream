@@ -30,7 +30,7 @@
           </view>
         </view>
       <view class="btn-area">
-        <button formType="submit" type="primary">提交</button>
+      <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>
       </view>
     </form>
   </view>

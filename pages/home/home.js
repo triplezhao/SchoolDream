@@ -10,7 +10,6 @@ Page({
     student: null,
     loadingHidden: false,
     list: [],
-    room_now: null,
     islogin: false,
   },
   onLoad: function (options) {
@@ -24,7 +23,7 @@ Page({
         islogin: true,
       })
       wx.setNavigationBarTitle({
-        title: '当前班级：'+getApp().globalData.room_now.room.roomname,
+        title: '当前班级：' + getApp().globalData.room_now.room.roomname,
       });
       that.update();
     }
@@ -44,16 +43,14 @@ Page({
 
     });
 
-
-
   },
   onReady: function () {
     // 页面渲染完成
   },
   onShow: function () {
     // 页面显示
-    if(getApp().globalData.refesh_change_4){
-        this.loadRooms();
+    if (getApp().globalData.refesh_change_home) {
+      this.loadRooms();
     }
   },
   onHide: function () {
@@ -63,9 +60,9 @@ Page({
     // 页面关闭
   },
 
- /**
-   * 上拉刷新
-   */
+  /**
+    * 上拉刷新
+    */
   onPullDownRefresh: function () {
     //加载最新
     this.loadRooms();
@@ -82,6 +79,9 @@ Page({
     query.equalTo('student', student);
 
     query.include('student,room');
+
+    query.descending('createdAt');
+
     // 执行查询
     query.find().then(function (student2Rooms) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
@@ -104,11 +104,10 @@ Page({
           islogin: true,
         })
 
-
-        //如果当前roomNow不存在，则切换到列表第一个加入的room，
-        if (!that.data.room_now || that.data.room_now.student.objectId != student.id) {
-          that.enter2Rooom(student2Rooms[student2Rooms.length - 1]);
-        }
+        // //如果当前roomNow不存在，则切换到列表第一个加入的room，
+        // if (!that.data.room_now || that.data.room_now.student.objectId != student.id) {
+        //   that.enter2Rooom(student2Rooms[student2Rooms.length - 1]);
+        // }
 
       }
     });
@@ -118,23 +117,11 @@ Page({
     var that = this;
     //改全局内存
     getApp().globalData.room_now = student2room;
-    //改本业内存
-    that.setData({
-      room_now: student2room,
-    })
-    //存储到本地
-    console.log('存储到本地setStorageSync', student2room);
-    wx.setStorageSync("room_now", student2room);
-    //通知其他页面也刷新？
-    console.log('通知其他页面，修改了roomnow');
-    getApp().globalData.room_now_change_1 = true;
-    getApp().globalData.room_now_change_2 = true;
-    getApp().globalData.room_now_change_3 = true;
-    getApp().globalData.room_now_change_4 = true;
 
-    wx.setNavigationBarTitle({
-      title: '当前班级：'+student2room.room.roomname,
-    });
+    wx.navigateTo({
+      url: '../blackboard/blackboard'
+    })
+
   },
 
 
@@ -144,30 +131,23 @@ Page({
     console.log('点击了列表的：', index)
     var that = this;
     wx.showActionSheet({
-      itemList: ['切换到', '退出', '复制邀请码'],
+      itemList: ['进入', '邀请同学','设置'],
       success: function (res) {
         if (!res.cancel) {
           console.log(res.tapIndex)
           switch (res.tapIndex) {
             case 0:
-              if (that.data.list[index].objectId == that.data.room_now.objectId) {
-                wx.showToast({
-                  title: '已经在这个room',
-                  duration: 2000
-                })
-              } else {
-                that.enter2Rooom(that.data.list[index]);
-              }
-
+              that.enter2Rooom(that.data.list[index]);
               break;
             case 1:
-
-            case 2:
-                 // that.data.list[index].room.objectId;
               wx.navigateTo({
-                url:'../invite/invite?invitecode='+that.data.list[index].room.objectId
+                url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
               })
-
+              break;
+            case 2:
+              wx.navigateTo({
+                url: '../roomsetting/roomsetting'
+              })
               break;
           }
         }

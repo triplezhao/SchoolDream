@@ -27,17 +27,36 @@ Page({
   },
   formSubmit: function (e) {
     var that = this;
-   
+
 
     var invitationcode = e.detail.value.invitationcode;
     var nickname = e.detail.value.nickname;
-     console.log('form发生了submit事件，携带数据为：', invitationcode)
+
+
+    if (!invitationcode) {
+      wx.showToast({
+        title: '邀请码不能为空',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
+    }
+    if (!nickname) {
+      wx.showToast({
+        title: 'nickname不能为空',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
+    }
+
+    console.log('form发生了submit事件，携带数据为：', invitationcode)
 
 
     //先查询是否存在这个room
     var room = AV.Object.createWithoutData('Room', invitationcode);
     var query = new AV.Query('Room');
-    query.equalTo('objectId',invitationcode);
+    query.equalTo('objectId', invitationcode);
     query.first().then(function (result) {
       console.log(result);
       //存在room，
@@ -68,12 +87,12 @@ Page({
 
             student2room.save().then(function (data) {
 
-            console.log('create new student2room succ');
+              console.log('create new student2room succ');
               wx.showToast({
-              title: '加入成功',
-              icon: 'success',
-              duration: 2000
-            })
+                title: '加入成功',
+                icon: 'success',
+                duration: 2000
+              })
             });
 
           } else {
@@ -94,10 +113,10 @@ Page({
       } else {
         console.log('do nothing');
         //不存在此班级
-            wx.showToast({
-              title: '不存在此班级',
-              icon: 'fail',
-              duration: 2000
+        wx.showToast({
+          title: '不存在此班级',
+          icon: 'fail',
+          duration: 2000
         })
       }
 

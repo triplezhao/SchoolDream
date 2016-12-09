@@ -1,0 +1,61 @@
+
+<!--<loading hidden="{{islogin}}">
+正在加载...</loading>-->
+
+<!--<scroll-view wx:if="{{islogin}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"-->
+<scroll-view  scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
+             style="height: 100%">
+
+
+<view class="images-wrapper">
+      <view class="images-list">
+        <block wx:for="{{list}}" wx:for-item="item">
+           <view class="flex-wrp-column">
+          <image src="{{item.student.avatarUrl}}" class="images-image" data-src="{{item.student.avatarUrl}}" bindtap="previewImage"></image>
+          <text style="font-size:12px">{{item.student.nickName}}</text>
+          </view>
+        </block>
+        <view class="images-image image-plus" bindtap="tapInvite">
+          <view class="image-plus-horizontal"></view>
+          <view class="image-plus-vertical"></view>
+        </view>
+      </view>
+    </view>
+
+
+
+
+
+  <View class="flex-wrp-row" style="background:gray;">
+    <text style="color:white;font-size:12px; padding:10px;"></text>
+  </View>
+
+
+  <view class="my">
+  <view class="my-item flex-wrp">
+     
+      <view class="myitem-name flex-item">
+        <text>班级名称：{{room_now.room.roomname}}</text>
+      </view>
+    </view>
+    <view class="my-item flex-wrp">
+      
+      <view class="myitem-name flex-item">
+        <text wx:if="{{room_now.nickname}}">我在本班昵称：{{room_now.nickname}}</text>
+        <text wx:elif="{{room_now.student.nickName}}">我在本班昵称：{{room_now.student.nickName}}</text>
+      </view>
+    </view>
+    <view class="my-item flex-wrp">
+     
+      <view class="myitem-name flex-item">
+        <text>我的黑板</text>
+      </view>
+    </view>
+    <view class="my-item flex-wrp">
+      <view  bindtap="tapInvite" class="myitem-name flex-item">
+        <text>邀请同学</text>
+      </view>
+    </view>
+
+  </view>
+</scroll-view>
