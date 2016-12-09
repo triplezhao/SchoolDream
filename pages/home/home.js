@@ -8,7 +8,6 @@ Page({
     actionSheetHidden: true,
     actionSheetObj: null,
     student: null,
-    loadingHidden: false,
     list: [],
     islogin: false,
   },
@@ -16,28 +15,31 @@ Page({
     wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
     var that = this;
-    if (getApp().globalData.logined_student && getApp().globalData.room_now) {
+    if (getApp().globalData.logined_student) {
       //改本业内存
+
       that.setData({
-        room_now: getApp().globalData.room_now,
         islogin: true,
+        student: getApp().globalData.logined_student
       })
-      wx.setNavigationBarTitle({
-        title: '当前班级：' + getApp().globalData.room_now.room.roomname,
-      });
-      that.update();
+
+      console.log('111', that.data.islogin);
     }
 
-
     getApp().checkLoginStatus(function (code, data) {
+
       if (code == 1) {
         that.setData({
           text: 'sadfasdf',
-          student: data
+          student: data,
+          islogin: true
         })
+
+        console.log('222', that.data.islogin);
         that.loadRooms();
       } else {
         that.setData({
+          islogin: false
         })
       }
 
@@ -49,6 +51,7 @@ Page({
   },
   onShow: function () {
     // 页面显示
+
     if (getApp().globalData.refesh_change_home) {
       this.loadRooms();
     }
@@ -69,7 +72,12 @@ Page({
   },
 
   loadRooms: function () {
+
     var that = this;
+
+    if (!getApp().globalData.logined_student) {
+      return;
+    }
 
     // 查询Student2Room
     var query = new AV.Query('Student2Room');
@@ -131,7 +139,7 @@ Page({
     console.log('点击了列表的：', index)
     var that = this;
     wx.showActionSheet({
-      itemList: ['进入', '邀请同学','设置'],
+      itemList: ['进入', '邀请同学', '设置'],
       success: function (res) {
         if (!res.cancel) {
           console.log(res.tapIndex)

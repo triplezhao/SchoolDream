@@ -24,7 +24,6 @@ Page({
       title: '当前班级：' + getApp().globalData.room_now.room.roomname,
     });
 
-
     this.loadStudents();
 
   },

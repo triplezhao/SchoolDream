@@ -1,9 +1,9 @@
 
-<!--<loading hidden="{{islogin}}">
-正在加载...</loading>-->
+<loading wx:if="{{!islogin}}">
+正在加载...</loading>
 
 <!--<scroll-view wx:if="{{islogin}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"-->
-<scroll-view  scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
+<scroll-view wx:if="{{islogin}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
              style="height: 100%">
   <view class="user flex-wrp">
     <view class="avatar flex-item ">
@@ -20,7 +20,7 @@
   <View class="flex-wrp-row" style="background:skyblue;">
     <text style="color:white;font-size:12px; padding:4px;">已经加入的班级</text>
   </View>
-  <block wx:for="{{list}}">
+  <block wx:if="list" wx:for="{{list}}">
     <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
       <view class="avatar flex-item">
         <image src="{{item.room.picurl[0]}}"></image>

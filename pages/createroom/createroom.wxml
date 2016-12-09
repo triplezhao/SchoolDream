@@ -17,7 +17,7 @@
           <View style="height: 1px;background-color: gray;"></View>
         </view>
       </view>
-       <view class="images-wrapper" >>
+       <view class="images-wrapper" >
           <text class="images-text">请选择图片</text>
           <view class="images-list">
             <block wx:for="{{tempFilePaths}}" wx:for-item="image">

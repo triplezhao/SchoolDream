@@ -32,23 +32,19 @@ App({
 
     this.globalData.room_now = wx.getStorageSync('room_now');
     this.globalData.logined_student = this.getStudentInfoFromLocal();
-
-    if(!this.globalData.room_now){
-      console.log('is not in room')
-      return;
-    }
+   
     
     if(!this.globalData.logined_student){
       console.log('is not login')
       return;
     }
 
-    //如果登录用户与本地的room的student指针指向的不一样，则设置本地为null
-    if (this.globalData.room_now.student.objectId != this.globalData.logined_student.objectId) {
-      console.log('room与登录用户不相等');
-      this.globalData.room_now = null;
-      wx.removeStorageSync('room_now');
-    }
+    // //如果登录用户与本地的room的student指针指向的不一样，则设置本地为null
+    // if (this.globalData.room_now.student.objectId != this.globalData.logined_student.objectId) {
+    //   console.log('room与登录用户不相等');
+    //   this.globalData.room_now = null;
+    //   wx.removeStorageSync('room_now');
+    // }
   },
 
   // getUserInfo: function (cb) {
@@ -126,7 +122,7 @@ App({
             //无论是更新还是注册，都把返回的对象保存到本地
             that.saveStudent2Local(saved);
             console.log('注册或者更新完成，保存到本地: ', saved);
-            cb(1, saved);
+            cb(1, that.globalData.logined_student);
           }, function (error) {
             cb(0, "保存失败")
           });
