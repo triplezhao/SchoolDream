@@ -14,7 +14,17 @@ Page({
     isLoading: false,
     room_now: null,
     hideContent: false,
-    hideError: true
+    hideError: true,
+
+    current: {
+      poster: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
+      name: '此时此刻',
+      author: '许巍',
+      src: 'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46',
+    },
+    audioAction: {
+      method: 'pause'
+    }
   },
 
   onLoad: function (options) {
@@ -35,8 +45,8 @@ Page({
   onShow: function () {
     // 页面显示
     console.log("onShow");
-    if(getApp().globalData.refesh_change_1){
-        getApp().globalData.refesh_change_1=false;
+    if(getApp().globalData.refesh_change_blackboard){
+        getApp().globalData.refesh_change_blackboard=false;
         this.refesh();
     }
     this.checkLogin();
@@ -71,6 +81,8 @@ Page({
 
   //刷新处理
   refesh: function (e) {
+
+     console.log('startrefesh===============');
 
     var that = this;
 
@@ -232,6 +244,12 @@ Page({
   tapCreateArticle: function (e) {
     wx.navigateTo({
       url: '../createarticle/createarticle'
+    })
+  },
+  //跳转到新建页面
+  tapCreateVoice: function (e) {
+    wx.navigateTo({
+      url: '../createvoice/createvoice'
     })
   },
   previewImage: function (e) {

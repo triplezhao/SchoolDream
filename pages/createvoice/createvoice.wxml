@@ -1,0 +1,106 @@
+
+<loading wx:if="{{isloading}}">
+正在加载...</loading>
+
+
+  <view style="margin:30rpx;">
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <view class="flex-wrp-row" style="justify-content:  flex-start;margin:10px;">
+        <view style="width:100rpx">内容:</view>
+        <view style="flex-grow: 1;">
+          <textarea name="content" class="inputs flex-wrp" auto-height="true" style="flex-wrap:wrap;word-break:break-all;"
+                    placeholder-style="color:gray;font-size:16px;padding:0px 0px 0px 0px;" placeholder=" 文字"  />
+          <View style="height: 1px;background-color: gray;"></View>
+        </view>
+      </view>
+      <!--<view class="flex-wrp-row" style="justify-content:  flex-start; margin:10rpx;">
+      <text style="">选择图片:</text>
+      <image bindtap="chooseImage" src="{{tempFilePaths[0]}}"
+             style="width: 80rpx; height: 80rpx;padding:10px; background-image:url( ../../image/wordS.png);"  />
+    </view>
+    -->
+    <view class="images-wrapper">
+ 
+      <text class="images-text" >图片:</text>
+      <view class="images-list">
+        <block wx:for="{{tempFilePaths}}" wx:for-item="image">
+          <image src="{{image}}" class="images-image" data-src="{{image}}" bindtap="previewImage"></image>
+        </block>
+        <view class="images-image image-plus" bindtap="chooseImage">
+          <view class="image-plus-horizontal"></view>
+          <view class="image-plus-vertical"></view>
+        </view>
+      </view>
+    </view>
+
+  <view class="page-body">
+    <view class="page-body-wrapper">
+      <block wx:if="{{recording === false && playing === false && hasRecord === false}}">
+        <view class="page-body-time">
+          <text class="time-big">{{formatedRecordTime}}</text>
+        </view>
+        <view class="page-body-buttons">
+          <view class="page-body-button"></view>
+          <view class="page-body-button" bindtap="startRecord">
+            <image src="/image/record.png"></image>
+          </view>
+          <view class="page-body-button"></view>
+        </view>
+      </block>
+
+      <block wx:if="{{recording === true}}">
+        <view class="page-body-time">
+          <text class="time-big">{{formatedRecordTime}}</text>
+        </view>
+        <view class="page-body-buttons">
+          <view class="page-body-button"></view>
+          <view class="page-body-button" bindtap="stopRecord">
+            <view class="button-stop-record"></view>
+          </view>
+          <view class="page-body-button"></view>
+        </view>
+      </block>
+
+      <block wx:if="{{hasRecord === true && playing === false}}">
+        <view class="page-body-time">
+          <text class="time-big">{{formatedPlayTime}}</text>
+          <text class="time-small">{{formatedRecordTime}}</text>
+        </view>
+        <view class="page-body-buttons">
+          <view class="page-body-button"></view>
+          <view class="page-body-button" bindtap="playVoice">
+            <image src="/image/play.png"></image>
+          </view>
+          <view class="page-body-button" bindtap="clear">
+            <image src="/image/trash.png"></image>
+          </view>
+        </view>
+      </block>
+
+      <block wx:if="{{hasRecord === true && playing === true}}">
+        <view class="page-body-time">
+          <text class="time-big">{{formatedPlayTime}}</text>
+          <text class="time-small">{{formatedRecordTime}}</text>
+        </view>
+        <view class="page-body-buttons">
+          <view class="page-body-button" bindtap="stopVoice">
+            <image src="/image/stop.png"></image>
+          </view>
+          <view class="page-body-button" bindtap="pauseVoice">
+            <image src="/image/pause.png"></image>
+          </view>
+          <view class="page-body-button" bindtap="clear">
+            <image src="/image/trash.png"></image>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+
+    <view class="btn-area">
+      <button formType="submit" disabled="{{!hasRecord|| playing === true}}" type="primary">提交</button>
+    </view>
+  </form>
+
+</view>

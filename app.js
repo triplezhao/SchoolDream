@@ -16,7 +16,8 @@ App({
     logined_student: null,
     room_now: null,
     refesh_change_home: false,
-  
+    refesh_change_blackboard: false,
+
   },
   onLaunch: function () {
     //调用API从本地缓存中获取数据
@@ -32,9 +33,9 @@ App({
 
     this.globalData.room_now = wx.getStorageSync('room_now');
     this.globalData.logined_student = this.getStudentInfoFromLocal();
-   
-    
-    if(!this.globalData.logined_student){
+
+
+    if (!this.globalData.logined_student) {
       console.log('is not login')
       return;
     }
@@ -78,60 +79,65 @@ App({
       this.globalData.logined_student = student;
       cb(1, student);
     } else {
-      //重新登录
-      that.weixinlogin(function (res, data) {
-        console.log('收到回调', res);
-        if (res == 1) {
-          //存储student到local
-
-          var student = new Student();
-
-
-          //查询下是否已经注册了
-          var query = new AV.Query(Student);
-          query.equalTo('openId', data.openId);
-
-          query.first().then(function (results) {
-
-            if (results == undefined) {
-              //没有注册，则添加新用户，
-              student.set('phone', '0');
-              console.log('未注册的用户: ');
-            } else {
-              console.log('已经注册的用户: ', results);
-              //已经注册了的话，则更新
-              student = results;
-
-            }
-
-            student.set('openId', data.openId);
-            student.set('nickName', data.nickName);
-            student.set('gender', data.gender);
-            student.set('city', data.city);
-            student.set('province', data.province);
-            student.set('country', data.country);
-            student.set('avatarUrl', data.avatarUrl);
-            student.set('unionId', data.unionId);
-            console.log('拼接后的student data: ', student.get('openId'));
-            //存储student到leancloud
-            return student.save();
-
-          }).then(function (saved) {
-            //更新内存
-            that.globalData.logined_student = JSON.parse(JSON.stringify(saved));
-            //无论是更新还是注册，都把返回的对象保存到本地
-            that.saveStudent2Local(saved);
-            console.log('注册或者更新完成，保存到本地: ', saved);
-            cb(1, that.globalData.logined_student);
-          }, function (error) {
-            cb(0, "保存失败")
-          });
-
-        } else {
-          cb(0, "网络失败")
-        }
-      });
+      getStudentInfoFromServer(cb);
     }
+  },
+
+  getStudentInfoFromServer: function (cb) {
+     var that = this;
+    //重新登录
+    that.weixinlogin(function (res, data) {
+      console.log('收到回调', res);
+      if (res == 1) {
+        //存储student到local
+
+        var student = new Student();
+
+
+        //查询下是否已经注册了
+        var query = new AV.Query(Student);
+        query.equalTo('openId', data.openId);
+
+        query.first().then(function (results) {
+
+          if (results == undefined) {
+            //没有注册，则添加新用户，
+            student.set('phone', '0');
+            console.log('未注册的用户: ');
+          } else {
+            console.log('已经注册的用户: ', results);
+            //已经注册了的话，则更新
+            student = results;
+
+          }
+
+          student.set('openId', data.openId);
+          student.set('nickName', data.nickName);
+          student.set('gender', data.gender);
+          student.set('city', data.city);
+          student.set('province', data.province);
+          student.set('country', data.country);
+          student.set('avatarUrl', data.avatarUrl);
+          student.set('unionId', data.unionId);
+          console.log('拼接后的student data: ', student.get('openId'));
+          //存储student到leancloud
+          return student.save();
+
+        }).then(function (saved) {
+          //更新内存
+          that.globalData.logined_student = JSON.parse(JSON.stringify(saved));
+          //无论是更新还是注册，都把返回的对象保存到本地
+          that.saveStudent2Local(saved);
+          console.log('注册或者更新完成，保存到本地: ', saved);
+          cb(1, that.globalData.logined_student);
+        }, function (error) {
+          cb(0, "保存失败")
+        });
+
+      } else {
+        cb(0, "网络失败")
+      }
+    });
   },
 
 

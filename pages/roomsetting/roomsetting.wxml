@@ -46,4 +46,8 @@
       </view>
     </view>
   </view>
+  <View  style="display:flex;  flex-direction:row; padding:10rpx">
+    <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" bindtap="tapDelRoom" type="warn" style="font-size:14px">解散班级</button>
+    <button wx:elif="{{room_now.student.objectId!=room_now.room.creater.objectId}}" bindtap="tapOutRoom" type="default" style="font-size:14px">退出班级</button>
+  </View>
 </scroll-view>

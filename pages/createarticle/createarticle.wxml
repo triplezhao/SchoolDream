@@ -1,10 +1,13 @@
 
+<loading wx:if="{{isloading}}">
+正在加载...</loading>
+
   <view style="margin:30rpx;">
     <form bindsubmit="formSubmit" bindreset="formReset">
       <view class="flex-wrp-row" style="justify-content:  flex-start;margin:10px;">
         <view style="width:100rpx">内容:</view>
         <view style="flex-grow: 1;">
-          <textarea name="content" class="inputs flex-wrp" style="flex-wrap:wrap;word-break:break-all;"
+          <textarea name="content" class="inputs flex-wrp" auto-height="true" style="flex-wrap:wrap;word-break:break-all;"
                     placeholder-style="color:gray;font-size:16px;padding:0px 0px 0px 0px;" placeholder=" 文字"  />
           <View style="height: 1px;background-color: gray;"></View>
         </view>

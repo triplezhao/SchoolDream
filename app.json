@@ -6,6 +6,7 @@
     "pages/roomsetting/roomsetting",
     "pages/createroom/createroom",
     "pages/createarticle/createarticle",
+    "pages/createvoice/createvoice",
     "pages/jionroom/jionroom",
     "pages/invite/invite",
     "pages/test/test"

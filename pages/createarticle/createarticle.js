@@ -9,7 +9,8 @@ Page({
   data: {
     text: "Page createarticle",
     tempFilePaths: [],
-    disabled: true
+    disabled: true,
+    isloading: false,
   },
 
   onLoad: function (options) {
@@ -34,21 +35,21 @@ Page({
     var content = e.detail.value.content;
     var picurl = that.data.tempFilePaths;
 
-     if(!content){
-        wx.showToast({
-          title: '内容不能为空',
-          icon: 'success',
-          duration: 1000
-        })
-        return;
+    if (!content) {
+      wx.showToast({
+        title: '内容不能为空',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
     }
-     if(!picurl){
-        wx.showToast({
-          title: '图片不能为空',
-          icon: 'success',
-          duration: 1000
-        })
-         return;
+    if (!picurl) {
+      wx.showToast({
+        title: '图片不能为空',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
     }
 
     // 新建一个 AV 对象
@@ -63,8 +64,15 @@ Page({
     var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
     article.set('room', room);
 
+
+    that.setData({
+      isloading: true
+    })
     article.save().then(function (res) {
       // 成功保存之后，执行其他逻辑.
+      that.setData({
+        isloading: false
+      })
       console.log('article created with objectId: ' + article.id);
       if (res) {
         wx.showToast({
@@ -72,7 +80,9 @@ Page({
           icon: 'success',
           duration: 2000
         })
-        getApp().globalData.refesh_change_1 = true;
+
+
+        getApp().globalData.refesh_change_home = true;
         wx.navigateBack();
       } else {
         // 异常处理
@@ -80,6 +90,9 @@ Page({
       }
 
     }, function (error) {
+      that.setData({
+        isloading: false
+      })
       // 异常处理
       console.error('Failed to create new object, with error message: ' + error.message);
     });
@@ -156,13 +169,13 @@ Page({
   previewImage: function (e) {
     var current = e.target.dataset.src
 
-    if(!current){
-        wx.showToast({
-          title: '图片异常',
-          icon: 'success',
-          duration: 1000
-        })
-        return;
+    if (!current) {
+      wx.showToast({
+        title: '图片异常',
+        icon: 'success',
+        duration: 1000
+      })
+      return;
     }
 
     wx.previewImage({

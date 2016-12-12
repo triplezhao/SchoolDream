@@ -82,17 +82,54 @@ Page({
           islogin: true,
         })
       }
-    },function(error){
-        console.log(error);
+    }, function (error) {
+      console.log(error);
     });
   },
   //跳转到加入页面
   tapInvite: function () {
-    var that= this;
+    var that = this;
     wx.navigateTo({
       url: '../invite/invite?invitecode=' + getApp().globalData.room_now.room.objectId
     })
 
   },
+
+
+  //解散房间
+  tapOutRoom: function (e) {
+    var that = this;
+    var room = AV.Object.createWithoutData('Student2Room', that.data.room_now.objectId);
+    room.destroy().then(function (success) {
+       console.log(success);
+      // 删除成功,云函数会处理 关联的删除操作
+      getApp().globalData.refesh_change_home=true;
+
+      wx.navigateBack();
+
+    }, function (error) {
+      // 删除失败
+      console.log(error);
+    });
+
+  },
+  //解散房间
+  tapDelRoom: function (e) {
+    var that = this;
+    var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
+    room.destroy().then(function (success) {
+       console.log(success);
+      // 删除成功,云函数会处理 关联的删除操作
+      getApp().globalData.refesh_change_home=true;
+
+      wx.navigateBack();
+
+    }, function (error) {
+      // 删除失败
+      console.log(error);
+    });
+
+  },
+
 
 })

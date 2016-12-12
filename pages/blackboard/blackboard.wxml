@@ -4,6 +4,7 @@
 </view>
 <View  wx:if="{{!hideContent}}" class="btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
   <button bindtap="tapCreateArticle" style="font-size:12px;">发帖子</button>
+  <button bindtap="tapCreateVoice" style="font-size:12px;">发录音帖子</button>
 </View>
 <scroll-view class="container" wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
              bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
@@ -22,7 +23,13 @@
           <view bindtap="bindItemTap">
             <text class="answer-txt" aid="{{answer_id}}">{{item.content}}</text>
           </view>
-          <image src="{{item.pics[0]}}"  data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
+
+          <view  wx:if="{{item.voiceurl}}"  class="answer-actions">
+          <audio src="{{current.src}}" poster="{{current.poster}}" name="{{item.content}}" author="{{item.creater.nickName}}" action="{{audioAction}}" controls></audio>
+          </view> 
+
+          <image wx:if="{{item.pics[0]}}"  src="{{item.pics[0]}}"  data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
+
           <view class="answer-actions" bindtap="bindItemTap">
             <view class="like dot">
               <a>{{item.good_num}} 赞</a>

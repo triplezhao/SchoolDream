@@ -26,7 +26,7 @@ Page({
       console.log('111', that.data.islogin);
     }
 
-    getApp().checkLoginStatus(function (code, data) {
+    getApp().getStudentInfoFromServer(function (code, data) {
 
       if (code == 1) {
         that.setData({
@@ -73,6 +73,7 @@ Page({
 
   loadRooms: function () {
 
+    console.log('start loadRooms===========');
     var that = this;
 
     if (!getApp().globalData.logined_student) {
@@ -90,9 +91,12 @@ Page({
 
     query.descending('createdAt');
 
+    console.log('query.find()===========');
     // 执行查询
     query.find().then(function (student2Rooms) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
+
+    console.log('then===========',student2Rooms);
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
@@ -114,14 +118,14 @@ Page({
 
         // //如果当前roomNow不存在，则切换到列表第一个加入的room，
         // if (!that.data.room_now || that.data.room_now.student.objectId != student.id) {
-        //   that.enter2Rooom(student2Rooms[student2Rooms.length - 1]);
+        //   that.enter2Room(student2Rooms[student2Rooms.length - 1]);
         // }
 
       }
     });
   },
 
-  enter2Rooom: function (student2room) {
+  enter2Room: function (student2room) {
     var that = this;
     //改全局内存
     getApp().globalData.room_now = student2room;
@@ -131,6 +135,10 @@ Page({
     })
 
   },
+
+
+
+
 
 
   showActionSheet: function (e) {
@@ -145,7 +153,7 @@ Page({
           console.log(res.tapIndex)
           switch (res.tapIndex) {
             case 0:
-              that.enter2Rooom(that.data.list[index]);
+              that.enter2Room(that.data.list[index]);
               break;
             case 1:
               wx.navigateTo({
@@ -153,6 +161,8 @@ Page({
               })
               break;
             case 2:
+              //改全局内存
+             getApp().globalData.room_now =  that.data.list[index];
               wx.navigateTo({
                 url: '../roomsetting/roomsetting'
               })
