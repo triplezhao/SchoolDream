@@ -1,19 +1,17 @@
 
-<view wx:if="{{!hideError}}" style="display: flex;justify-content:center;">
-  <text >请先去选择一个班级</text>
-</view>
-<View  wx:if="{{!hideContent}}" class="btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
+
+<View  class="btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
   <button bindtap="tapCreateArticle" style="font-size:12px;">发帖子</button>
   <button bindtap="tapCreateVoice" style="font-size:12px;">发录音帖子</button>
 </View>
-<scroll-view class="container" wx:if="{{!hideContent}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
+<scroll-view class="container" wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
              bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
   <block wx:for="{{list}}" wx:for-index="idx" wx:for-item="item" data-idx="{{idx}}">
     <view class="feed-item">
       <view class="feed-source">
         <a class="">
-          <view  class="avatar">
-            <image src="{{item.creater.avatarUrl}}" data-src="{{item.creater.avatarUrl}}" bindtap="previewImage" ></image>
+          <view class="avatar">
+            <image src="{{item.creater.avatarUrl}}" data-src="{{item.creater.avatarUrl}}" bindtap="previewImage"></image>
           </view>
           <text>{{item.creater.nickName}}</text>
         </a>
@@ -23,30 +21,32 @@
           <view bindtap="bindItemTap">
             <text class="answer-txt" aid="{{answer_id}}">{{item.content}}</text>
           </view>
-
-          <view  wx:if="{{item.voiceurl}}"  class="answer-actions">
-          <audio src="{{current.src}}" poster="{{current.poster}}" name="{{item.content}}" author="{{item.creater.nickName}}" action="{{audioAction}}" controls></audio>
-          </view> 
-
-          <image wx:if="{{item.pics[0]}}"  src="{{item.pics[0]}}"  data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
-
-          <view class="answer-actions" bindtap="bindItemTap">
-            <view class="like dot">
-              <a>{{item.good_num}} 赞</a>
-            </view>
-            <view class="comments dot">{{item.comment_num}} 评论</view>
+          <view wx:if="{{item.voiceurl}}" class="answer-actions">
+              <view class="page-body-button" bindtap="playVoiceUrl" data-voiceurl="{{item.voiceurl}}" >
+                   <image src="/image/play.png"></image>
+              </view>
+            <!--<audio bindtap="playVoiceUrl" data-voiceurl="{{item.voiceurl}}" src="{{item.voiceurl}}" poster="{{current.poster}}"
+                   name="{{item.content}}" author="{{item.creater.nickName}}" action="{{audioAction}}"controls></audio>-->
           </view>
+        </view>
+        <image wx:if="{{item.pics[0]}}" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
+        <view class="answer-actions" bindtap="bindItemTap">
+          <view class="like dot">
+            <a>{{item.good_num}} 赞</a>
+          </view>
+          <view class="comments dot">{{item.comment_num}} 评论</view>
         </view>
       </view>
     </view>
-  </block>
-  <view class="tips1">
-    <view wx:if="{{hasMore}}"
-          style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
-      <text>上拉加载更多</text>
-    </view>
-    <view wx:else style="display: flex;justify-content:center;">
-      <text >没有更多内容了</text>
-    </view>
+</block>
+<view class="tips1">
+  <view wx:if="{{hasMore}}"
+        style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
+    <text>上拉加载更多</text>
   </view>
+  <view wx:else style="display: flex;justify-content:center;">
+    <text >没有更多内容了</text>
+  </view>
+</view>
 </scroll-view>
+<loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>

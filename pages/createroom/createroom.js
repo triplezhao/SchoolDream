@@ -116,7 +116,7 @@ Page({
         console.log(res)
         wx.uploadFile({
 
-          url: 'https://up.qbox.me',
+          url: QN.getUploadUrl(),
           filePath: res.tempFilePaths[0],
           name: 'file',
           formData: {

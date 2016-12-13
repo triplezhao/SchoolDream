@@ -6,15 +6,23 @@ const pageSize = 5;
 
 Page({
   data: {
+    // 是否显示loading
+    showLoading: false,
+    // loading提示语
+    loadingMessage: '',
+    // 提示消息
+    toastMessage: '',
+
+    room_now: null,
+    student: null,
+
     list: [],
     maxtime: utils.getTs(new Date()),
     total: 0,
     // size: 20,
     hasMore: true,
-    isLoading: false,
-    room_now: null,
-    hideContent: false,
-    hideError: true,
+
+    temp_voice_path: '',
 
     current: {
       poster: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
@@ -34,7 +42,13 @@ Page({
 
     // 页面初始化 options为页面跳转所带来的参数
     // this.refesh();
+    this.setData({
+      room_now: getApp().globalData.room_now,
+      student: getApp().globalData.logined_student,
+    })
 
+
+    this.refesh();
   },
 
   onReady: function () {
@@ -43,13 +57,16 @@ Page({
     // this.onShow();
   },
   onShow: function () {
+
+    wx.setNavigationBarTitle({
+      title: '当前班级：' + getApp().globalData.room_now.room.roomname,
+    });
     // 页面显示
     console.log("onShow");
-    if(getApp().globalData.refesh_change_blackboard){
-        getApp().globalData.refesh_change_blackboard=false;
-        this.refesh();
+    if (getApp().globalData.refesh_change_blackboard) {
+      getApp().globalData.refesh_change_blackboard = false;
+      this.refesh();
     }
-    this.checkLogin();
 
   },
   onHide: function () {
@@ -60,7 +77,6 @@ Page({
     // 页面关闭
     console.log("onUnload");
   },
-
 
   /**
    * 上拉刷新
@@ -82,13 +98,12 @@ Page({
   //刷新处理
   refesh: function (e) {
 
-     console.log('startrefesh===============');
+    console.log('startrefesh===============');
 
     var that = this;
 
-
+    that.showLoading('加载中');
     that.setData({
-      isLoading: true,
       maxtime: utils.getTs(new Date()),
     });
     // 
@@ -101,12 +116,14 @@ Page({
     query.descending('createdAt');
     query.limit(pageSize);
     query.include('creater,room');
-   
+
     query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
+      that.hideLoading();
+      wx.stopPullDownRefresh();
       if (results) {
         results.forEach(function (scm, i, a) {
           scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
@@ -125,19 +142,17 @@ Page({
           maxtime = utils.getTs(results[results.length - 1].createdAt);
           console.log('time ts', maxtime);
         }
-         console.log('maxtime', maxtime);
-         console.log('that.data.maxtime', that.data.maxtime);
+        console.log('maxtime', maxtime);
+        console.log('that.data.maxtime', that.data.maxtime);
 
         //更新界面
         that.setData({
           // 拼接数组
           list: results,
-          isLoading: false,
           hasMore: maxtime < that.data.maxtime,
           maxtime: maxtime,
-          // total: res.data.info.count
         })
-        wx.stopPullDownRefresh();
+      
       }
     });
   },
@@ -145,23 +160,14 @@ Page({
 
   //加载更多
   loadMore: function (e) {
-
     var that = this;
-
-
     if (!that.data.hasMore) {
-      wx.showToast({
-        title: '没有更多了',
-        icon: 'fail',
-        duration: 500
-      })
+      that.showToast('没有更多了');
       return;
     }
 
+    that.showLoading('加载更多');
 
-    that.setData({
-      isLoading: true,
-    });
     var query = new AV.Query('Article');
     var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
 
@@ -178,6 +184,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
+      that.hideLoading();
       if (results) {
         results.forEach(function (scm, i, a) {
           scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
@@ -196,50 +203,19 @@ Page({
           console.log('time ts', maxtime);
         }
         console.log('maxtime', maxtime);
-         console.log('that.data.maxtime', that.data.maxtime);
+        console.log('that.data.maxtime', that.data.maxtime);
         //更新界面
         that.setData({
           // 拼接数组
           list: that.data.list.concat(results),
           hasMore: maxtime < that.data.maxtime,
           maxtime: maxtime,
-          isLoading: false,
         })
+
       }
     });
   },
 
-
-
-  checkLogin: function () {
-    var that = this;
-    //app房间为空，则提示错误信息
-    if (!getApp().globalData.room_now) {
-      that.setData({
-        hideContent: true,
-        hideError: false,
-      })
-      return;
-    }
-
-    //当前page房间为空，或者 从我的页面进行了切换房间。则重新赋值
-    if (!that.data.room_now || getApp().globalData.room_now_change_1) {
-
-      getApp().globalData.room_now_change_1 = false;
-
-      that.setData({
-        room_now: getApp().globalData.room_now,
-        hideContent: false,
-        hideError: true
-      })
-
-      wx.setNavigationBarTitle({
-        title: '当前班级：'+getApp().globalData.room_now.room.roomname,
-      });
-
-      that.refesh();
-    }
-  },
   //跳转到新建页面
   tapCreateArticle: function (e) {
     wx.navigateTo({
@@ -253,12 +229,51 @@ Page({
     })
   },
   previewImage: function (e) {
-    var current = e.target.dataset.src
+    var current = e.currentTarget.dataset.src
 
     wx.previewImage({
       current: current,
       urls: [current]
     })
-  }
+  },
+
+
+  playVoiceUrl: function (e) {
+    var voiceurl = e.currentTarget.dataset.voiceurl;
+    var httpsurl = QN.genHttpsDownUrl(voiceurl);
+    wx.downloadFile({
+      url: httpsurl,
+      type: 'audio',
+      success: function (res) {
+        console.log(res);
+        wx.playVoice({
+          filePath: res.tempFilePath
+        })
+      },
+      fail(error) {
+        console.log(error)
+      },
+      complete(res) {
+        console.log(res)
+      }
+    })
+  },
+  // 显示loading提示
+  showLoading(loadingMessage) {
+    this.setData({ showLoading: true, loadingMessage });
+  },
+
+  // 隐藏loading提示
+  hideLoading() {
+    this.setData({ showLoading: false, loadingMessage: '' });
+  },
+
+  // 显示toast消息
+  showToast(toastMessage) {
+    wx.showToast({
+      title:toastMessage,
+      duration:1000
+    })
+  },
 
 })

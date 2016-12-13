@@ -11,10 +11,22 @@ var playTimeInterval
 Page({
   data: {
 
+    // 是否显示loading
+    showLoading: false,
+    // loading提示语
+    loadingMessage: '',
+    // 是否显示toast
+    showToast: false,
+    // 提示消息
+    toastMessage: '',
+
+    room_now: null,
+    student: null,
+
     tempFilePaths: [],//图片的
     tempFilePath: null,  //音频的
     disabled: true,
-    isloading: false,
+
 
     recording: false,
     playing: false,
@@ -25,6 +37,26 @@ Page({
     formatedPlayTime: '00:00:00'
   },
 
+  onLoad: function (options) {
+    // 页面初始化 options为页面跳转所带来的参数
+    that.setData({
+      room_now: getApp().globalData.room_now,
+      student: getApp().globalData.logined_student,
+    })
+  },
+  onReady: function () {
+    // 页面渲染完成
+  },
+  onShow: function () {
+    // 页面显示
+  },
+  onHide: function () {
+    // 页面隐藏
+  },
+  onUnload: function () {
+    // 页面关闭
+  },
+
   formSubmit: function (e) {
     var that = this;
     console.log('form发生了submit事件，携带数据为：', e.detail.value);
@@ -33,32 +65,21 @@ Page({
     var picurl = that.data.tempFilePaths;
 
     if (!content) {
-      wx.showToast({
-        title: '内容不能为空',
-        icon: 'success',
-        duration: 1000
-      })
+      that.showToast('内容不能为空');
       return;
     }
     if (!that.data.hasRecord) {
-      wx.showToast({
-        title: '还没有音频',
-        icon: 'success',
-        duration: 1000
-      })
+      that.showToast('还没有音频');
       return;
     }
 
-    that.setData({
-      isloading: true
-    })
+    that.showLoading('加载中');
 
-
-console.log('that.data.tempFilePath', that.data.tempFilePath);
+    console.log('that.data.tempFilePath', that.data.tempFilePath);
     //第一步，先上传音频
     var uptoken = QN.genUpToken();
     wx.uploadFile({
-      url: 'https://up.qbox.me',
+      url: QN.getUploadUrl(),
       filePath: that.data.tempFilePath,
       name: 'file',
       formData: {
@@ -75,7 +96,7 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
         console.log(that.data.tempFilePath);
 
 
-    // 新建一个 AV 对象
+        // 新建一个 AV 对象
         var article = new Article();
         article.set('title', 'title');
         article.set('content', content);
@@ -89,6 +110,7 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
       },
       complete(res) {
         console.log(res)
+        that.hideLoading();
       }
     })
 
@@ -96,8 +118,8 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
 
 
   save2Server: function (article) {
-   
 
+    var that = this;
     var creater = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
     article.set('creater', creater);
 
@@ -106,30 +128,21 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
 
     article.save().then(function (res) {
       // 成功保存之后，执行其他逻辑.
-      
+      that.hideLoading();
       console.log('article created with objectId: ' + article.id);
       if (res) {
-
-        wx.showToast({
-          title: '添加数据成功',
-          icon: 'success',
-          duration: 2000
-        })
+        that.showToast('发布成功');
         getApp().globalData.refesh_change_blackboard = true;
         wx.navigateBack();
       } else {
         // 异常处理
         console.error('发布失败: ' + error.message);
       }
-      that.setData({
-        isloading: false
-      })
+
 
     }, function (error) {
       // 异常处理
-      that.setData({
-        isloading: false
-      })
+      that.hideLoading();
       console.error('Failed to create new object, with error message: ' + error.message);
     });
   },
@@ -156,12 +169,10 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
 
         console.log(res)
 
-        that.setData({
-          isloading: true
-        })
+        that.showLoading('上传中');
         wx.uploadFile({
 
-          url: 'https://up.qbox.me',
+          url: QN.getUploadUrl(),
           filePath: res.tempFilePaths[0],
           name: 'file',
           formData: {
@@ -173,24 +184,17 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
 
             that.setData({
               tempFilePaths: [QN.getImageUrl(data.key)],
-              disabled: false
+              disabled: false,
             })
-            that.update();
 
-            that.setData({
-              isloading: false
-            })
-            wx.showToast({
-              title: data.key,
-              icon: 'success',
-              duration: 1000
-            })
+            that.showToast('上传成功');
           },
           fail(error) {
             console.log(error)
           },
           complete(res) {
             console.log(res)
+            that.hideLoading();
           }
         })
 
@@ -295,6 +299,22 @@ console.log('that.data.tempFilePath', that.data.tempFilePath);
       tempFilePath: '',
       formatedRecordTime: util.formatTime(0)
     })
-  }
+  },
+  // 显示loading提示
+  showLoading(loadingMessage) {
+    this.setData({ showLoading: true, loadingMessage });
+  },
 
+  // 隐藏loading提示
+  hideLoading() {
+    this.setData({ showLoading: false, loadingMessage: '' });
+  },
+
+  // 显示toast消息
+  showToast(toastMessage) {
+    wx.showToast({
+      title: toastMessage,
+      duration: 1000
+    })
+  },
 })

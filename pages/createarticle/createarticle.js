@@ -10,11 +10,26 @@ Page({
     text: "Page createarticle",
     tempFilePaths: [],
     disabled: true,
-    isloading: false,
+
+    // 是否显示loading
+    showLoading: false,
+    // loading提示语
+    loadingMessage: '',
+    // 是否显示toast
+    showToast: false,
+    // 提示消息
+    toastMessage: '',
+
+    room_now: null,
+    student: null,
   },
 
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
+    this.setData({
+      room_now: getApp().globalData.room_now,
+      student: getApp().globalData.logined_student,
+    })
   },
   onReady: function () {
     // 页面渲染完成
@@ -36,121 +51,103 @@ Page({
     var picurl = that.data.tempFilePaths;
 
     if (!content) {
-      wx.showToast({
-        title: '内容不能为空',
-        icon: 'success',
-        duration: 1000
-      })
+      that.showToast('内容不能为空');
       return;
     }
     if (!picurl) {
-      wx.showToast({
-        title: '图片不能为空',
-        icon: 'success',
-        duration: 1000
-      })
+      that.showToast('图片不能为空');
       return;
     }
 
-    // 新建一个 AV 对象
-    var article = new Article();
-    article.set('title', 'title');
-    article.set('content', content);
-    article.set('pics', that.data.tempFilePaths);
+    that.showLoading('正在发布');
+    //禁用发布按钮
+    that.setData({
+      disabled: true
+    })
 
+    //第一步，先上传图片
+    var uptoken = QN.genUpToken();
+    console.log(res)
+    wx.uploadFile({
+      url: QN.getUploadUrl(),
+      filePath: res.tempFilePaths[0],
+      name: 'file',
+      formData: {
+        'key': res.tempFilePaths[0].split('//')[1],
+        'token': uptoken
+      },
+      success: function (res) {
+
+        console.log(QN.getImageUrl(data.key));
+        var data = JSON.parse(res.data);
+        that.setData({
+          tempFilePaths: [QN.getImageUrl(data.key)],
+          disabled: false
+        })
+
+        //第2步，先上传数据
+        var article = new Article();
+        article.set('title', 'title');
+        article.set('content', content);
+        article.set('pics', [QN.getImageUrl(data.key)]);
+        that.save2Server(article);
+
+      },
+      fail(error) {
+        console.log(error)
+        that.hideLoading();
+      },
+      complete(res) {
+        console.log(res)
+      }
+    })
+
+
+  },
+  save2Server: function (article) {
+
+    var that = this;
     var creater = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
     article.set('creater', creater);
 
     var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
     article.set('room', room);
 
-
-    that.setData({
-      isloading: true
-    })
     article.save().then(function (res) {
       // 成功保存之后，执行其他逻辑.
-      that.setData({
-        isloading: false
-      })
+      that.hideLoading();
       console.log('article created with objectId: ' + article.id);
       if (res) {
-        wx.showToast({
-          title: '添加数据成功',
-          icon: 'success',
-          duration: 2000
-        })
-
-
-        getApp().globalData.refesh_change_home = true;
+        that.showToast('发布成功');
+        getApp().globalData.refesh_change_blackboard = true;
         wx.navigateBack();
       } else {
         // 异常处理
-        console.error('发布失败: ' + error.message);
+        console.error('发布失败');
+        that.showToast('发布失败');
       }
 
     }, function (error) {
-      that.setData({
-        isloading: false
-      })
+      that.hideLoading();
       // 异常处理
       console.error('Failed to create new object, with error message: ' + error.message);
     });
   },
 
 
-
   // 从相册选择照片或拍摄照片
   chooseImage() {
+    var that = this;
     wx.chooseImage({
       count: 3,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
-
       success: (res) => {
-
-        var that = this;
+        console.log(res);
         that.setData({
-          disabled: true
+          tempFilePaths: res.tempFilePaths,
+          disabled: false
         })
-
-        var uptoken = QN.genUpToken();
-
-        //用这个直接生成http://jsfiddle.net/gh/get/extjs/4.2/icattlecoder/jsfiddle/tree/master/uptoken
-        // var uptoken = 'Vu7wSzNFhyn2JxdvZ4VExCslx7lWNQUqsyC6XqRV:k9vaLUvyo8I5fnEaGI0XOWlNwLE=:eyJzY29wZSI6ImNsb3VkeSIsImRlYWRsaW5lIjoxNDgwNDQ2ODgxfQ==';
-
-        console.log(res)
-        wx.uploadFile({
-
-          url: 'https://up.qbox.me',
-          filePath: res.tempFilePaths[0],
-          name: 'file',
-          formData: {
-            'key': res.tempFilePaths[0].split('//')[1],
-            'token': uptoken
-          },
-          success: function (res) {
-            var data = JSON.parse(res.data);
-
-            that.setData({
-              tempFilePaths: [QN.getImageUrl(data.key)],
-              disabled: false
-            })
-            that.update();
-            wx.showToast({
-              title: data.key,
-              icon: 'success',
-              duration: 1000
-            })
-          },
-          fail(error) {
-            console.log(error)
-          },
-          complete(res) {
-            console.log(res)
-          }
-        })
-
       },
     });
   },
@@ -170,11 +167,7 @@ Page({
     var current = e.target.dataset.src
 
     if (!current) {
-      wx.showToast({
-        title: '图片异常',
-        icon: 'success',
-        duration: 1000
-      })
+      this.showToast('图片异常');
       return;
     }
 
@@ -182,6 +175,22 @@ Page({
       current: current,
       urls: this.data.tempFilePaths
     })
-  }
+  },
+  // 显示loading提示
+  showLoading(loadingMessage) {
+    this.setData({ showLoading: true, loadingMessage });
+  },
 
+  // 隐藏loading提示
+  hideLoading() {
+    this.setData({ showLoading: false, loadingMessage: '' });
+  },
+
+  // 显示toast消息
+  showToast(toastMessage) {
+    wx.showToast({
+      title: toastMessage,
+      duration: 1000
+    })
+  },
 })

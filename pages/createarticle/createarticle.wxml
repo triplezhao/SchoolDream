@@ -1,7 +1,4 @@
 
-<loading wx:if="{{isloading}}">
-正在加载...</loading>
-
   <view style="margin:30rpx;">
     <form bindsubmit="formSubmit" bindreset="formReset">
       <view class="flex-wrp-row" style="justify-content:  flex-start;margin:10px;">
@@ -36,3 +33,4 @@
     </view>
   </form>
 </view>
+<loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>

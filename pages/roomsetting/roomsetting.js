@@ -18,7 +18,6 @@ Page({
     that.setData({
       room_now: getApp().globalData.room_now,
       student: getApp().globalData.logined_student,
-      islogin: true,
     })
     wx.setNavigationBarTitle({
       title: '当前班级：' + getApp().globalData.room_now.room.roomname,
@@ -32,7 +31,9 @@ Page({
   },
   onShow: function () {
     // 页面显示
-
+    wx.setNavigationBarTitle({
+      title: '当前班级：' + getApp().globalData.room_now.room.roomname,
+    });
   },
   onHide: function () {
     // 页面隐藏
@@ -101,9 +102,9 @@ Page({
     var that = this;
     var room = AV.Object.createWithoutData('Student2Room', that.data.room_now.objectId);
     room.destroy().then(function (success) {
-       console.log(success);
+      console.log(success);
       // 删除成功,云函数会处理 关联的删除操作
-      getApp().globalData.refesh_change_home=true;
+      getApp().globalData.refesh_change_home = true;
 
       wx.navigateBack();
 
@@ -118,9 +119,9 @@ Page({
     var that = this;
     var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
     room.destroy().then(function (success) {
-       console.log(success);
+      console.log(success);
       // 删除成功,云函数会处理 关联的删除操作
-      getApp().globalData.refesh_change_home=true;
+      getApp().globalData.refesh_change_home = true;
 
       wx.navigateBack();
 
