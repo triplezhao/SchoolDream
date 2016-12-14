@@ -18,6 +18,7 @@ Page({
 
   },
   onLoad: function (options) {
+    console.log('onLoad');
     wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
     var that = this;
@@ -51,7 +52,7 @@ Page({
   },
   onShow: function () {
     // 页面显示
-
+    console.log('onShow');
     if (getApp().globalData.refesh_change_home) {
       this.loadRooms();
     }

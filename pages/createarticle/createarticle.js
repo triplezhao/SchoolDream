@@ -48,13 +48,13 @@ Page({
     console.log('form发生了submit事件，携带数据为：', e.detail.value);
 
     var content = e.detail.value.content;
-    var picurl = that.data.tempFilePaths;
+    var picurls = that.data.tempFilePaths;
 
     if (!content) {
       that.showToast('内容不能为空');
       return;
     }
-    if (!picurl) {
+    if (!picurls) {
       that.showToast('图片不能为空');
       return;
     }
@@ -67,19 +67,18 @@ Page({
 
     //第一步，先上传图片
     var uptoken = QN.genUpToken();
-    console.log(res)
     wx.uploadFile({
       url: QN.getUploadUrl(),
-      filePath: res.tempFilePaths[0],
+      filePath: picurls[0],
       name: 'file',
       formData: {
-        'key': res.tempFilePaths[0].split('//')[1],
+        'key': picurls[0].split('//')[1],
         'token': uptoken
       },
       success: function (res) {
 
-        console.log(QN.getImageUrl(data.key));
         var data = JSON.parse(res.data);
+        console.log(QN.getImageUrl(data.key));
         that.setData({
           tempFilePaths: [QN.getImageUrl(data.key)],
           disabled: false
