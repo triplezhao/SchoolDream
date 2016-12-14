@@ -15,6 +15,7 @@ Page({
 
     room_now: null,
     student: null,
+    nicknamemap: {},
 
     list: [],
     maxtime: utils.getTs(new Date()),
@@ -95,8 +96,10 @@ Page({
   },
 
 
+
+
   //刷新处理
-  refesh: function (e) {
+  refeshArticle: function (e) {
 
     console.log('startrefesh===============');
 
@@ -128,6 +131,7 @@ Page({
         results.forEach(function (scm, i, a) {
           scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
           scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+          scm.set('tmp_nickname', );
           // scm=JSON.parse(JSON.stringify(scm));
         });
         console.log('before JSON.parse', results);
@@ -152,8 +156,51 @@ Page({
           hasMore: maxtime < that.data.maxtime,
           maxtime: maxtime,
         })
-      
+
       }
+    });
+  },
+  //刷新处理
+  refesh: function (e) {
+
+    console.log('startrefesh===============');
+    //获取房间所有学生和学生的昵称，组成一个对象，当做map<objectId:nickname>以便房间内显示昵称用
+    var that = this;
+    // 查询Student2Room
+    var query = new AV.Query('Student2Room');
+    var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
+
+    // 查询当前登录用户加入的room
+    query.equalTo('room', room);
+    query.include('student');
+    // query.descending('createdAt');
+    that.showLoading('加载中');
+    // 执行查询
+    query.find().then(function (student2Rooms) {
+      //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
+      if (student2Rooms) {
+        student2Rooms.forEach(function (scm, i, a) {
+          //组件
+          // that.data.nicknamemap=JSON.parse(that.data.nicknamemap);
+          if(scm.get('nickname')){
+            that.data.nicknamemap[scm.get('student').id]=scm.get('nickname');
+          }
+
+        });
+        console.log('nicknamemap', that.data.nicknamemap);
+
+        //更新界面
+        that.setData({
+          nicknamemap: that.data.nicknamemap
+        })
+
+        //加载文章list
+        that.refeshArticle();
+
+      }
+    }, function (error) {
+      console.log(error);
+      that.hideLoading('加载中');
     });
   },
 
@@ -271,8 +318,8 @@ Page({
   // 显示toast消息
   showToast(toastMessage) {
     wx.showToast({
-      title:toastMessage,
-      duration:1000
+      title: toastMessage,
+      duration: 1000
     })
   },
 

@@ -11,7 +11,7 @@
         <view class="flex-wrp-column">
           <image src="{{item.student.avatarUrl}}" class="images-image" data-src="{{item.student.avatarUrl}}"
                  bindtap="previewImage"></image>
-          <text style="font-size:12px">{{item.student.nickName}}</text>
+          <text style="font-size:12px">{{item.nickname?item.nickname:item.student.nickName}}</text>
         </view>
       </block>
       <view class="images-image image-plus" bindtap="tapInvite">

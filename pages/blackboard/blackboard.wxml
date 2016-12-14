@@ -13,7 +13,7 @@
           <view class="avatar">
             <image src="{{item.creater.avatarUrl}}" data-src="{{item.creater.avatarUrl}}" bindtap="previewImage"></image>
           </view>
-          <text>{{item.creater.nickName}}</text>
+          <text>{{nicknamemap[item.creater.objectId]?nicknamemap[item.creater.objectId]:item.creater.nickName}}</text>
         </a>
       </view>
       <view class="feed-content">

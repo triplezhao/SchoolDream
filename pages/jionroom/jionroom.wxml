@@ -5,8 +5,8 @@
       <view class="flex-wrp-row" style="justify-content:  flex-start;margin:10rpx;">
        <view style="width:20%;font-size:12px">输入邀请码:</view>
         <view style="flex-grow: 1;">
-          <input name="invitationcode" class="inputs" placeholder-style="color:gray;font-size:12px;padding:0px 0px 0px 5px;"
-                 placeholder=" 邀请码"  />
+          <input name="invitationcode" class="inputs" 
+                 placeholder="长按黏贴邀请码"  />
           <View style="height: 1px;background-color: gray;"></View>
         </view>
       </view>
@@ -14,7 +14,7 @@
       <view class="flex-wrp-row" style="justify-content:  flex-start;margin:10rpx;">
        <view style="width:20%;font-size:12px">在本班昵称:</view>
         <view style="flex-grow: 1;">
-          <input name="nickname" class="inputs" placeholder-style="color:gray;font-size:12px;padding:0px 0px 0px 5px;"
+          <input name="nickname" class="inputs" placeholder-style=""
                  placeholder=" 昵称"  />
           <View style="height: 1px;background-color: gray;"></View>
         </view>
