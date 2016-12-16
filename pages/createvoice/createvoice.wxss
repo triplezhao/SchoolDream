@@ -87,6 +87,10 @@
   width: 250rpx;
   text-align: center;
 }
+.page-body-button image{
+  width: 120rpx;
+  height: 120rpx;
+}
 .button-stop-record {
   width: 110rpx;
   height: 110rpx;

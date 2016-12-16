@@ -1,11 +1,19 @@
 const AV = require('../../utils/leancloud-storage.js');
 const QN = require('../../utils/qiniuutil.js');
 const utils = require('../../utils/util.js');
-
+const Student = require('../../model/Student');
+const Student2Room = require('../../model/Student2Room');
+const Room = require('../../model/Room');
+const Article = require('../../model/Article');
+const Comment = require('../../model/Comment');
 const pageSize = 5;
 
 Page({
   data: {
+
+    inputShowed: false,
+    isShowComment: false,
+    inputVal: "",
     // 是否显示loading
     showLoading: false,
     // loading提示语
@@ -24,6 +32,8 @@ Page({
     hasMore: true,
 
     temp_voice_path: '',
+    mArticle: {},
+    mIndex: -1,
 
     current: {
       poster: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
@@ -97,8 +107,52 @@ Page({
 
 
 
-
+  
   //刷新处理
+  refesh: function (e) {
+
+    console.log('startrefesh===============');
+    //获取房间所有学生和学生的昵称，组成一个对象，当做map<objectId:nickname>以便房间内显示昵称用
+    var that = this;
+    // 查询Student2Room
+    var query = new AV.Query('Student2Room');
+    var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
+
+    // 查询当前登录用户加入的room
+    query.equalTo('room', room);
+    query.include('student');
+    // query.descending('createdAt');
+    that.showLoading('加载中');
+    // 执行查询
+    query.find().then(function (student2Rooms) {
+      //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
+      if (student2Rooms) {
+        student2Rooms.forEach(function (scm, i, a) {
+          //组件
+          // that.data.nicknamemap=JSON.parse(that.data.nicknamemap);
+          if (scm.get('nickname')) {
+            that.data.nicknamemap[scm.get('student').id] = scm.get('nickname');
+          }
+
+        });
+        console.log('nicknamemap', that.data.nicknamemap);
+
+        //更新界面
+        that.setData({
+          nicknamemap: that.data.nicknamemap
+        })
+
+        //加载文章list
+        that.refeshArticle();
+
+      }
+    }, function (error) {
+      console.log(error);
+      that.hideLoading('加载中');
+    });
+  },
+
+//刷新处理
   refeshArticle: function (e) {
 
     console.log('startrefesh===============');
@@ -118,8 +172,7 @@ Page({
 
     query.descending('createdAt');
     query.limit(pageSize);
-    query.include('creater,room');
-
+    query.include('creater,room,comments');
     query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
@@ -131,7 +184,10 @@ Page({
         results.forEach(function (scm, i, a) {
           scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
           scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
-          scm.set('tmp_nickname', );
+          if (scm.get('comments')) {
+            scm.set('comments', JSON.parse(JSON.stringify(scm.get('comments'))));
+          }
+          // scm.set('tmp_nickname', );
           // scm=JSON.parse(JSON.stringify(scm));
         });
         console.log('before JSON.parse', results);
@@ -160,51 +216,6 @@ Page({
       }
     });
   },
-  //刷新处理
-  refesh: function (e) {
-
-    console.log('startrefesh===============');
-    //获取房间所有学生和学生的昵称，组成一个对象，当做map<objectId:nickname>以便房间内显示昵称用
-    var that = this;
-    // 查询Student2Room
-    var query = new AV.Query('Student2Room');
-    var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
-
-    // 查询当前登录用户加入的room
-    query.equalTo('room', room);
-    query.include('student');
-    // query.descending('createdAt');
-    that.showLoading('加载中');
-    // 执行查询
-    query.find().then(function (student2Rooms) {
-      //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-      if (student2Rooms) {
-        student2Rooms.forEach(function (scm, i, a) {
-          //组件
-          // that.data.nicknamemap=JSON.parse(that.data.nicknamemap);
-          if(scm.get('nickname')){
-            that.data.nicknamemap[scm.get('student').id]=scm.get('nickname');
-          }
-
-        });
-        console.log('nicknamemap', that.data.nicknamemap);
-
-        //更新界面
-        that.setData({
-          nicknamemap: that.data.nicknamemap
-        })
-
-        //加载文章list
-        that.refeshArticle();
-
-      }
-    }, function (error) {
-      console.log(error);
-      that.hideLoading('加载中');
-    });
-  },
-
-
   //加载更多
   loadMore: function (e) {
     var that = this;
@@ -223,7 +234,7 @@ Page({
 
     query.descending('createdAt');
     query.limit(pageSize);
-    query.include('creater,room');
+    query.include('creater,room,comments');
 
     var oldest = new Date(that.data.maxtime);
     query.lessThanOrEqualTo('createdAt', oldest);
@@ -236,6 +247,9 @@ Page({
         results.forEach(function (scm, i, a) {
           scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
           scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+          if (scm.get('comments')) {
+            scm.set('comments', JSON.parse(JSON.stringify(scm.get('comments'))));
+          }
           // scm=JSON.parse(JSON.stringify(scm));
         });
         console.log('before JSON.parse', results);
@@ -321,6 +335,143 @@ Page({
       title: toastMessage,
       duration: 1000
     })
+  }
+  ,
+  showInput: function () {
+    this.setData({
+      inputShowed: true
+    });
+  },
+  hideInput: function () {
+    this.setData({
+      inputVal: "",
+      inputShowed: false
+    });
+  },
+  clearInput: function () {
+    this.setData({
+      inputVal: ""
+    });
+  },
+  inputTyping: function (e) {
+    this.setData({
+      inputVal: e.detail.value
+    });
+  },
+
+
+  showComment: function (e) {
+
+    console.log('showComment', e);
+
+    var that = this;
+    that.data.mIndex = e.currentTarget.dataset.index;
+    that.data.mArticle = that.data.list[that.data.mIndex];
+
+    this.setData({
+      isShowComment: true
+    });
+  },
+
+  hideComment: function () {
+
+    this.setData({
+      isShowComment: false
+    });
+  },
+
+  //点击发送按钮，先隐藏键盘/评论框，再发送评论数据
+  sendComment: function (e) {
+    var that = this;
+    this.hideComment();
+    this.hideInput();
+    //从页面传过来的article
+    var index = that.data.mIndex;
+    var current_article = that.data.list[index];
+
+
+
+    //赋值后 再删除数据
+    var content = that.data.inputVal;
+    this.clearInput();
+
+
+    //第2步，上传数据
+    var comment = new Comment();
+    comment.set('content', content);
+
+    var creater = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
+    comment.set('creater', creater);
+
+    //回复文章的作者，或者回复的评论作者
+    var touser = AV.Object.createWithoutData('Student', current_article.creater.objectId);
+    comment.set('touser', touser);
+
+    var toarticle = AV.Object.createWithoutData('Article', current_article.objectId);
+    comment.set('toarticle', toarticle);
+    comment.fetchWhenSave(true);
+
+    //回复的评论作者时候，才有这个值
+    // var tocomment = AV.Object.createWithoutData('Comment',current_article.objectId);
+    // comment.set('tocomment', tocomment);
+
+    that.showLoading();
+    // comment.save().then(function (res) {
+    //   // 成功保存之后，执行其他逻辑.
+    //   that.hideLoading();
+    //   console.log('article created with objectId: ' + article.id);
+    //   if (res) {
+    //     that.showToast('发布成功');
+    //     getApp().globalData.refesh_change_blackboard = true;
+    //     wx.navigateBack();
+    //   } else {
+    //     // 异常处理
+    //     console.error('发布失败');
+    //     that.showToast('发布失败');
+    //   }
+
+    // }, function (error) {
+    //   that.hideLoading();
+    //   // 异常处理
+    //   that.showToast('发布失败');
+    //   console.error('Failed to create new object, with error message: ' + error.message);
+    // });
+    comment.save()
+      //保存评论
+      .then(function (res) {
+
+        var article1 = new Article(current_article, { parse: true });
+
+        //指针类的，需要转换成av对象指针。
+        article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
+        article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
+
+        //不写死在表里，还是页面根据id去查询在这个房间里的昵称合适。
+        // article1.set('touser_name', AV.Object.createWithoutData('Room', current_article.room.objectId));
+        // article1.set('creater_name', AV.Object.createWithoutData('Room', current_article.room.objectId));
+
+
+
+        article1.increment('commentnum', 1);
+        article1.add('comments', res);
+        article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
+
+        return article1.save();
+      })
+      //保存文章，为文章添加评论数组，和评论数
+      .then(function (res) {
+        that.hideLoading();
+        //替换列表中的当前文章。以便显示最新评论和评论数
+        that.setData({
+          list: that.data.list.splice(index, 1, res),
+        })
+
+      }).catch(function (error) {
+        that.hideLoading();
+        // 异常处理
+        that.showToast('发布失败');
+        console.error('Failed to create new object, with error message: ' + error.message);
+      });
   },
 
 })
