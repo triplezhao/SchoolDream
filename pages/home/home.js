@@ -18,11 +18,11 @@ Page({
 
   },
   onLoad: function (options) {
+    let that = this;
     console.log('onLoad');
     wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
-    var that = this;
-   
+
     if (getApp().globalData.logined_student) {
       //改本业内存
       that.setData({
@@ -33,20 +33,19 @@ Page({
 
     that.showLoading('加载中');
 
-    getApp().getStudentInfoFromServer(function (code, data) {
-
-      if (code == 1) {
+    getApp().studentLogin((code, data) => {
+      if (code==1) {
         that.setData({
           student: data,
-        })
+        });
         that.loadRooms();
       } else {
+        console.log('studentLogin',data);
         that.hideLoading();
       }
-
     });
-
   },
+
   onReady: function () {
     // 页面渲染完成
   },
@@ -104,14 +103,18 @@ Page({
       console.log('then===========', student2Rooms);
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
+          
+          // console.log(scm.room.name);
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
           scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
-          // scm=JSON.parse(JSON.stringify(scm));
+          // scm=JSON.parse(JSON.stringify(scm)); 不起作用，去外面用数组的JSON.parse
+          // scm=scm.toJSON();不起作用， 踏实用JSON.parse吧
         });
         console.log('before JSON.parse', student2Rooms);
 
-        //解析成json标准对象存储
+        // //解析成json标准对象存储
         student2Rooms = JSON.parse(JSON.stringify(student2Rooms));
+        // student2Rooms = student2Rooms.toJSON(); //数组没这个方法
 
         console.log('after JSON.parse', student2Rooms);
 

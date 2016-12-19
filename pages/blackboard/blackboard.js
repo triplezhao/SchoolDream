@@ -104,15 +104,12 @@ Page({
     this.loadMore();
 
   },
-
-
-
   
   //刷新处理
   refesh: function (e) {
 
     console.log('startrefesh===============');
-    //获取房间所有学生和学生的昵称，组成一个对象，当做map<objectId:nickname>以便房间内显示昵称用
+    //获取房间所有学生和学生的昵称，组成一个对象，当做map<id:nickname>以便房间内显示昵称用
     var that = this;
     // 查询Student2Room
     var query = new AV.Query('Student2Room');
@@ -181,20 +178,6 @@ Page({
       that.hideLoading();
       wx.stopPullDownRefresh();
       if (results) {
-        results.forEach(function (scm, i, a) {
-          scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
-          scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
-          if (scm.get('comments')) {
-            scm.set('comments', JSON.parse(JSON.stringify(scm.get('comments'))));
-          }
-          // scm.set('tmp_nickname', );
-          // scm=JSON.parse(JSON.stringify(scm));
-        });
-        console.log('before JSON.parse', results);
-
-        //解析成json标准对象存储
-        results = JSON.parse(JSON.stringify(results));
-
         console.log('after JSON.parse', results);
 
         var maxtime = that.data.maxtime;
@@ -244,18 +227,6 @@ Page({
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
       that.hideLoading();
       if (results) {
-        results.forEach(function (scm, i, a) {
-          scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
-          scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
-          if (scm.get('comments')) {
-            scm.set('comments', JSON.parse(JSON.stringify(scm.get('comments'))));
-          }
-          // scm=JSON.parse(JSON.stringify(scm));
-        });
-        console.log('before JSON.parse', results);
-
-        //解析成json标准对象存储
-        results = JSON.parse(JSON.stringify(results));
 
         console.log('after JSON.parse', results);
         var maxtime = that.data.maxtime;
@@ -404,22 +375,22 @@ Page({
     comment.set('creater', creater);
 
     //回复文章的作者，或者回复的评论作者
-    var touser = AV.Object.createWithoutData('Student', current_article.creater.objectId);
+    var touser = AV.Object.createWithoutData('Student', current_article.creater.id);
     comment.set('touser', touser);
 
-    var toarticle = AV.Object.createWithoutData('Article', current_article.objectId);
+    var toarticle = AV.Object.createWithoutData('Article', current_article.id);
     comment.set('toarticle', toarticle);
     comment.fetchWhenSave(true);
 
     //回复的评论作者时候，才有这个值
-    // var tocomment = AV.Object.createWithoutData('Comment',current_article.objectId);
+    // var tocomment = AV.Object.createWithoutData('Comment',current_article.id);
     // comment.set('tocomment', tocomment);
 
     that.showLoading();
     // comment.save().then(function (res) {
     //   // 成功保存之后，执行其他逻辑.
     //   that.hideLoading();
-    //   console.log('article created with objectId: ' + article.id);
+    //   console.log('article created with id: ' + article.id);
     //   if (res) {
     //     that.showToast('发布成功');
     //     getApp().globalData.refesh_change_blackboard = true;
@@ -443,12 +414,12 @@ Page({
         var article1 = new Article(current_article, { parse: true });
 
         //指针类的，需要转换成av对象指针。
-        article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
-        article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
+        article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.id));
+        article1.set('room', AV.Object.createWithoutData('Room', current_article.room.id));
 
         //不写死在表里，还是页面根据id去查询在这个房间里的昵称合适。
-        // article1.set('touser_name', AV.Object.createWithoutData('Room', current_article.room.objectId));
-        // article1.set('creater_name', AV.Object.createWithoutData('Room', current_article.room.objectId));
+        // article1.set('touser_name', AV.Object.createWithoutData('Room', current_article.room.id));
+        // article1.set('creater_name', AV.Object.createWithoutData('Room', current_article.room.id));
 
 
 
