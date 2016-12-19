@@ -190,7 +190,7 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-    this.setData({ showLoading: true, loadingMessage });
+    this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
   },
 
   // 隐藏loading提示

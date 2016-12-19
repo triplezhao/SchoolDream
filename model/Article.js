@@ -9,6 +9,7 @@ class Article extends AV.Object {
     // creater  Pointer
     // room Pointer
     // comments [] array方式 云函数处理  评论的问题，文章列表，返回的时候，希望将评论列表页一起返回，不要二次查询。( 用pointer array方式存comment，可以只存储最新两个，或者n条评论，)
+    // zans[]    
     // zannum    云函数处理
     // commentnum  云函数处理
 
@@ -54,6 +55,12 @@ class Article extends AV.Object {
     }
     get comments() {
         return this.get('comments');
+    }
+    set zans(value) {
+        this.set('zans', value);
+    }
+    get zans() {
+        return this.get('zans');
     }
     set zannum(value) {
         this.set('zannum', value);

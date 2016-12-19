@@ -66,7 +66,7 @@ Page({
     room.set('teacher', '');
     room.set('question', '');
     room.set('answer', '');
-    var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.id);
+    var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
     room.set('creater', student);
 
     room.save().then(function (room) {

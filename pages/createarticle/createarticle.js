@@ -115,7 +115,7 @@ Page({
     article.save().then(function (res) {
       // 成功保存之后，执行其他逻辑.
       that.hideLoading();
-      console.log('article created with objectId: ' + article.id);
+      console.log('article created with objectId: ' + res.id);
       if (res) {
         that.showToast('发布成功');
         getApp().globalData.refesh_change_blackboard = true;
@@ -177,7 +177,7 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-    this.setData({ showLoading: true, loadingMessage });
+ this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
   },
 
   // 隐藏loading提示

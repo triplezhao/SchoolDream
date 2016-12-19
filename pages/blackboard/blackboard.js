@@ -6,6 +6,7 @@ const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
 const Article = require('../../model/Article');
 const Comment = require('../../model/Comment');
+const Zan = require('../../model/Zan');
 const pageSize = 5;
 
 Page({
@@ -23,6 +24,7 @@ Page({
 
     room_now: null,
     student: null,
+    //本班所有同学的信息的map，key是objectId,value是room2student实体
     nicknamemap: {},
 
     list: [],
@@ -70,7 +72,7 @@ Page({
   onShow: function () {
 
     wx.setNavigationBarTitle({
-      title: '当前班级：' + getApp().globalData.room_now.room.roomname,
+      title: '当前班级：' + getApp().globalData.room_now.room.name,
     });
     // 页面显示
     console.log("onShow");
@@ -104,7 +106,7 @@ Page({
     this.loadMore();
 
   },
-  
+
   //刷新处理
   refesh: function (e) {
 
@@ -126,10 +128,8 @@ Page({
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
           //组件
-          // that.data.nicknamemap=JSON.parse(that.data.nicknamemap);
-          if (scm.get('nickname')) {
-            that.data.nicknamemap[scm.get('student').id] = scm.get('nickname');
-          }
+          scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
+          that.data.nicknamemap[scm.student.objectId] = scm;
 
         });
         console.log('nicknamemap', that.data.nicknamemap);
@@ -149,7 +149,7 @@ Page({
     });
   },
 
-//刷新处理
+  //刷新处理
   refeshArticle: function (e) {
 
     console.log('startrefesh===============');
@@ -169,7 +169,7 @@ Page({
 
     query.descending('createdAt');
     query.limit(pageSize);
-    query.include('creater,room,comments');
+    query.include('creater,room,comments,zans');
     query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
@@ -178,10 +178,27 @@ Page({
       that.hideLoading();
       wx.stopPullDownRefresh();
       if (results) {
-        console.log('after JSON.parse', results);
 
         var maxtime = that.data.maxtime;
         if (results.length > 0) {
+
+          results.forEach(function (scm, i, a) {
+            scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
+            scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+
+            if (scm.get('comments')) {
+              scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+            }
+            if (scm.get('zans')) {
+              scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
+            }
+
+          });
+          console.log('before JSON.parse', results);
+          // //解析成json标准对象存储
+          results = JSON.parse(JSON.stringify(results));
+          console.log('after JSON.parse', results);
+
           maxtime = utils.getTs(results[results.length - 1].createdAt);
           console.log('time ts', maxtime);
         }
@@ -217,7 +234,7 @@ Page({
 
     query.descending('createdAt');
     query.limit(pageSize);
-    query.include('creater,room,comments');
+    query.include('creater,room,comments,zans');
 
     var oldest = new Date(that.data.maxtime);
     query.lessThanOrEqualTo('createdAt', oldest);
@@ -231,6 +248,23 @@ Page({
         console.log('after JSON.parse', results);
         var maxtime = that.data.maxtime;
         if (results.length > 0) {
+          results.forEach(function (scm, i, a) {
+            scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
+            scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+
+
+            if (scm.get('comments')) {
+              scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+            }
+            if (scm.get('zans')) {
+              scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
+            }
+          });
+          console.log('before JSON.parse', results);
+          // //解析成json标准对象存储
+          results = JSON.parse(JSON.stringify(results));
+          console.log('after JSON.parse', results);
+
           maxtime = utils.getTs(results[results.length - 1].createdAt);
           console.log('time ts', maxtime);
         }
@@ -292,7 +326,7 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-    this.setData({ showLoading: true, loadingMessage });
+    this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
   },
 
   // 隐藏loading提示
@@ -331,13 +365,12 @@ Page({
   },
 
 
-  showComment: function (e) {
+  showComment: function (index) {
 
-    console.log('showComment', e);
-
-    var that = this;
-    that.data.mIndex = e.currentTarget.dataset.index;
-    that.data.mArticle = that.data.list[that.data.mIndex];
+    console.log('showComment', index);
+    // var that = this;
+    // that.data.mIndex = e.currentTarget.dataset.index;
+    // that.data.mArticle = that.data.list[that.data.mIndex];
 
     this.setData({
       isShowComment: true
@@ -355,7 +388,6 @@ Page({
   sendComment: function (e) {
     var that = this;
     this.hideComment();
-    this.hideInput();
     //从页面传过来的article
     var index = that.data.mIndex;
     var current_article = that.data.list[index];
@@ -364,6 +396,7 @@ Page({
 
     //赋值后 再删除数据
     var content = that.data.inputVal;
+    this.hideInput();
     this.clearInput();
 
 
@@ -375,57 +408,32 @@ Page({
     comment.set('creater', creater);
 
     //回复文章的作者，或者回复的评论作者
-    var touser = AV.Object.createWithoutData('Student', current_article.creater.id);
+    var touser = AV.Object.createWithoutData('Student', current_article.creater.objectId);
     comment.set('touser', touser);
 
-    var toarticle = AV.Object.createWithoutData('Article', current_article.id);
+    var toarticle = AV.Object.createWithoutData('Article', current_article.objectId);
     comment.set('toarticle', toarticle);
     comment.fetchWhenSave(true);
 
     //回复的评论作者时候，才有这个值
-    // var tocomment = AV.Object.createWithoutData('Comment',current_article.id);
+    // var tocomment = AV.Object.createWithoutData('Comment',current_article.objectId);
     // comment.set('tocomment', tocomment);
 
     that.showLoading();
-    // comment.save().then(function (res) {
-    //   // 成功保存之后，执行其他逻辑.
-    //   that.hideLoading();
-    //   console.log('article created with id: ' + article.id);
-    //   if (res) {
-    //     that.showToast('发布成功');
-    //     getApp().globalData.refesh_change_blackboard = true;
-    //     wx.navigateBack();
-    //   } else {
-    //     // 异常处理
-    //     console.error('发布失败');
-    //     that.showToast('发布失败');
-    //   }
 
-    // }, function (error) {
-    //   that.hideLoading();
-    //   // 异常处理
-    //   that.showToast('发布失败');
-    //   console.error('Failed to create new object, with error message: ' + error.message);
-    // });
     comment.save()
       //保存评论
       .then(function (res) {
 
         var article1 = new Article(current_article, { parse: true });
 
-        //指针类的，需要转换成av对象指针。
-        article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.id));
-        article1.set('room', AV.Object.createWithoutData('Room', current_article.room.id));
-
-        //不写死在表里，还是页面根据id去查询在这个房间里的昵称合适。
-        // article1.set('touser_name', AV.Object.createWithoutData('Room', current_article.room.id));
-        // article1.set('creater_name', AV.Object.createWithoutData('Room', current_article.room.id));
-
-
-
+        // //指针类的，需要转换成av对象指针。
+        article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
+        article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
         article1.increment('commentnum', 1);
         article1.add('comments', res);
         article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
+        // article1.include('creater,room,comments');
 
         return article1.save();
       })
@@ -433,8 +441,11 @@ Page({
       .then(function (res) {
         that.hideLoading();
         //替换列表中的当前文章。以便显示最新评论和评论数
+        //json obj 没有set方法，直接用 .属性名= 的方式赋值
+        that.data.list[index].comments = JSON.parse(JSON.stringify(res.get('comments')));
+        that.data.list[index].commentnum = res.get('commentnum');
         that.setData({
-          list: that.data.list.splice(index, 1, res),
+          list: that.data.list,
         })
 
       }).catch(function (error) {
@@ -445,4 +456,193 @@ Page({
       });
   },
 
+  //点击发送按钮，先隐藏键盘/评论框，再发送评论数据
+  sendZan: function (e) {
+    var that = this;
+    //从页面传过来的article
+    var index = that.data.mIndex;
+    var current_article = that.data.list[index];
+
+    //第2步，上传数据
+    var zan = new Zan();
+    var creater = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
+    zan.set('creater', creater);
+    var article = AV.Object.createWithoutData('Article', current_article.objectId);
+    zan.set('article', article);
+    zan.fetchWhenSave(true);
+
+    that.showLoading();
+    zan.save()
+      //保存评论
+      .then(function (res) {
+
+        var article1 = new Article(current_article, { parse: true });
+
+        // //指针类的，需要转换成av对象指针。
+        article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
+        article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
+        article1.increment('zannum', 1);
+        article1.add('zans', res);
+        //  article1.addUnique('zans', res);
+        article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
+        // article1.include('creater,room,zans');
+
+        return article1.save();
+      })
+      //保存文章，为文章添加评论数组，和评论数
+      .then(function (res) {
+        that.hideLoading();
+        //替换列表中的当前文章。以便显示最新评论和评论数
+        //json obj 没有set方法，直接用 .属性名= 的方式赋值
+        that.data.list[index].zans = JSON.parse(JSON.stringify(res.get('zans')));
+        that.data.list[index].zannum = res.get('zannum');
+        that.setData({
+          list: that.data.list,
+        })
+
+      }).catch(function (error) {
+        that.hideLoading();
+        // 异常处理
+        that.showToast('点赞失败');
+        console.error('Failed to create new object, with error message: ' + error.message);
+      });
+  },
+  //点击发送按钮，先隐藏键盘/评论框，再发送评论数据
+  sendZanCansel: function (e) {
+    var that = this;
+    //从页面传过来的article
+    var index = that.data.mIndex;
+    var current_article = that.data.list[index];
+
+
+    //第一步，查找到这个zan
+    var thisZan = getContainsZan(that.data.mArticle.zans, getApp().globalData.logined_student);
+    //第2步，新建一个赞的avzan
+    var zan = AV.Object.createWithoutData('Zan', thisZan.objectId);
+
+    that.showLoading();
+
+
+    zan.destroy().then(function (success) {
+
+      var article1 = new Article(current_article, { parse: true });
+
+      // //指针类的，需要转换成av对象指针。
+      article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
+      article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
+      article1.increment('zannum', -1);
+      // article1.descending('zannum', 1);
+      // article1.add('zans', res);
+      // article1.remove('zans', zan);
+      // article1.get('zans').remove(zan);
+      article1.set('zans', removeZan(JSON.parse(JSON.stringify(article1.get('zans'))),success.id));
+      article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
+      // article1.include('creater,room,zans');
+
+      return article1.save();
+    })
+      //保存文章，为文章添加评论数组，和评论数
+      .then(function (res) {
+        that.hideLoading();
+        //替换列表中的当前文章。以便显示最新评论和评论数
+        //json obj 没有set方法，直接用 .属性名= 的方式赋值
+        that.data.list[index].zans = JSON.parse(JSON.stringify(res.get('zans')));
+        that.data.list[index].zannum = res.get('zannum');
+        that.setData({
+          list: that.data.list,
+        })
+
+      }).catch(function (error) {
+        that.hideLoading();
+        // 异常处理
+        that.showToast('点赞失败');
+        console.error('Failed to create new object, with error message: ' + error.message);
+      });
+  },
+  showActionSheet: function (e) {
+    //从页面传过来的article
+    console.log('showActionSheet', e);
+
+    var that = this;
+    that.data.mIndex = e.currentTarget.dataset.index;
+    that.data.mArticle = that.data.list[that.data.mIndex];
+
+    var index = e.currentTarget.dataset.index;
+
+    console.log('点击了列表的：', index);
+
+    var haszan = containsZan(that.data.mArticle.zans, getApp().globalData.logined_student);
+
+    wx.showActionSheet({
+      itemList: [haszan ? '取消赞' : '点赞', '评论'],
+      // itemList: ['点赞', '评论'],
+      success: function (res) {
+        if (!res.cancel) {
+          console.log(res.tapIndex)
+          switch (res.tapIndex) {
+            case 0:
+              if (haszan) {
+                that.sendZanCansel(index);
+              } else {
+                that.sendZan(index);
+              }
+
+              break;
+            case 1:
+              that.showComment(index);
+              break;
+          }
+        }
+      },
+    })
+  },
+
+
 })
+
+function containsZan(zans, student) {
+  if (!zans) {
+    return false;
+  }
+  if (zans.length <= 0) {
+    return false;
+  }
+  var i = zans.length;
+  while (i--) {
+    if (zans[i].creater.objectId == student.objectId) {
+      return true;
+    }
+  }
+  return false;
+}
+function getContainsZan(zans, student) {
+  if (!zans) {
+    return false;
+  }
+  if (zans.length <= 0) {
+    return false;
+  }
+  var i = zans.length;
+  while (i--) {
+    if (zans[i].creater.objectId == student.objectId) {
+      return zans[i];
+    }
+  }
+  return false;
+}
+function removeZan(zans, zanId) {
+  if (!zans) {
+    return false;
+  }
+  if (zans.length <= 0) {
+    return false;
+  }
+  var i = zans.length;
+  while (i--) {
+    if (zans[i].objectId == zanId) {
+       zans.splice(i,1);
+       return zans;
+    }
+  }
+  return false;
+}

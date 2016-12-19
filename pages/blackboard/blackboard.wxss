@@ -17,4 +17,51 @@
 
 }
 
+.commentbt{
+  height: 40rpx;
+  width:40rpx;
+  float: right;
+
+}
+
+/*评论list*/
+.commentlist{
+  display:flex;
+  flex-direction:column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: #eeeeee;
+}
+.commentlist text{
+  display: inline-block;
+  height: 40rpx;
+  line-height: 40rpx;
+  vertical-align: middle;
+  margin: 0 0 0 15rpx;
+  color: #b0acac;
+  font-size: 26rpx;
+}
+
+/*zanlist*/
+.zanlist{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:  wrap;
+ 
+  /*background: red;*/
+}
+.zanlist image{
+  height:30rpx;
+  width:30rpx;
+}
+.zanlist text{
+  display: inline-block;
+  height: 40rpx;
+  line-height: 40rpx;
+  vertical-align: middle;
+  margin: 0 0 0 15rpx;
+  color: #576b95;
+  font-size: 26rpx;
+}
+
 

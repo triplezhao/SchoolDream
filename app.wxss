@@ -107,7 +107,7 @@
   line-height: 40rpx;
   vertical-align: middle;
   margin: 0 0 0 15rpx;
-  color: #a0acac;
+  color: #576b95;
   font-size: 26rpx;
 }
 .container .feed-item .feed-source .item-more{

@@ -9,9 +9,9 @@
     <view class="images-list">
       <block wx:for="{{list}}" wx:for-item="item">
         <view class="flex-wrp-column">
-          <image src="{{item.student.avatarUrl}}" class="images-image" data-src="{{item.student.avatarUrl}}"
+          <image src="{{item.student.avatarurl}}" class="images-image" data-src="{{item.student.avatarurl}}"
                  bindtap="previewImage"></image>
-          <text style="font-size:12px">{{item.nickname?item.nickname:item.student.nickName}}</text>
+          <text style="font-size:12px">{{item.nickname?item.nickname:item.student.nickname}}</text>
         </view>
       </block>
       <view class="images-image image-plus" bindtap="tapInvite">
@@ -26,13 +26,13 @@
   <view class="my">
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
-        <text>班级名称：{{room_now.room.roomname}}</text>
+        <text>班级名称：{{room_now.room.name}}</text>
       </view>
     </view>
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
         <text wx:if="{{room_now.nickname}}">我在本班昵称：{{room_now.nickname}}</text>
-        <text wx:elif="{{room_now.student.nickName}}">我在本班昵称：{{room_now.student.nickName}}</text>
+        <text wx:elif="{{room_now.student.nickname}}">我在本班昵称：{{room_now.student.nickname}}</text>
       </view>
     </view>
     <view class="my-item flex-wrp">

@@ -20,7 +20,7 @@ Page({
       student: getApp().globalData.logined_student,
     })
     wx.setNavigationBarTitle({
-      title: '当前班级：' + getApp().globalData.room_now.room.roomname,
+      title: '当前班级：' + getApp().globalData.room_now.room.name,
     });
 
     this.loadStudents();
@@ -32,7 +32,7 @@ Page({
   onShow: function () {
     // 页面显示
     wx.setNavigationBarTitle({
-      title: '当前班级：' + getApp().globalData.room_now.room.roomname,
+      title: '当前班级：' + getApp().globalData.room_now.room.name,
     });
   },
   onHide: function () {

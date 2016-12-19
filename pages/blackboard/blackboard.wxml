@@ -12,9 +12,9 @@
           <view class="feed-source">
             <a class="">
               <view class="avatar">
-                <image src="{{item.creater.avatarUrl}}" data-src="{{item.creater.avatarUrl}}" bindtap="previewImage"></image>
+                <image src="{{item.creater.avatarurl}}" data-src="{{item.creater.avatarurl}}" bindtap="previewImage"></image>
               </view>
-              <text>{{nicknamemap[item.creater.objectId]?nicknamemap[item.creater.objectId]:item.creater.nickName}}</text>
+              <text>{{nicknamemap[item.creater.objectId].nickname?nicknamemap[item.creater.objectId].nickname:nicknamemap[item.creater.objectId].student.nickname}}</text>
             </a>
           </view>
           <view class="feed-content">
@@ -33,12 +33,24 @@
             </view>
           </view>
           <image wx:if="{{item.pics[0]}}" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
-          <view class="answer-actions" >
+          <view class="answer-actions">
             <view class="like dot">
               <a>{{item.zannum}} 赞</a>
             </view>
-            <view class="comments dot"  data-index="{{idx}}" bindtap="showComment" >{{item.commentnum}} 评论</view>
+            <view class="comments dot" >{{item.commentnum}} 评论</view>
+            <image class="commentbt" src="../../image/comment.png"  data-index="{{idx}}" bindtap="showActionSheet"> </image>
           </view>
+          <view class="zanlist">
+           <image  src="../../image/heart.png" ></image>
+              <block wx:for="{{item.zans}}" wx:for-index="zidx" wx:for-item="zitem" data-idx="{{zidx}}">
+               <text>{{nicknamemap[zitem.creater.objectId].nickname?nicknamemap[zitem.creater.objectId].nickname:nicknamemap[zitem.creater.objectId].student.nickname}},</text>
+              </block>
+            </view>
+           <view class="commentlist">
+              <block wx:for="{{item.comments}}" wx:for-index="cidx" wx:for-item="citem" data-idx="{{cidx}}">
+                <text>{{nicknamemap[citem.creater.objectId].nickname?nicknamemap[citem.creater.objectId].nickname:nicknamemap[citem.creater.objectId].student.nickname}}:{{citem.content}}</text>
+              </block>
+            </view>
         </view>
       </view>
     </block>
