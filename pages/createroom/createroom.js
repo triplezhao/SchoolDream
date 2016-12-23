@@ -25,6 +25,10 @@ Page({
     },
     indexs: [0, 0, 0],
     isShowAreaPicker: false,
+    name: '',
+    desc: '',
+    question: '',
+    answer: ''
   },
 
   onLoad: function (options) {
@@ -49,120 +53,65 @@ Page({
   },
   formSubmit: function (e) {
 
-
     var that = this;
     console.log('form发生了submit事件，携带数据为：', e.detail.value)
 
-    var name = e.detail.value.name;
-    var desc = e.detail.value.desc;
-
-
-    if (!name) {
-      that.showToast('请填写名称');
-      return;
-    }
-    if (!desc) {
-      that.showToast('请填写简介');
-      return;
-    }
-    if (!desc) {
-      that.showToast('请填写问题');
-      return;
-    }
-    if (!desc) {
-      that.showToast('请填写答案');
+    if (!that.check()) {
       return;
     }
 
-    // 新建一个 AV 对象
-    var room = new Room();
-    room.set('name', name);
-    room.set('desc', desc);
-    room.set('picurl', that.data.tempFilePaths);
-    room.set('province', that.data.selectedArea.prov);
-    room.set('city', that.data.selectedArea.city);
-    room.set('dist', that.data.selectedArea.dist);
-    room.set('entry_year', that.data.date);
-    room.set('question', '小贼贼是叫什么名字');
-    room.set('answer', '张小山');
-    room.set('teacher', '');
-    var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
-    room.set('creater', student);
+    var picurls = that.data.tempFilePaths;
+    //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
+    new AV.File(picurls[0], {
+      blob: {
+        uri: picurls[0],
+      }
+    }).save().then(res => {
+      console.log(res);
+      //第2步，先上传数据
+      // 新建一个 AV 对象
+      var room = new Room();
+      room.set('name', that.data.name);
+      room.set('desc', that.data.desc);
+      room.set('picurl', that.data.tempFilePaths);
+      room.set('province', that.data.selectedArea.prov);
+      room.set('city', that.data.selectedArea.city);
+      room.set('dist', that.data.selectedArea.dist);
 
-    room.save().then(function (room) {
-      // 成功保存之后，执行其他逻辑.
+      var ts =Date.parse(that.data.date+" 12:0:0");
+      room.set('entry_year', ts);
+      room.set('question', that.data.question);
+      room.set('answer', that.data.answer);
+      room.set('teacher', '');
+      var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
+      room.set('creater', student);
+
+      return room.save();
+    }).then(room => {
       console.log('room created with id: ' + room.id);
-
-      // console.log('av1', room);
-      // console.log('av to json', room.toJSON());
-      // var room2 = new Room(room.toJSON(), { parse: true })
-      // console.log('av 2 ', room2);
-
-      wx.showToast({
-        title: '添加数据成功',
-        icon: 'success',
-        duration: 2000
-      })
-
+      that.showToast('创建成功')
       getApp().globalData.refesh_change_home = true;
       wx.navigateBack();
-
-    }, function (error) {
-      // 异常处理
-      console.error('Failed to create new object, with error message: ' + error.message);
-    });
+    })
+      .catch((error) => {
+        console.log(error);
+        that.showToast('失败')
+      });
   },
-
-
 
   // 从相册选择照片或拍摄照片
   chooseImage() {
+    var that = this;
     wx.chooseImage({
-      count: 1,
+      count: 3,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
-
       success: (res) => {
-
-        var that = this;
+        console.log(res);
         that.setData({
-          disabled: true
+          tempFilePaths: res.tempFilePaths,
+          disabled: false
         })
-
-        var uptoken = QN.genUpToken();
-
-        console.log(res)
-        wx.uploadFile({
-
-          url: QN.getUploadUrl(),
-          filePath: res.tempFilePaths[0],
-          name: 'file',
-          formData: {
-            'key': res.tempFilePaths[0].split('//')[1],
-            'token': uptoken
-          },
-          success: function (res) {
-            var data = JSON.parse(res.data);
-
-            that.setData({
-              tempFilePaths: [QN.getImageUrl(data.key)],
-              disabled: false
-            })
-            that.update();
-            wx.showToast({
-              title: data.key,
-              icon: 'success',
-              duration: 1000
-            })
-          },
-          fail(error) {
-            console.log(error)
-          },
-          complete(res) {
-            console.log(res)
-          }
-        })
-
       },
     });
   },
@@ -224,7 +173,7 @@ Page({
       selectedArea: this.data.selectedArea,
       indexs: this.data.indexs,
     })
- 
+
 
   },
   bindDistChange: function (e) {
@@ -242,7 +191,7 @@ Page({
       indexs: this.data.indexs,
     })
 
-   
+
   },
   showAreaPicker: function (index) {
 
@@ -279,4 +228,50 @@ Page({
       duration: 1000
     })
   },
+
+  bindKeyInputName: function (e) {
+    this.setData({
+      name: e.detail.value
+    })
+  },
+  bindKeyInputDesc: function (e) {
+    this.setData({
+      desc: e.detail.value
+    })
+  },
+  bindKeyInputQuestion: function (e) {
+    this.setData({
+      question: e.detail.value
+    })
+  },
+  bindKeyInputAnswer: function (e) {
+    this.setData({
+      answer: e.detail.value
+    })
+  },
+
+  check: function () {
+    let that = this;
+    if (!that.data.name) {
+      that.showToast('请填写名称');
+      return false;
+    }
+    if (!that.data.desc) {
+      that.showToast('请填写简介');
+      return false;
+    }
+    if (!that.data.question) {
+      that.showToast('请填写问题');
+      return false;
+    }
+    if (!that.data.answer) {
+      that.showToast('请填写答案');
+      return false;
+    }
+    if (!that.data.tempFilePaths || that.data.tempFilePaths.length == 0) {
+      that.showToast('请选择一张图片');
+      return false;
+    }
+    return true;
+  }
 })

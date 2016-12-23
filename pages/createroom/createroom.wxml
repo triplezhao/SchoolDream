@@ -7,7 +7,7 @@
           <view class="weui-label">名称:</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="name" class="weui-input" placeholder="请输入名称"  />
+          <input name="name" class="weui-input" bindinput="bindKeyInputName" placeholder="请输入名称"  />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
@@ -15,7 +15,7 @@
           <view class="weui-label">简介:</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="desc" class="weui-input" placeholder="请输入简介"  />
+          <input name="desc" class="weui-input" bindinput="bindKeyInputDesc" placeholder="请输入简介"  />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
@@ -87,7 +87,7 @@
           <view class="weui-label">设置问题：</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="name" class="weui-input" placeholder="手动输入或者选择常用"  />
+          <input name="name" class="weui-input" bindinput="bindKeyInputQuestion" placeholder="手动输入或者选择常用"  />
         </view>
       </view>
       <view class="weui-cell weui-cell_input">
@@ -95,7 +95,7 @@
           <view class="weui-label">设置答案：</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="name" class="weui-input" placeholder="输入答案"  />
+          <input name="name" class="weui-input"  bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
         </view>
       </view>
     </view>
