@@ -26,7 +26,7 @@
       <view class="chat-content flex-item">
         <view class="chat-source">
           <text class="chatmate">{{item.room.name}}</text> 
-           <text class="lasttime">1天前</text>
+           <text class="lasttime">{{item.room.createdAt}}</text>
         </view>
         <text class="chat-txt">{{item.room.desc}}</text>
       </view>

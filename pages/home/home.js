@@ -2,6 +2,7 @@ const AV = require('../../utils/leancloud-storage');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 
+var a='1111111111111'
 Page({
   data: {
     // 是否显示loading
@@ -17,8 +18,13 @@ Page({
     list: [],
 
   },
+
+
   onLoad: function (options) {
     let that = this;
+    // var output = Mustache.render("{{#bold}}Hi {{name}}.{{/bold}}", data);
+    // that.data.gettime = 
+
     console.log('onLoad');
     wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
@@ -34,13 +40,13 @@ Page({
     that.showLoading('加载中');
 
     getApp().studentLogin((code, data) => {
-      if (code==1) {
+      if (code == 1) {
         that.setData({
           student: data,
         });
         that.loadRooms();
       } else {
-        console.log('studentLogin',data);
+        console.log('studentLogin', data);
         that.hideLoading();
       }
     });
@@ -103,7 +109,7 @@ Page({
       console.log('then===========', student2Rooms);
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
-          
+
           // console.log(scm.room.name);
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
           scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
@@ -190,7 +196,7 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-    this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
+    this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 隐藏loading提示

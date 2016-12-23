@@ -2,14 +2,14 @@
   "pages": [
   
     "pages/home/home",
-    "pages/blackboard/blackboard",
-    "pages/roomsetting/roomsetting",
     "pages/createroom/createroom",
+    "pages/test/test",
+    "pages/roomsetting/roomsetting",
+    "pages/blackboard/blackboard",
     "pages/createarticle/createarticle",
     "pages/createvoice/createvoice",
     "pages/jionroom/jionroom",
-    "pages/invite/invite",
-    "pages/test/test"
+    "pages/invite/invite"
   ],
 
    "window":{

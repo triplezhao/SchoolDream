@@ -65,42 +65,24 @@ Page({
       disabled: true
     })
 
-    //第一步，先上传图片
-    var uptoken = QN.genUpToken();
-    wx.uploadFile({
-      url: QN.getUploadUrl(),
-      filePath: picurls[0],
-      name: 'file',
-      formData: {
-        'key': picurls[0].split('//')[1],
-        'token': uptoken
-      },
-      success: function (res) {
 
-        var data = JSON.parse(res.data);
-        console.log(QN.getImageUrl(data.key));
-        that.setData({
-          tempFilePaths: [QN.getImageUrl(data.key)],
-          disabled: false
-        })
-
-        //第2步，先上传数据
-        var article = new Article();
-        article.set('title', 'title');
-        article.set('content', content);
-        article.set('pics', [QN.getImageUrl(data.key)]);
-        that.save2Server(article);
-
-      },
-      fail(error) {
-        console.log(error)
-        that.hideLoading();
-      },
-      complete(res) {
-        console.log(res)
+    //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
+    new AV.File(picurls[0], {
+      blob: {
+        uri: picurls[0],
       }
+    }).save().then(res => {
+       console.log(res);
+      //第2步，先上传数据
+      var article = new Article();
+      article.set('title', 'title');
+      article.set('content', content);
+      article.set('pics', [res.url()]);
+      that.save2Server(article);
     })
-
+      .catch((error) => {
+        console.log(error);
+      });
 
   },
   save2Server: function (article) {
@@ -177,7 +159,7 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
- this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
+    this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 隐藏loading提示

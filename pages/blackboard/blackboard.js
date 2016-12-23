@@ -60,8 +60,11 @@ Page({
       student: getApp().globalData.logined_student,
     })
 
+    if (getApp().globalData.room_now) {
+      this.refesh();
+    }
 
-    this.refesh();
+
   },
 
   onReady: function () {
@@ -71,7 +74,8 @@ Page({
   },
   onShow: function () {
 
-    wx.setNavigationBarTitle({
+    if (getApp().globalData.room_now) {
+     wx.setNavigationBarTitle({
       title: '当前班级：' + getApp().globalData.room_now.room.name,
     });
     // 页面显示
@@ -81,6 +85,9 @@ Page({
       this.refesh();
     }
 
+    }
+
+    
   },
   onHide: function () {
     // 页面隐藏
@@ -326,7 +333,7 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-    this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
+    this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 隐藏loading提示
@@ -535,7 +542,7 @@ Page({
       // article1.add('zans', res);
       // article1.remove('zans', zan);
       // article1.get('zans').remove(zan);
-      article1.set('zans', removeZan(JSON.parse(JSON.stringify(article1.get('zans'))),success.id));
+      article1.set('zans', removeZan(JSON.parse(JSON.stringify(article1.get('zans'))), success.id));
       article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
       // article1.include('creater,room,zans');
 
@@ -640,8 +647,8 @@ function removeZan(zans, zanId) {
   var i = zans.length;
   while (i--) {
     if (zans[i].objectId == zanId) {
-       zans.splice(i,1);
-       return zans;
+      zans.splice(i, 1);
+      return zans;
     }
   }
   return false;
