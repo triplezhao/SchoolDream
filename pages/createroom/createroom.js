@@ -24,7 +24,10 @@ Page({
       dist: "东城区"
     },
     indexs: [0, 0, 0],
-    isShowAreaPicker: false,
+
+    questionIndex: 0,
+    questions: ['咱班班主任叫什么名字？','咱班班长叫什么名字？','咱班换了几次英语老师=。=？'],
+
     name: '',
     desc: '',
     question: '',
@@ -193,24 +196,20 @@ Page({
 
 
   },
-  showAreaPicker: function (index) {
+  bindQuestionChange: function (e) {
 
-    console.log('showAreaPicker', index);
+   const val = e.detail.value
+    console.log('picker country code 发生选择改变，携带值为', e.detail.value);
     // var that = this;
     // that.data.mIndex = e.currentTarget.dataset.index;
     // that.data.mArticle = that.data.list[that.data.mIndex];
 
-    this.setData({
-      isShowAreaPicker: true
-    });
+     this.setData({
+      question: this.data.questions[val],
+      questionIndex: val,
+    })
   },
 
-  hideAreaPicker: function () {
-
-    this.setData({
-      isShowAreaPicker: false
-    });
-  },
   // 显示loading提示
   showLoading(loadingMessage) {
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });

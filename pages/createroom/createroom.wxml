@@ -56,25 +56,27 @@
             </picker>
           </view>
         </view>
-     
         <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
             <view class="weui-label">市：</view>
           </view>
           <view class="weui-cell__bd">
-            <picker bindchange="bindCityChange" value="{{indexs[1]}}" range="{{areas[indexs[0]].cities}}" range-key="areaName">
+            <picker bindchange="bindCityChange" value="{{indexs[1]}}" range="{{areas[indexs[0]].cities}}"
+                    range-key="areaName">
               <view class="weui-select weui-select_in-select-after">{{areas[indexs[0]].cities[indexs[1]].areaName}}</view>
             </picker>
           </view>
         </view>
-      
         <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
             <view class="weui-label">区/县：</view>
           </view>
           <view class="weui-cell__bd">
-            <picker bindchange="bindDistChange" value="{{indexs[2]}}" range="{{areas[indexs[0]].cities[indexs[1]].counties}}" range-key="areaName">
-              <view class="weui-select weui-select_in-select-after">{{areas[indexs[0]].cities[indexs[1]].counties[indexs[2]].areaName}}</view>
+            <picker bindchange="bindDistChange" value="{{indexs[2]}}"
+                    range="{{areas[indexs[0]].cities[indexs[1]].counties}}" range-key="areaName">
+              <view class="weui-select weui-select_in-select-after">
+              {{areas[indexs[0]].cities[indexs[1]].counties[indexs[2]].areaName}}
+              </view>
             </picker>
           </view>
         </view>
@@ -87,15 +89,19 @@
           <view class="weui-label">设置问题：</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="name" class="weui-input" bindinput="bindKeyInputQuestion" placeholder="手动输入或者选择常用"  />
+          <input name="name" value="{{question}}" class="weui-input  " bindinput="bindKeyInputQuestion" placeholder="手动输入或者选择常用"  />
         </view>
+        <picker bindchange="bindQuestionChange" value="{{questionIndex}}"
+                range="{{questions}}" >
+          <view class="weui-select "></view>
+        </picker>
       </view>
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
           <view class="weui-label">设置答案：</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="name" class="weui-input"  bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
+          <input name="name" class="weui-input" bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
         </view>
       </view>
     </view>
