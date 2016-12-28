@@ -3,12 +3,13 @@
   
     "pages/home/home",
     "pages/createroom/createroom",
-    "pages/test/test",
+    "pages/searchroom/searchroom",
     "pages/roomsetting/roomsetting",
     "pages/blackboard/blackboard",
     "pages/createarticle/createarticle",
     "pages/createvoice/createvoice",
     "pages/jionroom/jionroom",
+    "pages/test/test",
     "pages/invite/invite"
   ],
 

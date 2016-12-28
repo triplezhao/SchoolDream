@@ -35,10 +35,20 @@
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
+            <view class="weui-label">类型：</view>
+          </view>
+          <view class="weui-cell__bd">
+            <picker bindchange="bindSchoolTypeChange" value="{{schooltypeIndex}}" range="{{schooltypes}}">
+              <view  class="weui-select weui-select_in-select-after">{{schooltype}}</view>
+            </picker>
+          </view>
+        </view>
+        <view class="weui-cell weui-cell_select">
+          <view class="weui-cell__hd weui-cell__hd_in-select-after">
             <view class="weui-label">入学日期：</view>
           </view>
           <view class="weui-cell__bd">
-            <picker mode="date" value="{{date}}" start="1948-09-01" end="2017-09-01" bindchange="bindDateChange">
+            <picker mode="date" value="{{date}}" fields="year" start="1948-09-01" end="2017-09-01" bindchange="bindDateChange">
               <view class="weui-select weui-select_in-select-after">{{date}}</view>
             </picker>
           </view>
@@ -89,10 +99,10 @@
           <view class="weui-label">设置问题：</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="name" value="{{question}}" class="weui-input  " bindinput="bindKeyInputQuestion" placeholder="手动输入或者选择常用"  />
+          <input name="name" value="{{question}}" class="weui-input  " bindinput="bindKeyInputQuestion"
+                 placeholder="手动输入或者选择常用"  />
         </view>
-        <picker bindchange="bindQuestionChange" value="{{questionIndex}}"
-                range="{{questions}}" >
+        <picker bindchange="bindQuestionChange" value="{{questionIndex}}" range="{{questions}}">
           <view class="weui-select "></view>
         </picker>
       </view>

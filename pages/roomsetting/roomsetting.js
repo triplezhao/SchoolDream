@@ -6,11 +6,21 @@ const Room = require('../../model/Room');
 Page({
   data: {
     text: "Page wode",
+    // 是否显示loading
+    showLoading: false,
+    // loading提示语
+    loadingMessage: '',
+    // 提示消息
+    toastMessage: '',
+
     student: null,
     room_now: null,
-    list: []
+    list: [],
+    
   },
   onLoad: function (options) {
+    if(!getApp().globalData.room_now)
+      return;
     wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
     var that = this;
@@ -30,6 +40,8 @@ Page({
     // 页面渲染完成
   },
   onShow: function () {
+     if(!getApp().globalData.room_now)
+      return;
     // 页面显示
     wx.setNavigationBarTitle({
       title: '当前班级：' + getApp().globalData.room_now.room.name,
@@ -89,10 +101,11 @@ Page({
   },
   //跳转到加入页面
   tapInvite: function () {
-    var that = this;
-    wx.navigateTo({
-      url: '../invite/invite?invitecode=' + getApp().globalData.room_now.room.objectId
-    })
+    // var that = this;
+    // wx.navigateTo({
+    //   url: '../invite/invite?invitecode=' + getApp().globalData.room_now.room.objectId
+    // })
+    this.showToast('目前真机分享不能用');
 
   },
 
@@ -131,6 +144,22 @@ Page({
     });
 
   },
+  // 显示loading提示
+  showLoading(loadingMessage) {
+    this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
+  },
 
+  // 隐藏loading提示
+  hideLoading() {
+    this.setData({ showLoading: false, loadingMessage: '' });
+  },
+
+  // 显示toast消息
+  showToast(toastMessage) {
+    wx.showToast({
+      title: toastMessage,
+      duration: 1000
+    })
+  }
 
 })

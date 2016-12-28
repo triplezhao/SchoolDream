@@ -31,6 +31,16 @@
     </view>
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
+        <text>加入验证问题：{{room_now.room.question}}</text>
+      </view>
+    </view>
+    <view class="my-item flex-wrp">
+      <view class="myitem-name flex-item">
+        <text>加入验证问题答案：{{room_now.room.answer}}</text>
+      </view>
+    </view>
+    <view class="my-item flex-wrp">
+      <view class="myitem-name flex-item">
         <text wx:if="{{room_now.nickname}}">我在本班昵称：{{room_now.nickname}}</text>
         <text wx:elif="{{room_now.student.nickname}}">我在本班昵称：{{room_now.student.nickname}}</text>
       </view>

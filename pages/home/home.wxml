@@ -13,7 +13,7 @@
   </view>
   <View  style="display:flex;  flex-direction:row; padding:10rpx">
     <button bindtap="tapCreateRoom" type="warn" style="font-size:14px">创建班级</button>
-    <button bindtap="tapJionRoom" type="primary" style="font-size:14px">加入班级</button>
+    <button bindtap="tapSearchRoom" type="primary" style="font-size:14px">查找班级</button>
   </View>
   <View class="flex-wrp-row" style="background:skyblue;">
     <text style="color:white;font-size:12px; padding:4px;">已经加入的班级</text>

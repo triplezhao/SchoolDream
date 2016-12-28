@@ -59,6 +59,7 @@ Page({
     // 页面显示
     console.log('onShow');
     if (getApp().globalData.refesh_change_home) {
+      getApp().globalData.refesh_change_home=false;
       this.loadRooms();
     }
   },
@@ -163,9 +164,10 @@ Page({
               that.enter2Room(that.data.list[index]);
               break;
             case 1:
-              wx.navigateTo({
-                url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
-              })
+             that.showToast('真机分享不能用，通知好友使用搜索');
+              // wx.navigateTo({
+              //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
+              // })
               break;
             case 2:
               //改全局内存
@@ -191,6 +193,13 @@ Page({
   tapJionRoom: function () {
     wx.navigateTo({
       url: '../jionroom/jionroom'
+    })
+
+  },
+  //搜索班级页面
+  tapSearchRoom: function () {
+    wx.navigateTo({
+      url: '../searchroom/searchroom'
     })
 
   },

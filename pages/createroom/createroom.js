@@ -16,7 +16,7 @@ Page({
     text: "Page createroom",
     tempFilePaths: [],
     disabled: true,
-    date: "2005-09-01",
+
     areas: Area.getData(),
     selectedArea: {
       prov: "北京市",
@@ -26,21 +26,27 @@ Page({
     indexs: [0, 0, 0],
 
     questionIndex: 0,
-    questions: ['咱班班主任叫什么名字？','咱班班长叫什么名字？','咱班换了几次英语老师=。=？'],
+    questions: ['咱班班主任叫什么名字？', '咱班班长叫什么名字？', '咱班换了几次英语老师=。=？'],
 
+    schooltypeIndex: 0,
+    schooltypes: ['大学(专/本科/研究生/商学院)', '高中/中专', '初中', '小学', '幼儿园', '其他'],
+    schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
+    
     name: '',
     desc: '',
     question: '',
-    answer: ''
+    answer: '',
+    schooltype: '',
+    date: "2005-09-01",
   },
 
   onLoad: function (options) {
     // // 页面初始化 options为页面跳转所带来的参数
     // var a=Area.getData();
     // console.log(a);
-    // this.setData({
-    //   areas:a
-    // })
+    this.setData({
+      schooltype: this.data.schooltypes[0]
+    })
   },
   onReady: function () {
     // 页面渲染完成
@@ -76,15 +82,16 @@ Page({
       var room = new Room();
       room.set('name', that.data.name);
       room.set('desc', that.data.desc);
-      room.set('picurl', that.data.tempFilePaths);
+      room.set('picurl', [res.url()]);
       room.set('province', that.data.selectedArea.prov);
       room.set('city', that.data.selectedArea.city);
       room.set('dist', that.data.selectedArea.dist);
 
-      var ts =Date.parse(that.data.date+" 12:0:0");
+      var ts = Date.parse(that.data.date + " 12:0:0");
       room.set('entry_year', ts);
       room.set('question', that.data.question);
       room.set('answer', that.data.answer);
+      room.set('schooltype', that.data.schooltypes_short[that.data.schooltypeIndex]);
       room.set('teacher', '');
       var student = AV.Object.createWithoutData('Student', getApp().globalData.logined_student.objectId);
       room.set('creater', student);
@@ -154,6 +161,8 @@ Page({
     this.data.indexs[1] = 0;
     this.data.indexs[2] = 0;
     this.data.selectedArea.prov = this.data.areas[val].areaName;
+    this.data.selectedArea.city = this.data.areas[val].cities[0].areaName;
+    this.data.selectedArea.dist = this.data.areas[val].cities[0].counties[0].areaName
 
     this.setData({
       selectedArea: this.data.selectedArea,
@@ -171,12 +180,12 @@ Page({
     this.data.indexs[1] = val;
     this.data.indexs[2] = 0;
     this.data.selectedArea.city = this.data.areas[this.data.indexs[0]].cities[val].areaName;
+    this.data.selectedArea.dist = this.data.areas[this.data.indexs[0]].cities[val].counties[0].areaName
 
     this.setData({
       selectedArea: this.data.selectedArea,
       indexs: this.data.indexs,
     })
-
 
   },
   bindDistChange: function (e) {
@@ -198,15 +207,28 @@ Page({
   },
   bindQuestionChange: function (e) {
 
-   const val = e.detail.value
+    const val = e.detail.value
     console.log('picker country code 发生选择改变，携带值为', e.detail.value);
     // var that = this;
     // that.data.mIndex = e.currentTarget.dataset.index;
     // that.data.mArticle = that.data.list[that.data.mIndex];
 
-     this.setData({
+    this.setData({
       question: this.data.questions[val],
       questionIndex: val,
+    })
+  },
+  bindSchoolTypeChange: function (e) {
+
+    const val = e.detail.value
+    console.log('picker country code 发生选择改变，携带值为', e.detail.value);
+    // var that = this;
+    // that.data.mIndex = e.currentTarget.dataset.index;
+    // that.data.mArticle = that.data.list[that.data.mIndex];
+
+    this.setData({
+      schooltype: this.data.schooltypes[val],
+      schooltypeIndex: val,
     })
   },
 

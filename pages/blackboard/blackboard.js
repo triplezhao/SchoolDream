@@ -64,7 +64,6 @@ Page({
       this.refesh();
     }
 
-
   },
 
   onReady: function () {
@@ -603,7 +602,14 @@ Page({
       },
     })
   },
-
+ onShareAppMessage: function () {
+    return {
+      title: getApp().globalData.room_now.room.name,
+      desc: getApp().globalData.room_now.room.desc ,
+      path: '/pages/jionroom/jionroom?name='+getApp().globalData.room_now.room.name+'&objectId='+getApp().globalData.room_now.room.objectId
+      +'&question='+getApp().globalData.room_now.room.question+'&answer='+getApp().globalData.room_now.room.answer+'&picurl='+getApp().globalData.room_now.room.picurl
+    }
+  }
 
 })
 
