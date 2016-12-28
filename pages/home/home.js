@@ -2,7 +2,7 @@ const AV = require('../../utils/leancloud-storage');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 
-var a='1111111111111'
+var a = '1111111111111'
 Page({
   data: {
     // 是否显示loading
@@ -59,7 +59,7 @@ Page({
     // 页面显示
     console.log('onShow');
     if (getApp().globalData.refesh_change_home) {
-      getApp().globalData.refesh_change_home=false;
+      getApp().globalData.refesh_change_home = false;
       this.loadRooms();
     }
   },
@@ -164,7 +164,8 @@ Page({
               that.enter2Room(that.data.list[index]);
               break;
             case 1:
-             that.showToast('真机分享不能用，通知好友使用搜索');
+            that.onShareAppMessage()
+              // that.showToast('真机分享不能用，通知好友使用搜索');
               // wx.navigateTo({
               //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
               // })
@@ -180,6 +181,16 @@ Page({
         }
       },
     })
+  },
+  
+  onShareAppMessage: function () {
+    return {
+      title: '朋小圈校友录',
+      desc: getApp().globalData.logined_student.nickname+'喊你加入校友录',
+       path: '/pages/home/home'
+      // path: '/pages/jionroom/jionroom?name=' + getApp().globalData.room_now.room.name + '&objectId=' + getApp().globalData.room_now.room.objectId
+      // + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl
+    }
   },
 
   //跳转到创建页面

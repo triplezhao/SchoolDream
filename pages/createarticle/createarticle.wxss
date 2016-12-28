@@ -19,7 +19,7 @@
 }
 
 .images-wrapper {
-  padding: 20rpx;
+  padding: 0rpx;
   background-color: #fff;
   margin-top: 20rpx;
 }
@@ -58,3 +58,4 @@
   height: 4rpx;
   transform: translate(-50%, -50%);
 }
+

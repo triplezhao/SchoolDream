@@ -1,42 +1,39 @@
 
-  <view style="margin:30rpx;">
-    <view class="weui-cells__title">班级信息：</view>
-    <view class="weui-cells weui-cells_after-title">
+  <view style="margin:0rpx;">
       <view class="weui-cell">
         <view class="weui-cell__hd">
           <image src="{{picurl}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
         </view>
         <view class="weui-cell__bd">{{name}}</view>
       </view>
-      <view class="weui-cell">
+         <view class="weui-cell"></view>
+      <view class="weui-cells__title">加入班级需要回答以下问题：</view>
+      <view class="weui-cell" style="background:skyblue;">
         <view class="weui-cell__hd">
-         <view class="weui-label">验证问题:</view>
+          <view class="weui-label">问题:</view>
         </view>
         <view class="weui-cell__bd">{{question}}</view>
       </view>
-    </view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">昵称:</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input name="name" class="weui-input" bindinput="bindKeyInputNickname" placeholder="你在本班昵称"  />
-        </view>
-      </view>
-      
       <view class="weui-cell weui-cell_input">
         <view class="weui-cell__hd">
           <view class="weui-label">答案:</view>
         </view>
         <view class="weui-cell__bd">
-          <input name="desc" class="weui-input" bindinput="bindKeyInputAnswer" placeholder="{{question}}"  />
+          <input name="desc" class="weui-input" bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
         </view>
       </view>
     </view>
-    <view class="btn-area">
+    <view class="weui-cell weui-cell_input">
+      <view class="weui-cell__hd">
+        <view class="weui-label">昵称:</view>
+      </view>
+      <view class="weui-cell__bd">
+        <input name="name" class="weui-input" bindinput="bindKeyInputNickname" placeholder="输入本班昵称"  />
+      </view>
+    </view>
+    <view class="weui-cell"></view>
+    <view class="weui-btn-area" >
       <button type="primary" bindtap="tapJionRoom">加入班级</button>
     </view>
-  </view>
   <loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>
 

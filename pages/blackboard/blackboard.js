@@ -315,7 +315,6 @@ Page({
     var httpsurl = QN.genHttpsDownUrl(voiceurl);
     wx.downloadFile({
       url: httpsurl,
-      type: 'audio',
       success: function (res) {
         console.log(res);
         wx.playVoice({

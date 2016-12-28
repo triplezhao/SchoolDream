@@ -19,7 +19,7 @@
 }
 
 .images-wrapper {
-  padding: 20rpx;
+  padding: 0rpx;
   background-color: #fff;
   margin-top: 20rpx;
 }
