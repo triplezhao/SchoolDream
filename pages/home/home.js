@@ -34,12 +34,17 @@ Page({
       that.setData({
         student: getApp().globalData.logined_student
       })
-      that.hideLoading();
+      // that.hideLoading();
+      that.loadRooms();
+    } else {
+      that.showToast('登录失败');
+      return;
     }
 
-    that.showLoading('加载中');
+    //放到appjs里面加载不可以， app与page会同时加载
 
-    getApp().studentLogin((code, data) => {
+    that.showLoading('加载中');
+    getApp().checkLoginStatus((code, data) => {
       if (code == 1) {
         that.setData({
           student: data,
@@ -56,6 +61,9 @@ Page({
     // 页面渲染完成
   },
   onShow: function () {
+     if (!getApp().globalData.logined_student) {
+      return;
+    }
     // 页面显示
     console.log('onShow');
     if (getApp().globalData.refesh_change_home) {
@@ -164,7 +172,7 @@ Page({
               that.enter2Room(that.data.list[index]);
               break;
             case 1:
-            that.onShareAppMessage()
+              that.onShareAppMessage()
               // that.showToast('真机分享不能用，通知好友使用搜索');
               // wx.navigateTo({
               //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
@@ -182,12 +190,12 @@ Page({
       },
     })
   },
-  
+
   onShareAppMessage: function () {
     return {
       title: '朋小圈校友录',
-      desc: getApp().globalData.logined_student.nickname+'喊你加入校友录',
-       path: '/pages/home/home'
+      desc: getApp().globalData.logined_student.nickname + '喊你加入校友录',
+      path: '/pages/home/home'
       // path: '/pages/jionroom/jionroom?name=' + getApp().globalData.room_now.room.name + '&objectId=' + getApp().globalData.room_now.room.objectId
       // + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl
     }

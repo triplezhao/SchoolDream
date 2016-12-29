@@ -29,6 +29,7 @@ Page({
 
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数
+    let that = this;
     wx.hideNavigationBarLoading();
     console.log(options.query)
     this.setData({
@@ -38,6 +39,19 @@ Page({
       answer: options.answer,
       picurl: options.picurl,
     })
+
+    that.showLoading('加载中');
+    setTimeout(() => {
+      that.hideLoading();
+    }, 10000);
+    getApp().checkLoginStatus((code, data) => {
+      that.hideLoading();
+      if (code == 1) {
+        console.log('studentLogin', data);
+      } else {
+        console.log('studentLogin', data);
+      }
+    });
   },
   onReady: function () {
     // 页面渲染完成
@@ -52,7 +66,7 @@ Page({
   onUnload: function () {
     // 页面关闭
   },
- 
+
   showLoading(loadingMessage) {
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
@@ -72,8 +86,22 @@ Page({
 
   //跳转到加入页面
   tapJionRoom: function (e) {
-
     let that = this;
+    if (!getApp().globalData.logined_student) {
+      that.showLoading('加载中');
+      getApp().checkLoginStatus((code, data) => {
+        that.hideLoading();
+        if (code == 1) {
+          console.log('studentLogin', data);
+        } else {
+          //注册失败，直接返回。
+          that.showToast('无法获取用户信息');
+          return;
+        }
+      });
+    };
+
+
     if (!that.data.nickname) {
       that.showToast('请填写本班昵称');
       return;

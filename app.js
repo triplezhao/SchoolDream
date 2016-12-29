@@ -24,24 +24,9 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     wx.setStorageSync('logs', logs)
-    this.syncRoomNow();
-
+    // this.studentLogin();
   },
 
-
-  //从本地拉取登录数据到内存
-  syncRoomNow: function (cb) {
-    console.log('syncRoomNow');
-
-    this.globalData.room_now = wx.getStorageSync('room_now');
-    this.globalData.logined_student = this.getStudentInfoFromLocal();
-
-    if (!this.globalData.logined_student) {
-      console.log('is not login')
-      return;
-    }
-
-  },
 
   //登出，清除内存和本地数据
   logout: function (cb) {
@@ -52,7 +37,7 @@ App({
     that.clearStudentFromLocal();
   },
 
-  
+
   //获取获取本地的student
   getStudentInfoFromLocal: function () {
     var that = this;
@@ -90,7 +75,7 @@ App({
       this.globalData.logined_student = student;
       cb(1, student);
     } else {
-      studentLogin(cb);
+      that.studentLogin(cb);
     }
   },
 
@@ -101,8 +86,13 @@ App({
     var that = this;
     try {
 
-      that.weixinlogin((data) => {
-        console.log('收到回调', data);
+      that.weixinlogin((code, data) => {
+        console.log('收到回调', code+','+data);
+        if (code == 0) {
+             cb(0, "登录失败");
+             return;
+        }
+
         //存储student到local
         var student = new Student();
         //查询下是否已经注册了
@@ -135,7 +125,7 @@ App({
           })
           .then((saved) => {
             //更新内存
-            saved=JSON.parse(JSON.stringify(saved));
+            saved = JSON.parse(JSON.stringify(saved));
             that.globalData.logined_student = saved;
             //无论是更新还是注册，都把返回的对象保存到本地
             that.saveStudent2Local(saved);
@@ -168,6 +158,13 @@ App({
             success: function (wxgetUserInfo_res) {
               console.log('wxgetUserInfo_res', wxgetUserInfo_res);
               that.getOpenId2UnionId(wxlogin_res.code, weixinappId, wxgetUserInfo_res.encryptedData, wxgetUserInfo_res.iv, cb);
+            },
+            fail: function () {
+              // fail
+              cb(0, "微信登录失败")
+            },
+            complete: function () {
+              // complete
             }
           })
         } else {
@@ -200,7 +197,7 @@ App({
       }).then((data) => {
         //成功
         console.log('服务器解密后 data: ', JSON.parse(data));
-        cb(JSON.parse(data));
+        cb(1,JSON.parse(data));
       }).catch((error) => {
         // 处理调用失败
         console.log("decode失败," + error);
