@@ -12,6 +12,7 @@ Page({
     question: '',
     answer: '',
     picurl: '',
+    isshare: false,
 
 
     nickname: '',
@@ -38,6 +39,7 @@ Page({
       question: options.question,
       answer: options.answer,
       picurl: options.picurl,
+      isshare: options.isshare,
     })
 
     that.showLoading('加载中');
@@ -86,6 +88,7 @@ Page({
 
   //跳转到加入页面
   tapJionRoom: function (e) {
+ 
     let that = this;
     if (!getApp().globalData.logined_student) {
       that.showLoading('加载中');
@@ -159,7 +162,14 @@ Page({
               that.showToast('加入成功');
               that.hideLoading();
               getApp().globalData.refesh_change_home = true;
-              wx.navigateBack();
+              if (that.data.isshare) {
+                wx.redirectTo({
+                  url: '/pages/home/home'
+                })
+              } else {
+                wx.navigateBack();
+              }
+
             });
           } else {
             console.log('do nothing');
