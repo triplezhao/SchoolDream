@@ -198,6 +198,15 @@ Page({
 
             if (scm.get('comments')) {
               scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+              let danmulist = [];
+              scm.comments.forEach(function (cmt, i, a) {
+                danmulist[i] = {
+                  text: cmt.content,
+                  color: '#ff0000',
+                  time: i
+                }
+              });
+              scm.set('danmulist', JSON.parse(JSON.stringify(danmulist)));
             }
             if (scm.get('zans')) {
               scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
@@ -265,6 +274,16 @@ Page({
 
             if (scm.get('comments')) {
               scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+
+              let danmulist = [];
+              scm.comments.forEach(function (cmt, i, a) {
+                danmulist[i] = {
+                  text: cmt.content,
+                  color: '#ff0000',
+                  time: i
+                }
+              });
+              scm.set('danmulist', JSON.parse(JSON.stringify(danmulist)));
             }
             if (scm.get('zans')) {
               scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
@@ -302,6 +321,12 @@ Page({
   tapCreateVoice: function (e) {
     wx.navigateTo({
       url: '../createvoice/createvoice'
+    })
+  },
+  //跳转到新建页面
+  tapCreateVideo: function (e) {
+    wx.navigateTo({
+      url: '../createvideo/createvideo'
     })
   },
   previewImage: function (e) {
@@ -434,8 +459,10 @@ Page({
       //保存评论
       .then(function (res) {
 
-        var article1 = new Article(current_article, { parse: true });
 
+
+        var article1 = new Article(current_article, { parse: true });
+        article1['danmulist'] = [];
         // //指针类的，需要转换成av对象指针。
         article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
         article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
@@ -453,6 +480,15 @@ Page({
         //json obj 没有set方法，直接用 .属性名= 的方式赋值
         that.data.list[index].comments = JSON.parse(JSON.stringify(res.get('comments')));
         that.data.list[index].commentnum = res.get('commentnum');
+        let danmulist = [];
+        that.data.list[index].comments.forEach(function (cmt, i, a) {
+          danmulist[i] = {
+            text: cmt.content,
+            color: '#ff0000',
+            time: i
+          }
+        });
+        that.data.list[index].danmulist = JSON.parse(JSON.stringify(danmulist));
         that.setData({
           list: that.data.list,
         })

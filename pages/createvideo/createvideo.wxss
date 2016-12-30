@@ -1,0 +1,103 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}
+
+.textStyle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.textContainer {
+  margin-top: 200px;
+}
+
+.images-wrapper {
+  padding: 0rpx;
+  background-color: #fff;
+  margin-top: 20rpx;
+}
+.images-wrapper-text {
+  font-size: 28rpx;
+}
+.images-list {
+  display: flex;
+  margin-top: 20rpx;
+  flex-wrap: wrap;
+}
+.images-image {
+  width: 150rpx;
+  height: 150rpx;
+  margin: 10rpx;
+}
+.image-plus {
+  border: 1px solid #999;
+  position: relative;
+}
+.image-plus-horizontal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: #d9d9d9;
+  width: 4rpx;
+  height: 80rpx;
+  transform: translate(-50%, -50%);
+}
+.image-plus-vertical {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: #d9d9d9;
+  width: 80rpx;
+  height: 4rpx;
+  transform: translate(-50%, -50%);
+}
+
+
+
+.page-body-wrapper {
+  justify-content: space-between;
+  flex-grow: 1;
+  margin-bottom: 100rpx;
+}
+.page-body-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.time-big {
+  font-size: 60rpx;
+  margin: 20rpx;
+}
+.time-small {
+  font-size: 30rpx;
+}
+
+.page-body-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.page-body-button {
+  width: 250rpx;
+  text-align: center;
+}
+.page-body-button image{
+  width: 120rpx;
+  height: 120rpx;
+}
+.button-stop-record {
+  width: 110rpx;
+  height: 110rpx;
+  border: 20rpx solid #fff;
+  background-color: #f55c23;
+  border-radius: 130rpx;
+  margin: 0 auto;
+}
+
+

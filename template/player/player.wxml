@@ -2,7 +2,7 @@
   <view class="page-body">
       <block wx:if="{{playing == false||playingindex!=idx}}">
         <view class="flex-wrp-column">
-          <view wx:if="{{downloading_index==idx}}" class="eui-article__h3">正在下载...</view>
+          <view wx:if="{{downloading_index==idx}}" class="eui-article__h3"><icon type="download" size="23"></icon>正在下载...</view>
           <view wx:if="{{downloading_fail_index==idx&&downloading_index!=idx}}" class="eui-article__h3" bindtap="playVoice">下载失败,点击重试</view>
           <view class="page-body-buttons">
             <view class="page-body-button" bindtap="playVoice" data-voiceurl="{{item.voiceurl}}" data-index="{{idx}}">

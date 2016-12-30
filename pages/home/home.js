@@ -126,12 +126,11 @@ Page({
 
         console.log('after JSON.parse', student2Rooms);
 
-        that.hideLoading();
         //更新界面
         that.setData({
           list: student2Rooms,
         })
-
+        that.hideLoading();
       } else {
         that.hideLoading();
       }

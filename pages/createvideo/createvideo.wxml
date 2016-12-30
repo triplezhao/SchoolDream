@@ -69,21 +69,20 @@
               </view>
             </block>
           </view>
-        </view>
-         <view class="weui-cell weui-cell_input">
-        <view class="images-wrapper">
-          <text class="images-text">添加个图片:</text>
-          <view class="images-list">
-            <block wx:for="{{tempFilePaths}}" wx:for-item="image">
-              <image src="{{image}}" class="images-image" data-src="{{image}}" bindtap="previewImage"></image>
-            </block>
-            <view class="images-image image-plus" bindtap="chooseImage">
-              <view class="image-plus-horizontal"></view>
-              <view class="image-plus-vertical"></view>
+          <view class="weui-cell weui-cell_input">
+            <view class="images-wrapper">
+              <text class="images-text">添加个视频:</text>
+              <view class="images-list">
+              <video wx: wx:if="{{tempFilePath_video}}" class="images-image" src="{{tempFilePath_video}}"></video>
+                <!--<image src="{{tempFilePath_video}}" class="images-image" data-src="{{tempFilePath_video}}" bindtap="previewImage"></image>-->
+                <view class="images-image image-plus" bindtap="chooseVideo">
+                  <view class="image-plus-horizontal"></view>
+                  <view class="image-plus-vertical"></view>
+                </view>
+              </view>
             </view>
           </view>
         </view>
-      </view>
       </view>
       <view class="weui-btn-area">
         <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>

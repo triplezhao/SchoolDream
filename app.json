@@ -8,6 +8,7 @@
     "pages/blackboard/blackboard",
     "pages/createarticle/createarticle",
     "pages/createvoice/createvoice",
+    "pages/createvideo/createvideo",
     "pages/jionroom/jionroom",
     "pages/test/test",
     "pages/invite/invite"
