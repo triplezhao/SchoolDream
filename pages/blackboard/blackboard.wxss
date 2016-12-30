@@ -1,4 +1,4 @@
-
+@import "../../template/player/player.wxss";
 .container-relative {
   position: relative;
 }

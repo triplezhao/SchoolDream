@@ -7,6 +7,7 @@ const Room = require('../../model/Room');
 Page({
   data: {
     text: "Page jionclassroom",
+    student: null,
     name: '',
     objectId: '',
     question: '',
@@ -14,11 +15,8 @@ Page({
     picurl: '',
     isshare: false,
 
-
     nickname: '',
     input_answer: '',
-
-
 
     // 是否显示loading
     showLoading: false,
@@ -32,7 +30,7 @@ Page({
     // 页面初始化 options为页面跳转所带来的参数
     let that = this;
     wx.hideNavigationBarLoading();
-    console.log(options.query)
+    wx.setNavigationBarTitle({title:'加入班级：'+options.name});
     this.setData({
       name: options.name,
       objectId: options.objectId,
@@ -41,17 +39,24 @@ Page({
       picurl: options.picurl,
       isshare: options.isshare,
     })
+    that.relogin();
+  },
 
-    that.showLoading('加载中');
+  relogin: function () {
+    //放到appjs里面加载不可以， app与page会同时加载
+    this.showLoading('加载中');
     setTimeout(() => {
-      that.hideLoading();
-    }, 10000);
+      this.hideLoading();
+    }, 7000);
     getApp().checkLoginStatus((code, data) => {
-      that.hideLoading();
+      this.hideLoading();
+          console.log('studentLogin', data);
       if (code == 1) {
-        console.log('studentLogin', data);
+        this.setData({
+          student: data,
+        });
       } else {
-        console.log('studentLogin', data);
+        // console.log('studentLogin', data);
       }
     });
   },
@@ -75,7 +80,9 @@ Page({
 
   // 隐藏loading提示
   hideLoading() {
-    this.setData({ showLoading: false, loadingMessage: '' });
+    setTimeout(() => {
+      this.setData({ showLoading: false, loadingMessage: '' });
+    }, 200);
   },
 
   // 显示toast消息
@@ -88,7 +95,7 @@ Page({
 
   //跳转到加入页面
   tapJionRoom: function (e) {
- 
+
     let that = this;
     if (!getApp().globalData.logined_student) {
       that.showLoading('加载中');

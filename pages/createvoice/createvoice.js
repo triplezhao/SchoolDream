@@ -38,6 +38,7 @@ Page({
   },
 
   onLoad: function (options) {
+    let that = this;
     // 页面初始化 options为页面跳转所带来的参数
     that.setData({
       room_now: getApp().globalData.room_now,
@@ -222,34 +223,59 @@ Page({
 
   // 一下是录音代码
   startRecord: function () {
+    var that = this
     this.setData({ recording: true })
 
-    var that = this
     var interval = setInterval(function () {
       that.data.recordTime += 1
       that.setData({
         formatedRecordTime: util.formatTime(that.data.recordTime)
       })
     }, 1000)
+
     wx.startRecord({
       success: function (res) {
+        // success 
+        console.log('startRecord success');
         that.setData({
           hasRecord: true,
           tempFilePath: res.tempFilePath,
           formatedPlayTime: util.formatTime(that.data.playTime)
         })
       },
+      fail: function () {
+        // fail
+        console.log('startRecord fail');
+        that.showToast('录制失败');
+      },
       complete: function () {
+        // complete
+        console.log('startRecord complete');
         that.setData({ recording: false })
         clearInterval(interval)
       }
     })
   },
   stopRecord: function () {
-    wx.stopRecord();
-    this.setData({
-      disabled: false
+    let that = this;
+    wx.stopRecord({
+      success: function (res) {
+        // success
+        console.log('stopRecord success');
+      },
+      fail: function () {
+        // fail
+        console.log('stopRecord fail');
+      },
+      complete: function () {
+        // complete
+        console.log('stopRecord complete');
+        that.setData({
+          disabled: false
+        })
+      }
     })
+
   },
   playVoice: function () {
     var that = this
@@ -261,48 +287,104 @@ Page({
       })
     }, 1000)
     wx.playVoice({
-      filePath: this.data.tempFilePath,
-      success: function () {
-        clearInterval(playTimeInterval)
+      filePath: that.data.tempFilePath,
+      success: function (res) {
+        // success
+        console.log('playVoice success');
         that.data.playTime = 0
         that.setData({
           playing: false,
           formatedPlayTime: util.formatTime(that.data.playTime)
         })
+      },
+      fail: function () {
+        // fail
+        console.log('playVoice fail');
+        that.showToast('playVoice失败');
+      },
+      complete: function () {
+        // complete
+        console.log('playVoice complete');
+        clearInterval(playTimeInterval)
+      }
+    })
+
+  },
+  pauseVoice: function () {
+    let that = this;
+    wx.pauseVoice({
+      success: function (res) {
+        // success
+        console.log('pauseVoice success');
+      },
+      fail: function () {
+        // fail
+        console.log('pauseVoice fail');
+      },
+      complete: function () {
+        // complete
+        console.log('pauseVoice complete');
+        that.setData({
+          playing: false
+        })
+        clearInterval(playTimeInterval)
+      }
+    })
+
+  },
+  stopVoice: function () {
+    let that = this;
+    wx.stopVoice({
+      success: function (res) {
+        // success
+        console.log('stopVoice success');
+      },
+      fail: function () {
+        // fail
+        console.log('stopVoice fail');
+      },
+      complete: function () {
+        // complete
+        console.log('stopVoice complete');
+        clearInterval(playTimeInterval)
+        that.data.playTime = 0
+        that.setData({
+          playing: false,
+          formatedPlayTime: util.formatTime(this.data.playTime)
+        })
       }
     })
   },
-  pauseVoice: function () {
-    clearInterval(playTimeInterval)
-    wx.pauseVoice()
-    this.setData({
-      playing: false
-    })
-  },
-  stopVoice: function () {
-    clearInterval(playTimeInterval)
-    this.data.playTime = 0
-    this.setData({
-      playing: false,
-      formatedPlayTime: util.formatTime(this.data.playTime)
-    })
-    wx.stopVoice()
-  },
   clear: function () {
-    this.data.recordTime = 0
-    this.data.playTime = 0
-    clearInterval(playTimeInterval)
-    wx.stopVoice()
-    this.setData({
-      playing: false,
-      hasRecord: false,
-      tempFilePath: '',
-      formatedRecordTime: util.formatTime(0)
+    var that = this;
+    wx.stopVoice({
+      success: function (res) {
+        // success
+        console.log('stopVoice success');
+      },
+      fail: function () {
+        // fail
+        console.log('stopVoice fail');
+      },
+      complete: function () {
+        // complete
+        console.log('stopVoice complete');
+        that.data.recordTime = 0
+        that.data.playTime = 0
+        clearInterval(playTimeInterval)
+        that.setData({
+          playing: false,
+          hasRecord: false,
+          tempFilePath: '',
+          formatedRecordTime: util.formatTime(0)
+        })
+      }
     })
+
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-    this.setData({ showLoading: true, loadingMessage:loadingMessage?loadingMessage:'加载中' });
+    this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 隐藏loading提示

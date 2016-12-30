@@ -1,4 +1,4 @@
-
+<import src="/template/player/player.wxml"/>
 <view class="container-relative">
   <view class="container-absolute">
     <View class="btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
@@ -23,13 +23,7 @@
                 <text >{{item.content}}</text>
               </view>
               <view wx:if="{{item.voiceurl}}" class="answer-actions">
-                <view class="page-body-button" bindtap="playVoiceUrl" data-voiceurl="{{item.voiceurl}}">
-                  <image src="/image/play.png"></image>
-                </view>
-                <!--<audio bindtap="playVoiceUrl" data-voiceurl="{{item.voiceurl}}" src="{{item.voiceurl}}" poster="{{current.poster}}"
-                   name="{{item.content}}" author="{{item.creater.nickName}}" action="{{audioAction}}"controls>
-              </audio>
-              -->
+                <include src="../../template/player/player.wxml"/>
             </view>
           </view>
           <image wx:if="{{item.pics[0]}}" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage"></image>

@@ -1,0 +1,29 @@
+<view style="margin:5rpx;">
+  <view class="page-body">
+      <block wx:if="{{playing == false||playingindex!=idx}}">
+        <view class="flex-wrp-column">
+          <view wx:if="{{downloading_index==idx}}" class="eui-article__h3">正在下载...</view>
+          <view wx:if="{{downloading_fail_index==idx&&downloading_index!=idx}}" class="eui-article__h3" bindtap="playVoice">下载失败,点击重试</view>
+          <view class="page-body-buttons">
+            <view class="page-body-button" bindtap="playVoice" data-voiceurl="{{item.voiceurl}}" data-index="{{idx}}">
+              <image src="/image/play.png"></image>
+            </view>
+          </view>
+        </view>
+      </block>
+      <block wx:if="{{playing == true&&playingindex==idx}}">
+        <view class="page-body-time">
+          <text class="time-big">{{formatedPlayTime}}</text>
+          <text class="time-small">{{formatedRecordTime}}</text>
+        </view>
+        <view class="page-body-buttons">
+          <view class="page-body-button" bindtap="stopVoice">
+            <image src="/image/stop.png"></image>
+          </view>
+          <view class="page-body-button" bindtap="pauseVoice">
+            <image src="/image/pause.png"></image>
+          </view>
+        </view>
+      </block>
+    </view>
+</view>

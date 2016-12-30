@@ -1,8 +1,8 @@
 
 
-<!--<scroll-view wx:if="{{isHideLoadinView}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"-->
-<scroll-view wx:if="true" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower"
-             style="height: 100%">
+<!-- <scroll-view wx:if="{{isHideLoadinView}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper" bindscrolltolower="bindscrolltolower" -->
+<scroll-view wx:if="{{student}}" scroll-y="true" bindscrolltoupper="bindscrolltoupper"
+             bindscrolltolower="bindscrolltolower" style="height: 100%">
   <view wx:if="{{student}}" class="user flex-wrp">
     <view class="avatar flex-item ">
       <image class="userinfo-avatar" src="{{student.avatarurl}}" background-size="cover"></image>
@@ -11,7 +11,7 @@
       <text class="userinfo-nickname">{{student.nickname}}</text>
     </view>
   </view>
-  <View  style="display:flex;  flex-direction:row; padding:10rpx">
+  <View style="display:flex;  flex-direction:row; padding:10rpx">
     <button bindtap="tapCreateRoom" type="warn" style="font-size:14px">创建班级</button>
     <button bindtap="tapSearchRoom" type="primary" style="font-size:14px">加入新班级</button>
   </View>
@@ -25,12 +25,36 @@
       </view>
       <view class="chat-content flex-item">
         <view class="chat-source">
-          <text class="chatmate">{{item.room.name}}</text> 
-           <text class="lasttime">{{item.room.createdAt}}</text>
+          <text class="chatmate">{{item.room.name}}</text>
+          <text class="lasttime">{{item.room.createdAt}}</text>
         </view>
         <text class="chat-txt">{{item.room.desc}}</text>
       </view>
     </view>
   </block>
 </scroll-view>
+<view wx:if="{{!student&&!showLoading}}" class="weui-msg">
+  <view class="weui-msg__icon-area">
+    <icon type="warn" size="93"></icon>
+  </view>
+  <view class="weui-msg__text-area">
+    <view class="weui-msg__title">授权失败</view>
+    <view class="weui-msg__desc">
+      需要您授权获取您的头像和昵称
+    </view>
+  </view>
+  <view class="weui-msg__opr-area">
+    <view class="weui-btn-area">
+      <button type="primary" bindtap="relogin">重试</button>
+    </view>
+  </view>
+  <view class="weui-msg__extra-area">
+    <view class="weui-footer">
+      <view class="weui-footer__links">
+        <!--<navigator url="" class="weui-footer__link">xxx</navigator>-->
+      </view>
+      <view class="weui-footer__text">Copyright © 2008-2018 pxq</view>
+    </view>
+  </view>
+</view>
 <loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>

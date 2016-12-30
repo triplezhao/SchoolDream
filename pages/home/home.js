@@ -27,41 +27,35 @@ Page({
 
     console.log('onLoad');
     wx.hideNavigationBarLoading();
-    // 页面初始化 options为页面跳转所带来的参数
 
-    if (getApp().globalData.logined_student) {
-      //改本业内存
-      that.setData({
-        student: getApp().globalData.logined_student
-      })
-      // that.hideLoading();
-      that.loadRooms();
-    } else {
-      that.showToast('登录失败');
-      return;
-    }
+    that.relogin();
 
+  },
+
+  relogin: function () {
     //放到appjs里面加载不可以， app与page会同时加载
 
-    that.showLoading('加载中');
+    this.showLoading('加载中');
+    setTimeout(() => {
+      this.hideLoading();
+    }, 7000);
     getApp().checkLoginStatus((code, data) => {
       if (code == 1) {
-        that.setData({
+        this.setData({
           student: data,
         });
-        that.loadRooms();
+        this.loadRooms();
       } else {
         console.log('studentLogin', data);
-        that.hideLoading();
+        this.hideLoading();
       }
     });
   },
-
   onReady: function () {
     // 页面渲染完成
   },
   onShow: function () {
-     if (!getApp().globalData.logined_student) {
+    if (!getApp().globalData.logined_student) {
       return;
     }
     // 页面显示
@@ -113,8 +107,7 @@ Page({
     // 执行查询
     query.find().then(function (student2Rooms) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-      that.hideLoading();
-      wx.stopPullDownRefresh();
+
       console.log('then===========', student2Rooms);
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
@@ -133,11 +126,14 @@ Page({
 
         console.log('after JSON.parse', student2Rooms);
 
+        that.hideLoading();
         //更新界面
         that.setData({
           list: student2Rooms,
         })
 
+      } else {
+        that.hideLoading();
       }
     }).catch(function (error) {
       that.hideLoading();
@@ -208,13 +204,7 @@ Page({
     })
 
   },
-  //跳转到加入页面
-  tapJionRoom: function () {
-    wx.navigateTo({
-      url: '../jionroom/jionroom'
-    })
 
-  },
   //搜索班级页面
   tapSearchRoom: function () {
     wx.navigateTo({

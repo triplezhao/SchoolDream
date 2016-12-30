@@ -7,8 +7,9 @@ const Room = require('../../model/Room');
 const Article = require('../../model/Article');
 const Comment = require('../../model/Comment');
 const Zan = require('../../model/Zan');
+const Player = require('../../template/player/player');
 const pageSize = 5;
-
+// import { Player } from '../../template/player/player';
 Page({
   data: {
 
@@ -60,6 +61,9 @@ Page({
       student: getApp().globalData.logined_student,
     })
 
+
+    Player.load(this);
+
     if (getApp().globalData.room_now) {
       this.refesh();
     }
@@ -74,19 +78,19 @@ Page({
   onShow: function () {
 
     if (getApp().globalData.room_now) {
-     wx.setNavigationBarTitle({
-      title: '当前班级：' + getApp().globalData.room_now.room.name,
-    });
-    // 页面显示
-    console.log("onShow");
-    if (getApp().globalData.refesh_change_blackboard) {
-      getApp().globalData.refesh_change_blackboard = false;
-      this.refesh();
-    }
+      wx.setNavigationBarTitle({
+        title: '当前班级：' + getApp().globalData.room_now.room.name,
+      });
+      // 页面显示
+      console.log("onShow");
+      if (getApp().globalData.refesh_change_blackboard) {
+        getApp().globalData.refesh_change_blackboard = false;
+        this.refesh();
+      }
 
     }
 
-    
+
   },
   onHide: function () {
     // 页面隐藏
@@ -601,13 +605,24 @@ Page({
       },
     })
   },
- onShareAppMessage: function () {
-   let path='/pages/jionroom/jionroom?isshare=true&name='+getApp().globalData.room_now.room.name+'&objectId='+getApp().globalData.room_now.room.objectId
-      +'&question='+getApp().globalData.room_now.room.question+'&answer='+getApp().globalData.room_now.room.answer+'&picurl='+getApp().globalData.room_now.room.picurl;
-   console.log(path);
+
+  playVoice: function (e) {
+    Player.playVoice(this, e);
+  },
+  pauseVoice: function (e) {
+    Player.pauseVoice(this, e);
+  },
+  stopVoice: function (e) {
+    Player.stopVoice(this, e);
+  },
+
+  onShareAppMessage: function () {
+    let path = '/pages/jionroom/jionroom?isshare=true&name=' + getApp().globalData.room_now.room.name + '&objectId=' + getApp().globalData.room_now.room.objectId
+      + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl;
+    console.log(path);
     return {
       title: getApp().globalData.room_now.room.name,
-      desc: getApp().globalData.room_now.room.desc ,
+      desc: getApp().globalData.room_now.room.desc,
       path: path
     }
   }
