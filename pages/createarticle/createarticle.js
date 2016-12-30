@@ -65,14 +65,20 @@ Page({
       disabled: true
     })
 
+//  picurls.forEach(function(element,i) {
+
+//       console.log(element,i);
+
+//     }, this);
 
     //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
+
     new AV.File(picurls[0], {
       blob: {
         uri: picurls[0],
       }
     }).save().then(res => {
-       console.log(res);
+      console.log(res);
       //第2步，先上传数据
       var article = new Article();
       article.set('title', 'title');

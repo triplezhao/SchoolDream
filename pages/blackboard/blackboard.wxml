@@ -1,7 +1,7 @@
 <import src="/template/player/player.wxml"  />
 <view class="container-relative">
   <view class="container-absolute">
-    <View class="btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
+    <View class="weui-btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
       <button bindtap="tapCreateArticle" style="font-size:12px;">发文字</button>
       <button bindtap="tapCreateVoice" style="font-size:12px;">发录音</button>
       <button bindtap="tapCreateVideo" style="font-size:12px;">发视频</button>
@@ -15,8 +15,7 @@
               <view class="avatar">
                 <image src="{{item.creater.avatarurl}}" data-src="{{item.creater.avatarurl}}" bindtap="previewImage"></image>
               </view>
-              <text>{{nicknamemap[item.creater.objectId].nickname?nicknamemap[item.creater.objectId].nickname:nicknamemap[item.creater.objectId].student.nickname}}
-              </text>
+              <text>{{nicknamemap[item.creater.objectId].nickname?nicknamemap[item.creater.objectId].nickname:nicknamemap[item.creater.objectId].student.nickname}}</text>
             </a>
           </view>
           <view class="feed-content">
@@ -24,8 +23,8 @@
               <view bindtap="bindItemTap">
                 <text >{{item.content}}</text>
               </view>
-              </view>
-              <view bindtap="bindItemTap">
+            </view>
+            <view bindtap="bindItemTap">
               <view wx:if="{{item.voiceurl}}" class="answer-actions">
                 <include src="../../template/player/player.wxml"  />
               </view>
@@ -33,7 +32,12 @@
                 <video src="{{item.videourl}}" danmu-list="{{item.danmulist}}"  enable-danmu danmu-btn ></video>
               </view>
             </view>
-            <image wx:if="{{item.pics[0]}}" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
+            <view wx:if="{{item.pics.length>0}}" class="images-list">
+              <block wx:for="{{item.pics}}" wx:for-item="image">
+                <image src="{{image}}" class="images-image" data-src="{{image}}" bindtap="previewImage"></image>
+              </block>
+            </view>
+            <image wx:if="{{item.pics.length==0}}" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage"></image>
             <view class="answer-actions">
               <view class="like dot">
                 <a>{{item.zannum}} 赞</a>
@@ -44,14 +48,12 @@
             <view class="zanlist">
               <image src="../../image/heart.png"></image>
               <block wx:for="{{item.zans}}" wx:for-index="zidx" wx:for-item="zitem" data-idx="{{zidx}}">
-                <text>{{nicknamemap[zitem.creater.objectId].nickname?nicknamemap[zitem.creater.objectId].nickname:nicknamemap[zitem.creater.objectId].student.nickname}},
-                </text>
+                <text>{{nicknamemap[zitem.creater.objectId].nickname?nicknamemap[zitem.creater.objectId].nickname:nicknamemap[zitem.creater.objectId].student.nickname}},</text>
               </block>
             </view>
             <view class="commentlist">
               <block wx:for="{{item.comments}}" wx:for-index="cidx" wx:for-item="citem" data-idx="{{cidx}}">
-                <text>{{nicknamemap[citem.creater.objectId].nickname?nicknamemap[citem.creater.objectId].nickname:nicknamemap[citem.creater.objectId].student.nickname}}:{{citem.content}}
-                </text>
+                <text>{{nicknamemap[citem.creater.objectId].nickname?nicknamemap[citem.creater.objectId].nickname:nicknamemap[citem.creater.objectId].student.nickname}}:{{citem.content}}</text>
               </block>
             </view>
           </view>

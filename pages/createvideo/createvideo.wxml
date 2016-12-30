@@ -1,92 +1,90 @@
 
   <view style="margin:5rpx;">
     <form bindsubmit="formSubmit" bindreset="formReset">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">内容:</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input name="content" class="weui-input" bindinput="bindKeyInputName" placeholder="请输入内容"  />
-        </view>
-      </view>
       <view class="weui-cells weui-cells_after-title">
-        <view class="page-body">
-          <view class="page-body-wrapper">
-            <block wx:if="{{recording === false && playing === false && hasRecord === false}}">
-              <view class="page-body-time">
-                <text class="time-big">{{formatedRecordTime}}</text>
-              </view>
-              <view class="page-body-buttons">
-                <view class="page-body-button"></view>
-                <view class="page-body-button" bindtap="startRecord">
-                  <image src="/image/record.png"></image>
-                </view>
-                <view class="page-body-button"></view>
-              </view>
-            </block>
-            <block wx:if="{{recording === true}}">
-              <view class="page-body-time">
-                <text class="time-big">{{formatedRecordTime}}</text>
-              </view>
-              <view class="page-body-buttons">
-                <view class="page-body-button"></view>
-                <view class="page-body-button" bindtap="stopRecord">
-                  <view class="button-stop-record"></view>
-                </view>
-                <view class="page-body-button"></view>
-              </view>
-            </block>
-            <block wx:if="{{hasRecord === true && playing === false}}">
-              <view class="page-body-time">
-                <text class="time-big">{{formatedPlayTime}}</text>
-                <text class="time-small">{{formatedRecordTime}}</text>
-              </view>
-              <view class="page-body-buttons">
-                <view class="page-body-button"></view>
-                <view class="page-body-button" bindtap="playVoice">
-                  <image src="/image/play.png"></image>
-                </view>
-                <view class="page-body-button" bindtap="clear">
-                  <image src="/image/trash.png"></image>
-                </view>
-              </view>
-            </block>
-            <block wx:if="{{hasRecord === true && playing === true}}">
-              <view class="page-body-time">
-                <text class="time-big">{{formatedPlayTime}}</text>
-                <text class="time-small">{{formatedRecordTime}}</text>
-              </view>
-              <view class="page-body-buttons">
-                <view class="page-body-button" bindtap="stopVoice">
-                  <image src="/image/stop.png"></image>
-                </view>
-                <view class="page-body-button" bindtap="pauseVoice">
-                  <image src="/image/pause.png"></image>
-                </view>
-                <view class="page-body-button" bindtap="clear">
-                  <image src="/image/trash.png"></image>
-                </view>
-              </view>
-            </block>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">内容:</view>
           </view>
-          <view class="weui-cell weui-cell_input">
-            <view class="images-wrapper">
-              <text class="images-text">添加个视频:</text>
-              <view class="images-list">
+          <view class="weui-cell__bd">
+            <input name="content" class="weui-input" bindinput="bindKeyInputName" placeholder="请输入内容"  />
+          </view>
+        </view>
+        <block wx:if="{{recording === false && playing === false && hasRecord === false}}">
+          <view class="page-body-time">
+            <text class="time-big">{{formatedRecordTime}}</text>
+          </view>
+          <view class="page-body-buttons">
+            <view class="page-body-button"></view>
+            <view class="page-body-button" bindtap="startRecord">
+              <image src="/image/record.png"></image>
+            </view>
+            <view class="page-body-button"></view>
+          </view>
+        </block>
+        <block wx:if="{{recording === true}}">
+          <view class="page-body-time">
+            <text class="time-big">{{formatedRecordTime}}</text>
+          </view>
+          <view class="page-body-buttons">
+            <view class="page-body-button"></view>
+            <view class="page-body-button" bindtap="stopRecord">
+              <view class="button-stop-record"></view>
+            </view>
+            <view class="page-body-button"></view>
+          </view>
+        </block>
+        <block wx:if="{{hasRecord === true && playing === false}}">
+          <view class="page-body-time">
+            <text class="time-big">{{formatedPlayTime}}</text>
+            <text class="time-small">{{formatedRecordTime}}</text>
+          </view>
+          <view class="page-body-buttons">
+            <view class="page-body-button"></view>
+            <view class="page-body-button" bindtap="playVoice">
+              <image src="/image/play.png"></image>
+            </view>
+            <view class="page-body-button" bindtap="clear">
+              <image src="/image/trash.png"></image>
+            </view>
+          </view>
+        </block>
+        <block wx:if="{{hasRecord === true && playing === true}}">
+          <view class="page-body-time">
+            <text class="time-big">{{formatedPlayTime}}</text>
+            <text class="time-small">{{formatedRecordTime}}</text>
+          </view>
+          <view class="page-body-buttons">
+            <view class="page-body-button" bindtap="stopVoice">
+              <image src="/image/stop.png"></image>
+            </view>
+            <view class="page-body-button" bindtap="pauseVoice">
+              <image src="/image/pause.png"></image>
+            </view>
+            <view class="page-body-button" bindtap="clear">
+              <image src="/image/trash.png"></image>
+            </view>
+          </view>
+        </block>
+        <view class="weui-cell weui-cell_input">
+          <view class="images-wrapper">
+            <text class="images-text">添加个视频:</text>
+            <view class="images-list">
               <video wx: wx:if="{{tempFilePath_video}}" class="images-image" src="{{tempFilePath_video}}"></video>
-                <!--<image src="{{tempFilePath_video}}" class="images-image" data-src="{{tempFilePath_video}}" bindtap="previewImage"></image>-->
-                <view class="images-image image-plus" bindtap="chooseVideo">
-                  <view class="image-plus-horizontal"></view>
-                  <view class="image-plus-vertical"></view>
-                </view>
-              </view>
+              <!--<image src="{{tempFilePath_video}}" class="images-image" data-src="{{tempFilePath_video}}" bindtap="previewImage">
+            </image>
+            -->
+            <view class="images-image image-plus" bindtap="chooseVideo">
+              <view class="image-plus-horizontal"></view>
+              <view class="image-plus-vertical"></view>
             </view>
           </view>
         </view>
       </view>
-      <view class="weui-btn-area">
-        <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>
-      </view>
-    </form>
-  </view>
-  <loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>
+    </view>
+    <view class="weui-btn-area">
+      <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>
+    </view>
+  </form>
+</view>
+<loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>
