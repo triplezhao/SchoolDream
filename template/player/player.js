@@ -41,45 +41,54 @@ module.exports = {
         //2.再播放
         let path = download_res.tempFilePath;
 
+
         that.setData({
           playing: true,
+          playingindex: index,
+          downloading_fail_index: -1,
         })
+        that.forceUpdate();
         clearInterval(playTimeInterval)
         playTimeInterval = setInterval(function () {
           that.data.playTime += 1
           that.setData({
-            playingindex: index,
             formatedPlayTime: util.formatTime(that.data.playTime)
           }
           )
         }, 1000)
 
-        wx.playVoice({
-          filePath: path,
-          success: function (res) {
-            // success
-            console.log('playVoice success');
-            that.data.playTime = 0
-            that.setData({
-              playing: false,
-              formatedPlayTime: util.formatTime(that.data.playTime)
-            })
-          },
-          fail: function () {
-            // fail
-            console.log('playVoice fail');
-            that.showToast('playVoice失败');
-          },
-          complete: function () {
-            // complete
-            console.log('playVoice complete');
-            clearInterval(playTimeInterval)
-          }
-        })
+        setTimeout(() => {
+          wx.playVoice({
+            filePath: path,
+            success: function (res) {
+              // success
+              console.log('playVoice success');
+
+            },
+            fail: function () {
+              // fail
+              console.log('playVoice fail');
+              that.showToast('playVoice失败');
+            },
+            complete: function () {
+              // complete
+              that.data.playTime = 0
+              that.setData({
+                playing: false,
+                formatedPlayTime: util.formatTime(that.data.playTime)
+              })
+              console.log('playVoice complete');
+              clearInterval(playTimeInterval)
+            }
+          })
+        }, 1000);
+
+
+
       },
       fail(error) {
         console.log(error)
-         that.setData({
+        that.setData({
           downloading_fail_index: index,
         })
       },

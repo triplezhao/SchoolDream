@@ -378,13 +378,14 @@ Page({
   ,
   showInput: function () {
     this.setData({
+      inputVal: "",
       inputShowed: true
     });
   },
   hideInput: function () {
     this.setData({
-      inputVal: "",
-      inputShowed: false
+      inputShowed: false,
+      isShowComment: false
     });
   },
   clearInput: function () {

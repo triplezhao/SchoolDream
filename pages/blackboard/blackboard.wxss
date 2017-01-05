@@ -8,7 +8,7 @@
 }
 .absolute-center-comment {
   position: absolute;
-  width: 98vw;
+  width: 100vw;
   height: 30vh;
   top: 30vh; 
   left: 0; 
@@ -33,7 +33,7 @@
 }
 .commentlist text{
   display: inline-block;
-  height: 40rpx;
+  /*height: 40rpx;*/
   line-height: 40rpx;
   vertical-align: middle;
   margin: 0 0 0 15rpx;
@@ -73,16 +73,16 @@
   
 }
 .container .feed-item{
-  width: 100%;
+  /*width: 100%;*/
   padding: 15rpx;
-  margin: 0rpx 0rpx 5rpx 0rpx;
+  margin: 0rpx 0rpx 2rpx 0rpx;
   background: #ffffff;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  box-shadow: 0 2px 5px gray;
+  border-top: 0px solid #eee;
+  border-bottom: 1px solid gray;
+  box-shadow: 0 0px 0px gray;
 }
 .container .feed-item .feed-source{
-  width: 100%;
+  /*width: 100%;*/
   left: 0;
   /*height: 100rpx;*/
 }
@@ -148,7 +148,7 @@
   padding: 10rpx;
 }
 .container .feed-item .feed-content .answer-actions{
-  width: 95%;
+  width: 98%;
   padding: 10rpx 0rpx  0;
   color: #a0acac;
 }
@@ -161,5 +161,6 @@
 .container .feed-item .feed-content .answer-actions .dot ::after{
   content: "•";
 }
+
 
 
