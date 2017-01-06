@@ -23,8 +23,8 @@ Page({
     room_now: null,
     student: null,
 
-    tempFilePaths: [],//图片的
-    tempFilePath: null,  //音频的
+    tempFilePathsPic: [],//图片的
+    tempFilePathVoice: null,  //音频的
     disabled: true,
 
 
@@ -63,7 +63,7 @@ Page({
     console.log('form发生了submit事件，携带数据为：', e.detail.value);
 
     var content = e.detail.value.content;
-    var picurl = that.data.tempFilePaths;
+    var picurl = that.data.tempFilePathsPic;
 
     if (!content) {
       that.showToast('内容不能为空');
@@ -73,47 +73,116 @@ Page({
       that.showToast('还没有音频');
       return;
     }
+    try {
 
-    that.showLoading('加载中');
+      that.showLoading('加载中');
 
-    console.log('that.data.tempFilePath', that.data.tempFilePath);
-    //第一步，先上传音频
-    var uptoken = QN.genUpToken();
-    wx.uploadFile({
-      url: QN.getUploadUrl(),
-      filePath: that.data.tempFilePath,
-      name: 'file',
-      formData: {
-        'key': that.data.tempFilePath.split('//')[1],
-        'token': uptoken
-      },
-      success: function (res) {
-        var data = JSON.parse(res.data);
+      console.log('that.data.tempFilePathVoice', that.data.tempFilePathVoice);
 
-        that.setData({
-          tempFilePath: QN.getImageUrl(data.key),
+      //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
+      if (that.data.tempFilePathsPic[0]) {
+        // 有图片的情况
+        //第0步，先上传图片
+        var picFile = new AV.File(that.data.tempFilePathsPic[0], {
+          blob: {
+            uri: that.data.tempFilePathsPic[0],
+          }
+        })
+        //第1步，先上传音频
+        var voiceFile = new AV.File(that.data.tempFilePathVoice, {
+          blob: {
+            uri: that.data.tempFilePathVoice,
+          }
         })
 
-        console.log(that.data.tempFilePath);
+        var pics = [];
+        var voiceurl = '';
 
-
-        // 新建一个 AV 对象
-        var article = new Article();
-        article.set('title', 'title');
-        article.set('content', content);
-        article.set('pics', that.data.tempFilePaths);
-        article.set('voiceurl', QN.getImageUrl(data.key));
-        that.save2Server(article);
-
-      },
-      fail(error) {
-        console.log(error)
-      },
-      complete(res) {
-        console.log(res)
-        that.hideLoading();
+        picFile.save()
+          .then(res => {
+            console.log(res);
+            pics = [res.url()];
+            return voiceFile.save();
+          })
+          .then(res => {
+            console.log(res);
+            voiceurl = res.url();
+            // 新建一个 AV 对象
+            var article = new Article();
+            article.set('title', 'title');
+            article.set('content', content);
+            article.set('pics', pics);
+            article.set('voiceurl', voiceurl);
+            that.save2Server(article);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        //没图片的情况
+        var voiceFile = new AV.File(that.data.tempFilePathVoice, {
+          blob: {
+            uri: that.data.tempFilePathVoice,
+          }
+        })
+        var voiceurl = '';
+        voiceFile.save()
+          .then(res => {
+            console.log(res);
+            voiceurl = res.url();
+            // 新建一个 AV 对象
+            var article = new Article();
+            article.set('title', 'title');
+            article.set('content', content);
+            article.set('voiceurl', voiceurl);
+            that.save2Server(article);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
-    })
+
+    } catch (e) {
+      that.hideLoading();
+    }
+
+    // //第一步，先上传音频
+    // var uptoken = QN.genUpToken();
+    // wx.uploadFile({
+    //   url: QN.getUploadUrl(),
+    //   filePath: that.data.tempFilePathVoice,
+    //   name: 'file',
+    //   formData: {
+    //     'key': that.data.tempFilePathVoice.split('//')[1],
+    //     'token': uptoken
+    //   },
+    //   success: function (res) {
+    //     var data = JSON.parse(res.data);
+
+    //     that.setData({
+    //       tempFilePathVoice: QN.getImageUrl(data.key),
+    //     })
+
+    //     console.log(that.data.tempFilePathVoice);
+
+
+    //     // 新建一个 AV 对象
+    //     var article = new Article();
+    //     article.set('title', 'title');
+    //     article.set('content', content);
+    //     article.set('pics', that.data.tempFilePathsPic);
+    //     article.set('voiceurl', QN.getImageUrl(data.key));
+    //     that.save2Server(article);
+
+    //   },
+    //   fail(error) {
+    //     console.log(error)
+    //   },
+    //   complete(res) {
+    //     console.log(res)
+    //     that.hideLoading();
+    //   }
+    // })
 
   },
 
@@ -148,61 +217,21 @@ Page({
     });
   },
 
-
   // 从相册选择照片或拍摄照片
   chooseImage() {
+    var that = this;
     wx.chooseImage({
       count: 3,
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
-
       success: (res) => {
-
-        var that = this;
+        console.log(res);
         that.setData({
-          disabled: true
+          tempFilePathsPic: res.tempFilePaths,
         })
-
-        var uptoken = QN.genUpToken();
-
-        //用这个直接生成http://jsfiddle.net/gh/get/extjs/4.2/icattlecoder/jsfiddle/tree/master/uptoken
-        // var uptoken = 'Vu7wSzNFhyn2JxdvZ4VExCslx7lWNQUqsyC6XqRV:k9vaLUvyo8I5fnEaGI0XOWlNwLE=:eyJzY29wZSI6ImNsb3VkeSIsImRlYWRsaW5lIjoxNDgwNDQ2ODgxfQ==';
-
-        console.log(res)
-
-        that.showLoading('上传中');
-        wx.uploadFile({
-
-          url: QN.getUploadUrl(),
-          filePath: res.tempFilePaths[0],
-          name: 'file',
-          formData: {
-            'key': res.tempFilePaths[0].split('//')[1],
-            'token': uptoken
-          },
-          success: function (res) {
-            var data = JSON.parse(res.data);
-
-            that.setData({
-              tempFilePaths: [QN.getImageUrl(data.key)],
-              disabled: false,
-            })
-
-            that.showToast('上传成功');
-          },
-          fail(error) {
-            console.log(error)
-          },
-          complete(res) {
-            console.log(res)
-            that.hideLoading();
-          }
-        })
-
       },
     });
   },
-
   previewImage: function (e) {
     var current = e.target.dataset.src
 
@@ -217,7 +246,7 @@ Page({
 
     wx.previewImage({
       current: current,
-      urls: this.data.tempFilePaths
+      urls: this.data.tempFilePathsPic
     })
   },
 
@@ -239,7 +268,7 @@ Page({
         console.log('startRecord success');
         that.setData({
           hasRecord: true,
-          tempFilePath: res.tempFilePath,
+          tempFilePathVoice: res.tempFilePath,
           formatedPlayTime: util.formatTime(that.data.playTime)
         })
       },
@@ -287,7 +316,7 @@ Page({
       })
     }, 1000)
     wx.playVoice({
-      filePath: that.data.tempFilePath,
+      filePath: that.data.tempFilePathVoice,
       success: function (res) {
         // success
         console.log('playVoice success');
@@ -375,7 +404,7 @@ Page({
         that.setData({
           playing: false,
           hasRecord: false,
-          tempFilePath: '',
+          tempFilePathVoice: '',
           formatedRecordTime: util.formatTime(0)
         })
       }

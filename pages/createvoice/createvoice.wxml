@@ -74,7 +74,7 @@
         <view class="images-wrapper">
           <text class="images-text">添加个图片:</text>
           <view class="images-list">
-            <block wx:for="{{tempFilePaths}}" wx:for-item="image">
+            <block wx:for="{{tempFilePathsPic}}" wx:for-item="image">
               <image src="{{image}}" class="images-image" data-src="{{image}}" bindtap="previewImage"></image>
             </block>
             <view class="images-image image-plus" bindtap="chooseImage">
@@ -86,7 +86,7 @@
       </view>
       </view>
       <view class="weui-btn-area">
-        <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>
+        <button formType="submit" disabled="{{!tempFilePathVoice}}" type="primary">提交</button>
       </view>
     </form>
   </view>

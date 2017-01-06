@@ -66,44 +66,66 @@ Page({
     that.showLoading('加载中');
 
     console.log('that.data.tempFilePath', that.data.tempFilePath_video);
-    //第一步，先上传音频
-    var uptoken = QN.genUpToken();
-    wx.uploadFile({
-      url: QN.getUploadUrl(),
-      filePath: that.data.tempFilePath_video,
-      name: 'file',
-      formData: {
-        'key': that.data.tempFilePath_video.split('//')[1],
-        'token': uptoken
-      },
-      success: function (res) {
-        var data = JSON.parse(res.data);
+    // //第一步，先上传音频
+    // var uptoken = QN.genUpToken();
+    // wx.uploadFile({
+    //   url: QN.getUploadUrl(),
+    //   filePath: that.data.tempFilePath_video,
+    //   name: 'file',
+    //   formData: {
+    //     'key': that.data.tempFilePath_video.split('//')[1],
+    //     'token': uptoken
+    //   },
+    //   success: function (res) {
+    //     var data = JSON.parse(res.data);
 
-        that.setData({
-          tempFilePath_video: QN.getImageUrl(data.key),
-        })
+    //     that.setData({
+    //       tempFilePath_video: QN.getImageUrl(data.key),
+    //     })
 
-        console.log(that.data.tempFilePath_video);
+    //     console.log(that.data.tempFilePath_video);
 
-        // 新建一个 AV 对象
+    //     // 新建一个 AV 对象
+    //     var article = new Article();
+    //     article.set('title', 'title');
+    //     article.set('content', content);
+    //     // article.set('pics', that.data.tempFilePaths);
+    //     // article.set('voiceurl', QN.getImageUrl(data.key));
+    //     article.set('videourl', that.data.tempFilePath_video);
+
+    //     that.save2Server(article);
+
+    //   },
+    //   fail(error) {
+    //     console.log(error)
+    //   },
+    //   complete(res) {
+    //     console.log(res)
+    //     that.hideLoading();
+    //   }
+    // })
+
+    var videofile = new AV.File(that.data.tempFilePath_video, {
+      blob: {
+        uri: that.data.tempFilePath_video,
+      }
+    })
+    videofile.save()
+      .then(res => {
+        console.log(res);
+        //第2步，先上传数据
         var article = new Article();
         article.set('title', 'title');
         article.set('content', content);
         // article.set('pics', that.data.tempFilePaths);
         // article.set('voiceurl', QN.getImageUrl(data.key));
         article.set('videourl', that.data.tempFilePath_video);
-
         that.save2Server(article);
-
-      },
-      fail(error) {
-        console.log(error)
-      },
-      complete(res) {
-        console.log(res)
+      })
+      .catch((error) => {
+        console.log(error);
         that.hideLoading();
-      }
-    })
+      });
 
   },
 
