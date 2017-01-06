@@ -17,6 +17,13 @@
   align-items: center;
 }
 
+/*纵向居中布局*/
+.center{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 /*//知乎的css*/
 /**app.wxss**/

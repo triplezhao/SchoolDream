@@ -16,7 +16,7 @@ Page({
     actionSheetObj: null,
     student: null,
     list: [],
-
+  schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
   },
 
 

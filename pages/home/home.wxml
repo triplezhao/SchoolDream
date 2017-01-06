@@ -11,13 +11,13 @@
       <text class="userinfo-nickname">{{student.nickname}}</text>
     </view>
   </view>
-  <View style="display:flex;  flex-direction:row; padding:10rpx">
+  <view class="flex-wrp-row" style="background:#eee;">
+    <text style="color:white;font-size:12px; padding:4px;"></text>
+  </view>
+  <!--<view style="display:flex;  flex-direction:row; padding:10rpx">
     <button bindtap="tapCreateRoom" type="warn" style="font-size:14px">创建班级</button>
     <button bindtap="tapSearchRoom" type="primary" style="font-size:14px">加入新班级</button>
-  </View>
-  <View class="flex-wrp-row" style="background:skyblue;">
-    <text style="color:white;font-size:12px; padding:4px;">已经加入的班级</text>
-  </View>
+  </view>-->
   <block wx:if="{{list}}" wx:for="{{list}}">
     <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
       <view class="avatar flex-item">
@@ -29,9 +29,40 @@
           <text class="lasttime">{{item.room.createdAt}}</text>
         </view>
         <text class="chat-txt">{{item.room.desc}}</text>
+
+        <text  wx:if="{{item.room.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.room.schooltype}}</text>
+        <text  wx:if="{{item.room.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.room.schooltype}}</text>
+        <text  wx:if="{{item.room.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.room.schooltype}}</text>
+        <text  wx:if="{{item.room.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.room.schooltype}}</text>
+
       </view>
     </view>
   </block>
+   <view class="flex-wrp-row" style="background:#eee;">
+    <text style="color:white;font-size:12px; padding:4px;"></text>
+  </view>
+  <view class="chat-item flex-wrp " bindtap="tapSearchRoom" data-index="{{index}}">
+    <view class="flex-item avatar ">
+        <view class="typesearch center" ><text>加</text></view>
+    </view>
+    <view class="chat-content flex-item">
+      <view class="chat-source">
+        <text class="chatmate">加入班级</text>
+      </view>
+      <text class="chat-txt">搜索加入新的班级</text>
+    </view>
+  </view>
+   <view class="chat-item flex-wrp " bindtap="tapCreateRoom" data-index="{{index}}">
+    <view class="flex-item avatar ">
+        <view class="typecreate center" ><text>建</text></view>
+    </view>
+    <view class="chat-content flex-item">
+      <view class="chat-source">
+        <text class="chatmate">创建新班级</text>
+      </view>
+      <text class="chat-txt">创建一个新的班级</text>
+    </view>
+  </view>
 </scroll-view>
 <view wx:if="{{!student&&!showLoading}}" class="weui-msg">
   <view class="weui-msg__icon-area">
@@ -39,9 +70,7 @@
   </view>
   <view class="weui-msg__text-area">
     <view class="weui-msg__title">授权失败</view>
-    <view class="weui-msg__desc">
-      需要您授权获取您的头像和昵称
-    </view>
+    <view class="weui-msg__desc">需要您授权获取您的头像和昵称</view>
   </view>
   <view class="weui-msg__opr-area">
     <view class="weui-btn-area">
@@ -51,7 +80,9 @@
   <view class="weui-msg__extra-area">
     <view class="weui-footer">
       <view class="weui-footer__links">
-        <!--<navigator url="" class="weui-footer__link">xxx</navigator>-->
+        <!--<navigator url="" class="weui-footer__link">
+        xxx</navigator>
+        -->
       </view>
       <view class="weui-footer__text">Copyright © 2008-2018 pxq</view>
     </view>

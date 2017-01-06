@@ -56,12 +56,34 @@
   vertical-align: text-bottom;
 }
 .chat-item .chat-content .chat-txt{
-  display: block;
+  /*display: block;*/
   color: #7b7b7b;
   font-size: 26rpx;
   line-height: 34rpx;
 }
+.chat-item .chat-content  .schooltype{
+  flex: 1;
+  font-size: 22rpx;
+  float: right;
+  vertical-align: text-bottom;
 
+  height: 30rpx;
+  border-radius: 5rpx;
+  color: white;
+  padding: 5rpx;
+}
+.schooltype0{
+  background-color: orangered;
+}
+.schooltype1{
+  background-color: skyblue;
+}
+.schooltype2{
+  background-color: green;
+}
+.schooltype3{
+  background-color: saddlebrown;
+}
 .top-tab{
   width: 750rpx;
   height: 100rpx;

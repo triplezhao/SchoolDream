@@ -61,6 +61,11 @@
             <text class="lasttime">{{item.createdAt}}</text>
           </view>
           <text class="chat-txt">{{item.desc}}</text>
+        <text  wx:if="{{item.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.schooltype}}</text>
+        <text  wx:if="{{item.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.schooltype}}</text>
+        <text  wx:if="{{item.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.schooltype}}</text>
+        <text  wx:if="{{item.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.schooltype}}</text>
+
         </view>
       </view>
     </block>
