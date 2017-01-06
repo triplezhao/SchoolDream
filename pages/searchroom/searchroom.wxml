@@ -22,7 +22,7 @@
         <view wx:else class="weui-select weui-select_in-select-after">不限</view>
       </picker>
     </view>
-     <view wx:if="{{where.entry_year}}" class="weui-search-bar__cancel-btn" data-type="entry_year" bindtap="clearTap">清除</view>
+    <view wx:if="{{where.entry_year}}" class="weui-search-bar__cancel-btn" data-type="entry_year" bindtap="clearTap">清除</view>
   </view>
   <view class="weui-cell weui-cell_input">
     <view class="weui-cell__hd">
@@ -36,7 +36,6 @@
     </view>
     <view wx:if="{{where.schooltype}}" class="weui-search-bar__cancel-btn" data-type="schooltype" bindtap="clearTap">清除</view>
   </view>
-  
   <view class="weui-search-bar">
     <view class="weui-search-bar__form">
       <view class="weui-search-bar__box">
@@ -49,7 +48,6 @@
     </view>
     <view class="weui-search-bar__cancel-btn" bindtap="searchRoom">搜索</view>
   </view>
-
   <scroll-view wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
                bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
     <block wx:if="{{list}}" wx:for="{{list}}">
@@ -67,12 +65,15 @@
       </view>
     </block>
     <view class="tips1">
-      <view wx:if="{{hasMore}}"
-            style="display: flex;flex-direction: row;align-items: center;align-self: center;justify-content: center;">
-        <text>上拉加载更多</text>
+      <view wx:if="{{showLoading}}" class="weui-loadmore">
+        <view class="weui-loading"></view>
+        <view class="weui-loadmore__tips">正在加载</view>
       </view>
-      <view wx:else style="display: flex;justify-content:center;">
-        <text >没有更多内容了</text>
+      <view wx:if="{{hasMore&&!showLoading}}" class="weui-loadmore weui-loadmore_line">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">上拉加载更多</view>
+      </view>
+      <view wx:if="{{!hasMore&&!showLoading}}" class="weui-loadmore weui-loadmore_line">
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无更多数据</view>
       </view>
     </view>
   </scroll-view>
@@ -116,4 +117,4 @@
       </view>
     </view>
   </view>
-    </view>
+</view>

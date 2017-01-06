@@ -16,10 +16,10 @@ Page({
     student: null,
     room_now: null,
     list: [],
-    
+
   },
   onLoad: function (options) {
-    if(!getApp().globalData.room_now)
+    if (!getApp().globalData.room_now)
       return;
     wx.hideNavigationBarLoading();
     // 页面初始化 options为页面跳转所带来的参数
@@ -40,7 +40,7 @@ Page({
     // 页面渲染完成
   },
   onShow: function () {
-     if(!getApp().globalData.room_now)
+    if (!getApp().globalData.room_now)
       return;
     // 页面显示
     wx.setNavigationBarTitle({
@@ -105,7 +105,7 @@ Page({
     // wx.navigateTo({
     //   url: '../invite/invite?invitecode=' + getApp().globalData.room_now.room.objectId
     // })
-    this.showToast('目前真机分享不能用');
+    this.showToast('点击右上角的分享，将本班级发送给同学');
 
   },
 
@@ -160,6 +160,17 @@ Page({
       title: toastMessage,
       duration: 1000
     })
+  },
+  onShareAppMessage: function () {
+    let that = this;
+    let path = '/pages/jionroom/jionroom?isshare=true&name=' + getApp().globalData.room_now.room.name + '&objectId=' + getApp().globalData.room_now.room.objectId
+      + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl;
+    console.log(path);
+    return {
+      title: getApp().globalData.room_now.room.name,
+      desc: that.data.room_now.student.nickname + '喊你加入' + getApp().globalData.room_now.room.name,
+      path: path
+    }
   }
 
 })

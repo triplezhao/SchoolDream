@@ -14,10 +14,10 @@
           <text style="font-size:12px">{{item.nickname?item.nickname:item.student.nickname}}</text>
         </view>
       </block>
-      <view class="images-image image-plus" bindtap="tapInvite">
+      <!--<view class="images-image image-plus" bindtap="tapInvite">
         <view class="image-plus-horizontal"></view>
         <view class="image-plus-vertical"></view>
-      </view>
+      </view>-->
     </view>
   </view>
   <View class="flex-wrp-row" style="background:gray;">
@@ -27,6 +27,17 @@
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
         <text>班级名称：{{room_now.room.name}}</text>
+      </view>
+    </view>
+      <view class="my-item flex-wrp">
+      <view class="myitem-name flex-item">
+        <text wx:if="{{room_now.nickname}}">我在本班昵称：{{room_now.nickname}}</text>
+        <text wx:elif="{{room_now.student.nickname}}">我在本班昵称：{{room_now.student.nickname}}</text>
+      </view>
+    </view>
+    <view class="my-item flex-wrp">
+      <view class="myitem-name flex-item">
+        <text>我的黑板</text>
       </view>
     </view>
     <view class="my-item flex-wrp">
@@ -40,21 +51,12 @@
       </view>
     </view>
     <view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text wx:if="{{room_now.nickname}}">我在本班昵称：{{room_now.nickname}}</text>
-        <text wx:elif="{{room_now.student.nickname}}">我在本班昵称：{{room_now.student.nickname}}</text>
-      </view>
-    </view>
-    <view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text>我的黑板</text>
-      </view>
-    </view>
-    <view class="my-item flex-wrp">
       <view bindtap="tapInvite" class="myitem-name flex-item">
-        <text>邀请同学</text>
+        <text>邀请同学方法：</text>
+        <text>点击右上角分享给同学</text>
       </view>
     </view>
+  
   </view>
   <View  style="display:flex;  flex-direction:row; padding:10rpx">
     <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" bindtap="tapDelRoom" type="warn" style="font-size:14px">解散班级</button>

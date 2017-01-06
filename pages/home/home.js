@@ -158,7 +158,7 @@ Page({
     console.log('点击了列表的：', index)
     var that = this;
     wx.showActionSheet({
-      itemList: ['进入', '邀请同学', '设置'],
+      itemList: ['进入','班级管理' ],
       success: function (res) {
         if (!res.cancel) {
           console.log(res.tapIndex)
@@ -167,18 +167,19 @@ Page({
               that.enter2Room(that.data.list[index]);
               break;
             case 1:
-              that.onShareAppMessage()
-              // that.showToast('真机分享不能用，通知好友使用搜索');
-              // wx.navigateTo({
-              //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
-              // })
-              break;
-            case 2:
-              //改全局内存
+               //改全局内存
               getApp().globalData.room_now = that.data.list[index];
               wx.navigateTo({
                 url: '../roomsetting/roomsetting'
               })
+             
+              break;
+            case 2:
+            that.onShareAppMessage()
+              // that.showToast('真机分享不能用，通知好友使用搜索');
+              // wx.navigateTo({
+              //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
+              // })
               break;
           }
         }

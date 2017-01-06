@@ -311,24 +311,7 @@ Page({
     });
   },
 
-  //跳转到新建页面
-  tapCreateArticle: function (e) {
-    wx.navigateTo({
-      url: '../createarticle/createarticle'
-    })
-  },
-  //跳转到新建页面
-  tapCreateVoice: function (e) {
-    wx.navigateTo({
-      url: '../createvoice/createvoice'
-    })
-  },
-  //跳转到新建页面
-  tapCreateVideo: function (e) {
-    wx.navigateTo({
-      url: '../createvideo/createvideo'
-    })
-  },
+
   previewImage: function (e) {
     var current = e.currentTarget.dataset.src
 
@@ -553,8 +536,8 @@ Page({
         console.error('Failed to create new object, with error message: ' + error.message);
       });
   },
-  //点击发送按钮，先隐藏键盘/评论框，再发送评论数据
-  sendZanCansel: function (e) {
+  //取消赞
+  sendZanCancel: function (e) {
     var that = this;
     //从页面传过来的article
     var index = that.data.mIndex;
@@ -605,6 +588,47 @@ Page({
         console.error('Failed to create new object, with error message: ' + error.message);
       });
   },
+
+  //点击发送按钮，先隐藏键盘/评论框，再发送评论数据
+  delArticle: function (e) {
+    var that = this;
+
+
+    wx.showModal({
+      title: '删除',
+      content: '确认删除这条记录吗',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+          //从页面传过来的article
+          var index = e.currentTarget.dataset.index;
+          var current_article = that.data.list[index];
+
+          console.log('current_article', e);
+          var article = AV.Object.createWithoutData('Article', current_article.objectId);
+
+          that.showLoading();
+
+          article.destroy().then((res) => {
+            console.log('del succ ', res);
+            that.data.list.splice(index, 1);
+            that.setData({
+              list: that.data.list,
+            })
+            that.hideLoading();
+          }).catch((error) => {
+            that.hideLoading();
+            // 异常处理
+            that.showToast('删除失败');
+            console.error(error);
+          });
+        }
+      }
+    })
+
+  },
+
+
   showActionSheet: function (e) {
     //从页面传过来的article
     console.log('showActionSheet', e);
@@ -628,7 +652,7 @@ Page({
           switch (res.tapIndex) {
             case 0:
               if (haszan) {
-                that.sendZanCansel(index);
+                that.sendZanCancel(index);
               } else {
                 that.sendZan(index);
               }
@@ -643,6 +667,55 @@ Page({
     })
   },
 
+  showActionSheetPlus: function (e) {
+    //从页面传过来的article
+    console.log('showActionSheet', e);
+    var that = this;
+    wx.showActionSheet({
+      itemList: ['发图文', '发音频', '发视频'],
+      success: function (res) {
+        if (!res.cancel) {
+          console.log(res.tapIndex)
+          switch (res.tapIndex) {
+            case 0:
+              wx.navigateTo({
+                url: '../createarticle/createarticle'
+              })
+              break;
+            case 1:
+              wx.navigateTo({
+                url: '../createvoice/createvoice'
+              })
+              break;
+            case 2:
+              wx.navigateTo({
+                url: '../createvideo/createvideo'
+              })
+              break;
+          }
+        }
+      },
+    })
+  },
+
+  //跳转到新建页面
+  tapCreateArticle: function (e) {
+    wx.navigateTo({
+      url: '../createarticle/createarticle'
+    })
+  },
+  //跳转到新建页面
+  tapCreateVoice: function (e) {
+    wx.navigateTo({
+      url: '../createvoice/createvoice'
+    })
+  },
+  //跳转到新建页面
+  tapCreateVideo: function (e) {
+    wx.navigateTo({
+      url: '../createvideo/createvideo'
+    })
+  },
   playVoice: function (e) {
     Player.playVoice(this, e);
   },
@@ -654,12 +727,13 @@ Page({
   },
 
   onShareAppMessage: function () {
+    let that = this;
     let path = '/pages/jionroom/jionroom?isshare=true&name=' + getApp().globalData.room_now.room.name + '&objectId=' + getApp().globalData.room_now.room.objectId
       + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl;
     console.log(path);
     return {
       title: getApp().globalData.room_now.room.name,
-      desc: getApp().globalData.room_now.room.desc,
+      desc: that.data.room_now.student.nickname + '喊你加入' + getApp().globalData.room_now.room.name,
       path: path
     }
   }

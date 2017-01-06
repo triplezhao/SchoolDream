@@ -15,30 +15,26 @@
   right: 0;
   bottom: 0; 
 }
+.absolute-plus {
+  position: absolute;
+  width: 5vw;
+  height: 5vw;
+  top: 80vh; 
+  left: 80vw; 
+  right: 5vw;
+  bottom: 5vw; 
+}
+
+
+
 
 .commentbt{
   height: 40rpx;
   width:40rpx;
   float: right;
-
 }
-
-/*评论list*/
-.commentlist{
-  display:flex;
-  flex-direction:column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background: #eeeeee;
-}
-.commentlist text{
-  display: inline-block;
-  /*height: 40rpx;*/
-  line-height: 40rpx;
-  vertical-align: middle;
-  margin: 0 0 0 15rpx;
-  color: #b0acac;
-  font-size: 26rpx;
+.del-bt{
+  margin: 0 0 0 10rpx;
 }
 
 /*zanlist*/
@@ -46,22 +42,53 @@
   display:flex;
   flex-direction:row;
   flex-wrap:  wrap;
- 
+   background: #ddd;
   /*background: red;*/
 }
 .zanlist image{
-  height:30rpx;
-  width:30rpx;
+   margin: 5rpx;
+   height: 30rpx;
+   width:30rpx;
 }
 .zanlist text{
   display: inline-block;
   height: 40rpx;
   line-height: 40rpx;
   vertical-align: middle;
-  margin: 0 0 0 15rpx;
+  margin: 0 0 0 5rpx;
   color: #576b95;
   font-size: 26rpx;
 }
+
+
+/*评论list*/
+.commentlist{
+  display:flex;
+  flex-direction:column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background: #ddd;
+}
+.commentlist view{
+ display: inline-block;
+}
+.commentlist text{
+  /*height: 40rpx;*/
+  line-height: 40rpx;
+  vertical-align: middle;
+  margin: 0 0 0 0rpx;
+  color: #333;
+  font-size: 26rpx;
+}
+.commentlist .name{
+  /*height: 40rpx;*/
+  line-height: 40rpx;
+  vertical-align: middle;
+  margin: 0 0 0 5rpx;
+  color: #576b95;
+  font-size: 26rpx;
+}
+
 
 
 .container{
@@ -78,7 +105,7 @@
   margin: 0rpx 0rpx 2rpx 0rpx;
   background: #ffffff;
   border-top: 0px solid #eee;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #ccc;
   box-shadow: 0 0px 0px gray;
 }
 .container .feed-item .feed-source{
@@ -113,23 +140,13 @@
   color: #576b95;
   font-size: 26rpx;
 }
-.container .feed-item .feed-source .item-more{
-  display: inline-block;
-  width: 40rpx;
-  height: 45rpx;
-  float: right;
-}
+
 .container .feed-item .feed-content{
-  padding: 30rpx 10rpx 0 0;
+  padding: 5rpx 10rpx 0 70rpx;
 }
-.container .feed-item .feed-content .question text{
-  font-size: 28rpx;
-  font-weight: 600px;
-  line-height: 40rpx;
-  text-space: 5rpx;
-}
+
 .container .feed-item .feed-content .answer-body{
-  padding: 20rpx 10rpx 0 0;
+  padding: 0rpx 10rpx 0 0;
   margin: 10rpx;
   /*height: 10rpx;*/
   font-size: 24rpx;
@@ -158,9 +175,51 @@
   padding: 0 10rpx 0 0;
   font-size: 24rpx;
 }
+.container .feed-item .feed-content .answer-actions text{
+  font-size: 24rpx;
+}
 .container .feed-item .feed-content .answer-actions .dot ::after{
   content: "•";
 }
 
-
-
+.images-list {
+  display: flex;
+  margin-top: 20rpx;
+  flex-wrap: wrap;
+}
+.images-image {
+  width: 150rpx;
+  height: 150rpx;
+  margin: 10rpx;
+}
+.images-image1 {
+  width: 60vw;
+  margin: 10rpx;
+  
+}
+.image-plus {
+  width: 100rpx;
+  height: 100rpx;
+  background: white ;
+  border: 2px solid #999;
+  position: relative;
+  border-radius: 50rpx;
+}
+.image-plus-horizontal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: green;
+  width: 5rpx;
+  height: 80rpx;
+  transform: translate(-50%, -50%);
+}
+.image-plus-vertical {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background-color: green;
+  width: 80rpx;
+  height: 5rpx;
+  transform: translate(-50%, -50%);
+}
