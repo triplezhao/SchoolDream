@@ -409,5 +409,6 @@ Page({
     this.setData({
       where: where,
     })
+    that.searchRoom();
   },
 })
