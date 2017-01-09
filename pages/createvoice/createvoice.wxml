@@ -70,20 +70,28 @@
             </block>
           </view>
         </view>
-         <view class="weui-cell weui-cell_input">
-        <view class="images-wrapper">
-          <text class="images-text">添加个图片:</text>
-          <view class="images-list">
-            <block wx:for="{{tempFilePathsPic}}" wx:for-item="image">
-              <image src="{{image}}" class="images-image" data-src="{{image}}" bindtap="previewImage"></image>
-            </block>
-            <view class="images-image image-plus" bindtap="chooseImage">
-              <view class="image-plus-horizontal"></view>
-              <view class="image-plus-vertical"></view>
+         <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <view class="weui-uploader">
+              <view class="weui-uploader__hd">
+                <view class="weui-uploader__title">图片上传</view>
+                <view class="weui-uploader__info">{{tempFilePathsPic.length}}/3（最多3张）</view>
+              </view>
+              <view class="weui-uploader__bd">
+                <view class="weui-uploader__files" id="uploaderFiles">
+                  <block wx:for-items="{{tempFilePathsPic}}" wx:key="{{index}}">
+                    <view class="weui-uploader__file" data-src="{{item}}" bindtap="previewImage" id="{{item}}">
+                      <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"  />
+                    </view>
+                  </block>
+              </view>
+              <view class="weui-uploader__input-box">
+                <view class="weui-uploader__input" bindtap="chooseImage"></view>
+              </view>
             </view>
-          </view>
         </view>
-      </view>
+        </view>
+        </view>
       </view>
       <view class="weui-btn-area">
         <button formType="submit" disabled="{{!tempFilePathVoice}}" type="primary">提交</button>

@@ -65,6 +65,8 @@
         <text  wx:if="{{item.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.schooltype}}</text>
         <text  wx:if="{{item.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.schooltype}}</text>
         <text  wx:if="{{item.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.schooltype}}</text>
+        <text  wx:if="{{item.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.schooltype}}</text>
+        <text  wx:if="{{item.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.schooltype}}</text>
 
         </view>
       </view>

@@ -84,6 +84,12 @@
 .schooltype3{
   background-color: saddlebrown;
 }
+.schooltype4{
+  background-color: slateblue;
+}
+.schooltype5{
+  background-color: darkblue;
+}
 .top-tab{
   width: 750rpx;
   height: 100rpx;

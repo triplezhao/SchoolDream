@@ -274,7 +274,7 @@ Page({
   tapJionRoom: function (e) {
     let room = e.currentTarget.dataset.obj;
     wx.navigateTo({
-      url: '../jionroom/jionroom?name=' + room.name + '&objectId=' + room.objectId
+      url: '../jionroom/jionroom?isshare=false&name=' + room.name + '&objectId=' + room.objectId
       + '&question=' + room.question + '&answer=' + room.answer + '&picurl=' + room.picurl
     })
   },

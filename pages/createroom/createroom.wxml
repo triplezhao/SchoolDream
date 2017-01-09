@@ -18,16 +18,24 @@
           <input name="desc" class="weui-input" bindinput="bindKeyInputDesc" placeholder="请输入简介"  />
         </view>
       </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="images-wrapper">
-          <text class="images-text">班级图标:</text>
-          <view class="images-list">
-            <block wx:for="{{tempFilePaths}}" wx:for-item="image">
-              <image src="{{image}}" class="images-image" data-src="{{image}}" bindtap="previewImage"></image>
-            </block>
-            <view class="images-image image-plus" bindtap="chooseImage">
-              <view class="image-plus-horizontal"></view>
-              <view class="image-plus-vertical"></view>
+      <view class="weui-cell">
+        <view class="weui-cell__bd">
+          <view class="weui-uploader">
+            <view class="weui-uploader__hd">
+              <view class="weui-uploader__title">图片上传</view>
+              <view class="weui-uploader__info">{{tempFilePaths.length}}/1（最多1张）</view>
+            </view>
+            <view class="weui-uploader__bd">
+              <view class="weui-uploader__files" id="uploaderFiles">
+                <block wx:for-items="{{tempFilePaths}}" wx:key="{{index}}">
+                  <view class="weui-uploader__file" data-src="{{item}}" bindtap="previewImage" id="{{item}}">
+                    <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"  />
+                  </view>
+                </block>
+              </view>
+              <view class="weui-uploader__input-box">
+                <view class="weui-uploader__input" bindtap="chooseImage"></view>
+              </view>
             </view>
           </view>
         </view>
@@ -39,7 +47,7 @@
           </view>
           <view class="weui-cell__bd">
             <picker bindchange="bindSchoolTypeChange" value="{{schooltypeIndex}}" range="{{schooltypes}}">
-              <view  class="weui-select weui-select_in-select-after">{{schooltype}}</view>
+              <view class="weui-select weui-select_in-select-after">{{schooltype}}</view>
             </picker>
           </view>
         </view>
@@ -48,7 +56,8 @@
             <view class="weui-label">入学日期：</view>
           </view>
           <view class="weui-cell__bd">
-            <picker mode="date" value="{{date}}" fields="year" start="1948-09-01" end="2017-09-01" bindchange="bindDateChange">
+            <picker mode="date" value="{{date}}" fields="year" start="1948-09-01" end="2017-09-01"
+                    bindchange="bindDateChange">
               <view class="weui-select weui-select_in-select-after">{{date}}</view>
             </picker>
           </view>

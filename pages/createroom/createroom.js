@@ -127,7 +127,7 @@ Page({
   },
 
   previewImage: function (e) {
-    var current = e.target.dataset.src
+     var current = e.currentTarget.dataset.src
 
     if (!current) {
       wx.showToast({

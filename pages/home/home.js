@@ -101,7 +101,8 @@ Page({
 
     query.include('student,room');
 
-    query.descending('createdAt');
+    // query.descending('createdAt');
+    query.ascending ('createdAt');
 
     console.log('query.find()===========');
     // 执行查询

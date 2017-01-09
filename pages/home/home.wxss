@@ -36,7 +36,7 @@
   color: #818A8F;
 }
 .user .user-info .edit{
-  font-size: 18px;
+  font-size: 24rpx;
   color: #bababa;
   line-height: 34rpx;
 }
@@ -141,6 +141,12 @@
 .schooltype3{
   background-color: saddlebrown;
 }
+.schooltype4{
+  background-color: slateblue;
+}
+.schooltype5{
+  background-color: darkblue;
+}
 .typesearch{
   width: 80rpx;
   height: 80rpx;
@@ -159,5 +165,6 @@
   color: white;
   font-size: 60rpx;
 }
+
 
 

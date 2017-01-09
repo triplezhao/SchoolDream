@@ -48,13 +48,13 @@ Page({
     console.log('form发生了submit事件，携带数据为：', e.detail.value);
 
     var content = e.detail.value.content;
-    var picurls = that.data.tempFilePaths;
+    var picPaths = that.data.tempFilePaths;
 
     if (!content) {
       that.showToast('内容不能为空');
       return;
     }
-    if (!picurls) {
+    if (!picPaths) {
       that.showToast('图片不能为空');
       return;
     }
@@ -65,7 +65,7 @@ Page({
       disabled: true
     })
 
-    //  picurls.forEach(function(element,i) {
+    //  picPaths.forEach(function(element,i) {
 
     //       console.log(element,i);
 
@@ -73,24 +73,37 @@ Page({
 
     //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
 
-    var picfile = new AV.File(picurls[0], {
-      blob: {
-        uri: picurls[0],
-      }
-    })
-    picfile.save()
-      .then(res => {
-        console.log(res);
-        //第2步，先上传数据
-        var article = new Article();
-        article.set('title', 'title');
-        article.set('content', content);
-        article.set('pics', [res.url()]);
-        that.save2Server(article);
+    let fileUrls = [];
+    for (let i = 0; i < picPaths.length; i++) {
+
+      let picfile = new AV.File(picPaths[i], {
+        blob: {
+          uri: picPaths[i],
+        }
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      picfile.save()
+        .then(res => {
+          console.log(res);
+          fileUrls[i] = res.url();
+
+          //最后一张上传完成，则提交表单
+          if (i == picPaths.length - 1) {
+            //第2步，先上传数据
+            let article = new Article();
+            article.set('title', 'title');
+            article.set('content', content);
+            article.set('pics', fileUrls);
+            that.save2Server(article);
+          }
+
+        })
+        .catch((error) => {
+          console.log(error);
+          that.hideLoading();
+        });
+    };
+
+
 
   },
   save2Server: function (article) {
@@ -133,8 +146,14 @@ Page({
       sourceType: ['album', 'camera'],
       success: (res) => {
         console.log(res);
+        //拼接到本地
+        // let arr=res.tempFilePaths.concat(that.data.tempFilePaths);
+        let arr = that.data.tempFilePaths.concat(res.tempFilePaths);
+        //截取前3个
+        arr = arr.slice(-3); // 输出：1,2,3
+
         that.setData({
-          tempFilePaths: res.tempFilePaths,
+          tempFilePaths: arr,
           disabled: false
         })
       },
@@ -153,7 +172,7 @@ Page({
   //   })
   // },
   previewImage: function (e) {
-    var current = e.target.dataset.src
+     var current = e.currentTarget.dataset.src
 
     if (!current) {
       this.showToast('图片异常');
