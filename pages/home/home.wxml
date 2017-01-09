@@ -33,8 +33,7 @@
     <text class="chat-txt">搜索加入新的班级</text>
   </view>
   <view class="center ">
-    <view class="weui-select ">
-  </view>
+    <view class="weui-select "></view>
   </view>
 </view>
 <view class="chat-item flex-wrp " bindtap="tapCreateRoom" data-index="{{index}}">
