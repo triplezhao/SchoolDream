@@ -74,34 +74,60 @@ Page({
     //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
 
     let fileUrls = [];
-    for (let i = 0; i < picPaths.length; i++) {
+    // for (let i = 0; i < picPaths.length; i++) {
 
-      let picfile = new AV.File(picPaths[i], {
-        blob: {
-          uri: picPaths[i],
+    let picfile = new AV.File(picPaths[0], {
+      blob: {
+        uri: picPaths[0],
+      }
+    })
+    picfile.save()
+      .then(res => {
+        console.log(res);
+        fileUrls[0] = res.url();
+
+        //如果大于1张，则继续去保存第二张
+        if (1 != picPaths.length) {
+          //第2步，先上传数据
+          let picfile = new AV.File(picPaths[1], {
+            blob: {
+              uri: picPaths[1],
+            }
+          })
+          return picfile.save();
         }
-      })
-      picfile.save()
-        .then(res => {
+      }).then(res => {
+        if (res) {
           console.log(res);
-          fileUrls[i] = res.url();
-
-          //最后一张上传完成，则提交表单
-          if (i == picPaths.length - 1) {
-            //第2步，先上传数据
-            let article = new Article();
-            article.set('title', 'title');
-            article.set('content', content);
-            article.set('pics', fileUrls);
-            that.save2Server(article);
-          }
-
-        })
-        .catch((error) => {
-          console.log(error);
-          that.hideLoading();
-        });
-    };
+          fileUrls[1] = res.url();
+        }
+        //如果大于2张，则继续save
+        if (2 != picPaths.length) {
+          let picfile = new AV.File(picPaths[2], {
+            blob: {
+              uri: picPaths[2],
+            }
+          })
+          return picfile.save();
+        }
+      }).then(res => {
+        //如果是3张，则取值
+        if (res) {
+          console.log(res);
+          fileUrls[2] = res.url();
+        }
+        //如果没有值
+        let article = new Article();
+        article.set('title', 'title');
+        article.set('content', content);
+        article.set('pics', fileUrls);
+        that.save2Server(article);
+      })
+      .catch((error) => {
+        console.log(error);
+        that.hideLoading();
+      });
+    // };
 
 
 
@@ -172,7 +198,7 @@ Page({
   //   })
   // },
   previewImage: function (e) {
-     var current = e.currentTarget.dataset.src
+    var current = e.currentTarget.dataset.src
 
     if (!current) {
       this.showToast('图片异常');

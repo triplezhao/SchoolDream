@@ -84,47 +84,113 @@ Page({
 
         let picPaths = that.data.tempFilePathsPic;
         let fileUrls = [];
-        for (let i = 0; i < picPaths.length; i++) {
+        // for (let i = 0; i < picPaths.length; i++) {
 
-          let picfile = new AV.File(picPaths[i], {
-            blob: {
-              uri: picPaths[i],
+        let picfile = new AV.File(picPaths[0], {
+          blob: {
+            uri: picPaths[0],
+          }
+        })
+        picfile.save()
+          .then(res => {
+            console.log(res);
+            fileUrls[0] = res.url();
+
+            //如果大于1张，则继续去保存第二张
+            if (1 != picPaths.length) {
+              //第2步，先上传数据
+              let picfile = new AV.File(picPaths[1], {
+                blob: {
+                  uri: picPaths[1],
+                }
+              })
+              return picfile.save();
             }
-          })
-          picfile.save()
-            .then(res => {
+          }).then(res => {
+            if (res) {
               console.log(res);
-              fileUrls[i] = res.url();
-
-              //最后一张上传完成，则提交表单
-              if (i == picPaths.length - 1) {
-                //第2步，先上传音频
-                var voiceFile = new AV.File(that.data.tempFilePathVoice, {
-                  blob: {
-                    uri: that.data.tempFilePathVoice,
-                  }
-                })
-                var voiceurl = '';
-                voiceFile.save().then(res => {
-                  console.log(res);
-                  voiceurl = res.url();
-                  // 新建一个 AV 对象
-                  var article = new Article();
-                  article.set('title', 'title');
-                  article.set('content', content);
-                  article.set('pics', fileUrls);
-                  article.set('voiceurl', voiceurl);
-                  that.save2Server(article);
-                });
+              fileUrls[1] = res.url();
+            }
+            //如果大于2张，则继续save
+            if (2 != picPaths.length) {
+              let picfile = new AV.File(picPaths[2], {
+                blob: {
+                  uri: picPaths[2],
+                }
+              })
+              return picfile.save();
+            }
+          }).then(res => {
+            //如果是3张，则取值
+            if (res) {
+              console.log(res);
+              fileUrls[2] = res.url();
+            }
+            //第2步，上传音频
+            var voiceFile = new AV.File(that.data.tempFilePathVoice, {
+              blob: {
+                uri: that.data.tempFilePathVoice,
               }
-
             })
-            .catch((error) => {
-              console.log(error);
-              that.hideLoading();
-            });
-        };
-        
+            return voiceFile.save();
+          }).then(res => {
+            console.log(res);
+            var voiceurl = res.url();
+            // 新建一个 AV 对象
+            var article = new Article();
+            article.set('title', 'title');
+            article.set('content', content);
+            article.set('pics', fileUrls);
+            article.set('voiceurl', voiceurl);
+            that.save2Server(article);
+          })
+          .catch((error) => {
+            console.log(error);
+            that.hideLoading();
+          });
+
+
+        // for (let i = 0; i < picPaths.length; i++) {
+
+        //   let picfile = new AV.File(picPaths[i], {
+        //     blob: {
+        //       uri: picPaths[i],
+        //     }
+        //   })
+        //   picfile.save()
+        //     .then(res => {
+        //       console.log(res);
+        //       fileUrls[i] = res.url();
+
+        //       //最后一张上传完成，则提交表单
+        //       if (i == picPaths.length - 1) {
+        //         //第2步，先上传音频
+        //         var voiceFile = new AV.File(that.data.tempFilePathVoice, {
+        //           blob: {
+        //             uri: that.data.tempFilePathVoice,
+        //           }
+        //         })
+        //         var voiceurl = '';
+        //         voiceFile.save().then(res => {
+        //           console.log(res);
+        //           voiceurl = res.url();
+        //           // 新建一个 AV 对象
+        //           var article = new Article();
+        //           article.set('title', 'title');
+        //           article.set('content', content);
+        //           article.set('pics', fileUrls);
+        //           article.set('voiceurl', voiceurl);
+        //           that.save2Server(article);
+        //         });
+        //       }
+
+        //     })
+        //     .catch((error) => {
+        //       console.log(error);
+        //       that.hideLoading();
+        //     });
+        // };
+
       } else {
         //没图片的情况
         var voiceFile = new AV.File(that.data.tempFilePathVoice, {
@@ -187,7 +253,7 @@ Page({
     });
   },
 
-    // 从相册选择照片或拍摄照片
+  // 从相册选择照片或拍摄照片
   chooseImage() {
     var that = this;
     wx.chooseImage({

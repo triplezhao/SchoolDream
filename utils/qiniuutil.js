@@ -14,7 +14,7 @@ const putPolicy = '{"scope":"pxquan","deadline":2480414056}';
 
 
 module.exports = {
-
+    base64encode: base64encode,
     genUpToken() {
         var accessKey = AK;
         var secretKey = SK;
@@ -101,7 +101,7 @@ module.exports = {
 
 
     // getCOSToken() {
-    
+
     //     var appid = COSAPPIDE;
     //     var bucket = BUCKET;
     //     var secret_id = COSAK;

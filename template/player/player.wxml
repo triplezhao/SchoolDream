@@ -1,9 +1,13 @@
-<view style="margin:5rpx;">
-  <view class="page-body">
-    <block wx:if="{{playing == false||playingindex!=idx}}">
-      <view class="flex-wrp-column">
-        <view wx:if="{{downloading_index==idx}}" class="weui-article__h3"><icon type="download" size="23"></icon>正在下载...</view>
-          <view wx:if="{{downloading_fail_index==idx&&downloading_index!=idx}}" class="weui-article__h3" bindtap="playVoice">下载失败,点击重试</view>
+<!--<view style="margin:5rpx;">
+<view class="page-body">
+  <block wx:if="{{playing == false||playingindex!=idx}}">
+    <view class="flex-wrp-column">
+      <view wx:if="{{downloading_index==idx}}" class="weui-article__h3">
+        <icon type="download" size="23"></icon>
+        正在下载...</view>
+        <view wx:if="{{downloading_fail_index==idx&&downloading_index!=idx}}" class="weui-article__h3" bindtap="playVoice">
+        下载失败,点击重试
+        </view>
         <view class="page-body-buttons">
           <view class="page-body-button" bindtap="playVoice" data-voiceurl="{{item.voiceurl}}" data-index="{{idx}}">
             <image src="/image/play.png"></image>
@@ -26,4 +30,18 @@
       </view>
     </block>
   </view>
+</view>
+-->
+  <view class="audio_play_item " bindtap="playVoice" data-voiceurl="{{item.voiceurl}}" data-index="{{idx}}">
+    <view class="avatar ">
+      <image wx:if="{{playing==true&&playingindex==idx}}" class="icon_audio_playing " src="../../image/playing{{animationtime}}.png "></image>
+      <image wx:if="{{playing == false||playingindex!=idx}}" class="icon_audio_playing " src="../../image/playing2.png "></image>
+    </view>
+    <view class="audio-content">
+      <view class="audio-source">
+        <text class="audiomate">标题:{{item.content}}</text>
+        <text class="lasttime"></text>
+      </view>
+      <text class="audio-txt">来源:{{nicknamemap[item.creater.objectId].nickname?nicknamemap[item.creater.objectId].nickname:nicknamemap[item.creater.objectId].student.nickname}}</text>
+    </view>
 </view>

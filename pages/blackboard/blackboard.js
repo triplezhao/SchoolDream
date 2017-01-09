@@ -27,6 +27,7 @@ Page({
     student: null,
     //本班所有同学的信息的map，key是objectId,value是room2student实体
     nicknamemap: {},
+    voiceurlmap: {},
 
     list: [],
     maxtime: utils.getTs(new Date()),

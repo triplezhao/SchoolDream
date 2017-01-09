@@ -1,4 +1,3 @@
-<import src="/template/player/player.wxml"  />
 <view class="container-relative">
   <view class="container-absolute">
     <!--<View class="weui-btn-area" style="display:flex;  flex-direction:row; justify-content:flex-end ">
@@ -23,9 +22,10 @@
               <text >{{item.content}}</text>
             </view>
             <!-- 如果有音频 -->
-            <view class="answer-actions" wx:if="{{item.voiceurl}}">
+            <view  wx:if="{{item.voiceurl}}">
               <include src="../../template/player/player.wxml"  />
             </view>
+          
             <!-- 如果有视频 -->
             <view class="answer-actions" wx:if="{{item.videourl}}">
               <video  style="max-width: 85vw;" src="{{item.videourl}}" danmu-list="{{item.danmulist}}"  enable-danmu danmu-btn ></video>
