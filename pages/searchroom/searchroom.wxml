@@ -48,6 +48,8 @@
     </view>
     <view class="weui-search-bar__cancel-btn" bindtap="searchRoom">搜索</view>
   </view>
+  <view class="divider" >
+</view>
   <scroll-view wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
                bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
     <block wx:if="{{list}}" wx:for="{{list}}">
@@ -58,7 +60,7 @@
         <view class="chat-content flex-item">
           <view class="chat-source">
             <text class="chatmate">{{item.name}}</text>
-            <text class="lasttime">{{item.createdAt}}</text>
+            <text class="lasttime">{{item.yyyymmdd}}</text>
           </view>
           <text class="chat-txt">{{item.desc}}</text>
         <text  wx:if="{{item.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.schooltype}}</text>

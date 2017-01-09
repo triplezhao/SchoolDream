@@ -34,7 +34,6 @@
   </view>
   <view class="center ">
     <view class="weui-select ">
-    <!--<image  style="height:30rpx;width:30rpx;" src="../../image/arrowright.png" ></image>-->
   </view>
   </view>
 </view>
@@ -55,8 +54,8 @@
   </view>
   </view>
 </view>
-<view class="flex-wrp-row" style="background:#eee;">
-  <text style="color:white;font-size:12px; padding:4px;"></text>
+<view class="divider_eee" >
+  
 </view>
 <block wx:if="{{list}}" wx:for="{{list}}">
   <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
@@ -66,7 +65,7 @@
     <view class="chat-content flex-item">
       <view class="chat-source">
         <text class="chatmate">{{item.room.name}}</text>
-        <text class="lasttime">{{item.room.createdAt}}</text>
+        <text class="lasttime">{{item.room.yyyymmdd}}</text>
       </view>
       <text class="chat-txt">{{item.room.desc}}</text>
       <text wx:if="{{item.room.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.room.schooltype}}</text>
@@ -78,8 +77,7 @@
     </view>
   </view>
 </block>
-<view class="flex-wrp-row" style="background:#eee;">
-  <text style="color:white;font-size:12px; padding:4px;"></text>
+<view class="divider_eee" >
 </view>
 </scroll-view>
 <view wx:if="{{!student&&!showLoading}}" class="weui-msg">

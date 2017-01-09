@@ -348,4 +348,14 @@ page {
   color: #333;
   font-size: 26rpx;
 }
+.divider{
+  background:#bbb;
+  padding-top: 8rpx;
+  padding-bottom: 8rpx;
+}
+.divider_eee{
+  background:#eee;
+  padding-top: 10rpx;
+  padding-bottom: 10rpx;
+}
 

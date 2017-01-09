@@ -1,6 +1,7 @@
 const AV = require('../../utils/leancloud-storage');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
+const utils = require('../../utils/util.js');
 
 var a = '1111111111111'
 Page({
@@ -16,7 +17,7 @@ Page({
     actionSheetObj: null,
     student: null,
     list: [],
-  schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
+    schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
   },
 
 
@@ -102,7 +103,7 @@ Page({
     query.include('student,room');
 
     // query.descending('createdAt');
-    query.ascending ('createdAt');
+    query.ascending('createdAt');
 
     console.log('query.find()===========');
     // 执行查询
@@ -115,7 +116,10 @@ Page({
 
           // console.log(scm.room.name);
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
-          scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+
+          let room = scm.get('room');
+          room.set('yyyymmdd', utils.yyyymmdd(room.get('createdAt')));
+          scm.set('room', JSON.parse(JSON.stringify(room)));
           // scm=JSON.parse(JSON.stringify(scm)); 不起作用，去外面用数组的JSON.parse
           // scm=scm.toJSON();不起作用， 踏实用JSON.parse吧
         });
@@ -159,7 +163,7 @@ Page({
     console.log('点击了列表的：', index)
     var that = this;
     wx.showActionSheet({
-      itemList: ['进入','班级管理' ],
+      itemList: ['进入', '班级管理'],
       success: function (res) {
         if (!res.cancel) {
           console.log(res.tapIndex)
@@ -168,15 +172,15 @@ Page({
               that.enter2Room(that.data.list[index]);
               break;
             case 1:
-               //改全局内存
+              //改全局内存
               getApp().globalData.room_now = that.data.list[index];
               wx.navigateTo({
                 url: '../roomsetting/roomsetting'
               })
-             
+
               break;
             case 2:
-            that.onShareAppMessage()
+              that.onShareAppMessage()
               // that.showToast('真机分享不能用，通知好友使用搜索');
               // wx.navigateTo({
               //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId

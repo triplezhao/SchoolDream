@@ -317,11 +317,12 @@ icon {
 }
 .weui-select {
   position: relative;
+  padding-top: 1.2em;
   padding-left: 15px;
   padding-right: 30px;
   height: auto;
   min-height: 2.58823529em;
-  line-height: 2.58823529em;
+  line-height: auto;
   /*border-right: 1rpx solid #D9D9D9;*/
 }
 .weui-select:before {

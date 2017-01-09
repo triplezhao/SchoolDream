@@ -194,6 +194,7 @@
 }
 .images-image1 {
   width: 60vw;
+  max-height: 40vw;
   margin: 10rpx;
   
 }

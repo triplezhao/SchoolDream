@@ -20,9 +20,8 @@
       </view>-->
     </view>
   </view>
-  <View class="flex-wrp-row" style="background:gray;">
-    <text style="color:white;font-size:12px; padding:10px;"></text>
-  </View>
+  <view class="divider">
+  </view>
   <view class="my">
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
@@ -39,6 +38,9 @@
       <view class="myitem-name flex-item">
         <text>我的黑板</text>
       </view>
+      <view class="center ">
+    <view class="weui-select "></view>
+  </view>
     </view>
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
@@ -53,13 +55,13 @@
     <view class="my-item flex-wrp">
       <view bindtap="tapInvite" class="myitem-name flex-item">
         <text>邀请同学方法：</text>
-        <text>点击右上角分享给同学</text>
+        <text style="color:green" >点击右上角分享给同学</text>
       </view>
     </view>
   
   </view>
-  <View  style="display:flex;  flex-direction:row; padding:10rpx">
-    <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" bindtap="tapDelRoom" type="warn" style="font-size:14px">解散班级</button>
-    <button wx:elif="{{room_now.student.objectId!=room_now.room.creater.objectId}}" bindtap="tapOutRoom" type="default" style="font-size:14px">退出班级</button>
+  <View  class="weui-btn-area">
+    <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="wxui-button" bindtap="tapDelRoom" type="warn" >解散班级</button>
+    <button wx:elif="{{room_now.student.objectId!=room_now.room.creater.objectId}}" class="wxui-button" bindtap="tapOutRoom" type="warn" >退出班级</button>
   </View>
 </scroll-view>

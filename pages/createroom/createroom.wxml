@@ -1,5 +1,6 @@
     <view class="container-absolute">
   <form bindsubmit="formSubmit" bindreset="formReset">
+    <view class="divider"></view>
     <view class="weui-cells__title">班级信息</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
@@ -40,7 +41,6 @@
           </view>
         </view>
       </view>
-      <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
             <view class="weui-label">类型：</view>
@@ -61,8 +61,8 @@
               <view class="weui-select weui-select_in-select-after">{{date}}</view>
             </picker>
           </view>
-        </view>
       </view>
+      <view class="divider"></view>
       <view class="weui-cells__title">地区选择</view>
       <view class="weui-cells weui-cells_after-title">
         <view class="weui-cell weui-cell_select">
@@ -101,6 +101,7 @@
         </view>
       </view>
     </view>
+    <view class="divider"></view>
     <view class="weui-cells__title">加入班级的验证问题：</view>
     <view class="weui-cells weui-cells_after-title">
       <view class="weui-cell weui-cell_input">
@@ -123,6 +124,7 @@
           <input name="name" class="weui-input" bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
         </view>
       </view>
+      <view class="divider"></view>
     </view>
     <view class="weui-btn-area">
       <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>

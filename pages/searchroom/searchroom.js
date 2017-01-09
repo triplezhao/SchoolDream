@@ -133,7 +133,8 @@ Page({
 
           results.forEach(function (scm, i, a) {
             scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
-
+            scm.set('yyyymmdd', utils.yyyymmdd(scm.get('createdAt')));
+            scm.set('room', JSON.parse(JSON.stringify(scm)));
           });
           console.log('before JSON.parse', results);
           // //解析成json标准对象存储
