@@ -19,7 +19,7 @@ Page({
     input_answer: '',
 
     // 是否显示loading
-    showLoading: false,
+    showLoading: true,
     // loading提示语
     loadingMessage: '',
     // 提示消息
@@ -37,7 +37,7 @@ Page({
       question: options.question,
       answer: options.answer,
       picurl: options.picurl,
-      isshare: options.isshare,
+      isshare: options.isshare=="true",
     })
 
     //如果是分享过来的，则需要先登录

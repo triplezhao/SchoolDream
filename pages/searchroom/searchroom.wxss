@@ -72,6 +72,19 @@
   color: white;
   padding: 5rpx;
 }
+.chat-item .chat-content  .jioned{
+  flex: 1;
+  font-size: 22rpx;
+  float: right;
+  vertical-align: text-bottom;
+
+  height: 30rpx;
+  border-radius: 5rpx;
+  color: white;
+  padding: 5rpx;
+  margin: 0rpx 5rpx;
+   background-color: darkturquoise;
+}
 .schooltype0{
   background-color: orangered;
 }
@@ -167,7 +180,7 @@
 /*每级地区标题*/
 .viewpager-title {
 	padding: 0 10px;
-	color: #f03118;
+	color: green;
 	line-height: 30px;
 }
 

@@ -15,6 +15,7 @@ Page({
     // 提示消息
     toastMessage: '',
     student: null,
+    jioned_room_map: {},
     list: [],
     maxtime: utils.getTs(new Date()),
     total: 0,
@@ -50,6 +51,7 @@ Page({
     wx.hideNavigationBarLoading();
     this.setData({
       student: getApp().globalData.logined_student,
+      jioned_room_map:getApp().globalData.jioned_room_map
     })
     this.refesh();
 
@@ -273,7 +275,13 @@ Page({
   },
   //跳转到加入页面
   tapJionRoom: function (e) {
+    let that = this;
     let room = e.currentTarget.dataset.obj;
+
+    if(this.data.jioned_room_map[room.objectId]){
+      this.showToast("您已经加入这个班级");
+      return ;
+    }
     wx.navigateTo({
       url: '../jionroom/jionroom?isshare=false&name=' + room.name + '&objectId=' + room.objectId
       + '&question=' + room.question + '&answer=' + room.answer + '&picurl=' + room.picurl

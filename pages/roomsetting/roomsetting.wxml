@@ -34,14 +34,14 @@
         <text wx:elif="{{room_now.student.nickname}}">我在本班昵称：{{room_now.student.nickname}}</text>
       </view>
     </view>
-    <view class="my-item flex-wrp">
+    <!--<view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
         <text>我的黑板</text>
       </view>
       <view class="center ">
-    <view class="weui-select "></view>
-  </view>
-    </view>
+        <view class="weui-select "></view>
+      </view>
+    </view>-->
     <view class="my-item flex-wrp">
       <view class="myitem-name flex-item">
         <text>加入验证问题：{{room_now.room.question}}</text>

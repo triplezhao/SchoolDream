@@ -1,5 +1,5 @@
 <view class="weui-cells weui-cells_after-title">
-  <view class="weui-cell weui-cell_input">
+  <view class="weui-cell " style="height: 2em;">
     <view class="weui-cell__hd">
       <view class="weui-label">地区:</view>
     </view>
@@ -11,7 +11,7 @@
     </view>
     <view wx:if="{{where.province}}" class="weui-search-bar__cancel-btn" data-type="province" bindtap="clearTap">清除</view>
   </view>
-  <view class="weui-cell weui-cell_input">
+  <view class="weui-cell " style="height: 2em;">
     <view class="weui-cell__hd">
       <view class="weui-label">入学时间:</view>
     </view>
@@ -24,7 +24,7 @@
     </view>
     <view wx:if="{{where.entry_year}}" class="weui-search-bar__cancel-btn" data-type="entry_year" bindtap="clearTap">清除</view>
   </view>
-  <view class="weui-cell weui-cell_input">
+  <view class="weui-cell " style="height: 2em;">
     <view class="weui-cell__hd">
       <view class="weui-label">学校类型:</view>
     </view>
@@ -48,8 +48,7 @@
     </view>
     <view class="weui-search-bar__cancel-btn" bindtap="searchRoom">搜索</view>
   </view>
-  <view class="divider" >
-</view>
+  <view class="divider"></view>
   <scroll-view wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
                bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
     <block wx:if="{{list}}" wx:for="{{list}}">
@@ -63,13 +62,13 @@
             <text class="lasttime">{{item.yyyymmdd}}</text>
           </view>
           <text class="chat-txt">{{item.desc}}</text>
-        <text  wx:if="{{item.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.schooltype}}</text>
-        <text  wx:if="{{item.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.schooltype}}</text>
-        <text  wx:if="{{item.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.schooltype}}</text>
-        <text  wx:if="{{item.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.schooltype}}</text>
-        <text  wx:if="{{item.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.schooltype}}</text>
-        <text  wx:if="{{item.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.schooltype}}</text>
-
+          <text wx:if="{{item.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.schooltype}}</text>
+          <text wx:if="{{item.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.schooltype}}</text>
+          <text wx:if="{{item.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.schooltype}}</text>
+          <text wx:if="{{item.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.schooltype}}</text>
+          <text wx:if="{{item.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.schooltype}}</text>
+          <text wx:if="{{item.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.schooltype}}</text>
+          <text wx:if="{{jioned_room_map[item.objectId]}}" class="jioned">已加入</text>
         </view>
       </view>
     </block>

@@ -13,6 +13,7 @@ const KEY_LOGINED_STUDENT = 'KEY_LOGINED_STUDENT';
 App({
 
   globalData: {
+    jioned_room_map:{},
     logined_student: null,
     room_now: null,
     refesh_change_home: false,
