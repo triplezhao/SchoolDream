@@ -46,7 +46,7 @@
         </view>
       </view>
     </view>
-    <view class="weui-search-bar__cancel-btn" bindtap="searchRoom">搜索</view>
+    <view class="weui-search-bar__cancel-btn appcolor"  bindtap="searchRoom">搜索</view>
   </view>
   <view class="divider"></view>
   <scroll-view wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
@@ -72,7 +72,6 @@
         </view>
       </view>
     </block>
-    <view class="tips1">
       <view wx:if="{{showLoading}}" class="weui-loadmore">
         <view class="weui-loading"></view>
         <view class="weui-loadmore__tips">正在加载</view>
@@ -83,7 +82,6 @@
       <view wx:if="{{!hasMore&&!showLoading}}" class="weui-loadmore weui-loadmore_line">
         <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无更多数据</view>
       </view>
-    </view>
   </scroll-view>
   <loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>
   <view class="modal">

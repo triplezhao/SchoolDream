@@ -83,7 +83,7 @@
   color: white;
   padding: 5rpx;
   margin: 0rpx 5rpx;
-   background-color: darkturquoise;
+   background-color: #673ab7;
 }
 .schooltype0{
   background-color: orangered;

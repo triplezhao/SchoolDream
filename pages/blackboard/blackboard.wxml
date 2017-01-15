@@ -33,7 +33,7 @@
             <!-- 如果是多张图片 -->
             <view class="images-list" wx:if="{{item.pics.length>1}}">
               <block wx:for="{{item.pics}}" wx:for-item="image">
-                <image class="images-image" src="{{image}}" data-src="{{image}}" bindtap="previewImage"></image>
+                <image class="images-image" src="{{image}}" data-src="{{image}}" data-itempics="{{item.pics}}" bindtap="previewImage"></image>
               </block>
             </view>
             <!-- 如果是1张图片 -->

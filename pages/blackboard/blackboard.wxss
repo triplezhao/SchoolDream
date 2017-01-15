@@ -201,7 +201,7 @@
 .image-plus {
   width: 100rpx;
   height: 100rpx;
-  background: green ;
+  background: #673ab7 ;
   /*border: 2px solid #999;*/
   position: relative;
   border-radius: 58rpx;

@@ -315,10 +315,12 @@ Page({
 
   previewImage: function (e) {
     var current = e.currentTarget.dataset.src
+    var itempics = e.currentTarget.dataset.itempics
+    if (!itempics) itempics = [current];
 
     wx.previewImage({
       current: current,
-      urls: [current]
+      urls:itempics
     })
   },
 
