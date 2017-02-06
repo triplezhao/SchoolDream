@@ -17,7 +17,7 @@
    "window":{
     "backgroundTextStyle":"dark",
     "navigationBarBackgroundColor": "#673ab7",
-    "navigationBarTitleText": "test",
+    "navigationBarTitleText": "校友录",
     "navigationBarTextStyle":"white",
     "enablePullDownRefresh":true
   },

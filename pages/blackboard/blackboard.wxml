@@ -78,7 +78,7 @@
         <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无更多数据</view>
       </view>
     </scroll-view>
-    <loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>
+    <!--<loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>-->
   </view>
   <view class="absolute-center-comment" wx:if="{{isShowComment}}">
     <view class="weui-search-bar">
