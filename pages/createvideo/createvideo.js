@@ -119,7 +119,7 @@ Page({
         article.set('content', content);
         // article.set('pics', that.data.tempFilePaths);
         // article.set('voiceurl', QN.getImageUrl(data.key));
-        article.set('videourl', that.data.tempFilePath_video);
+        article.set('videourl', res.url());
         that.save2Server(article);
       })
       .catch((error) => {
