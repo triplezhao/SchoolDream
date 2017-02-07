@@ -97,7 +97,7 @@ App({
         //存储student到local
         var student = new Student();
         //查询下是否已经注册了
-        var query = new AV.Query(Student);
+        var query = new AV.Query('Student');
         query.equalTo('openid', data.openId);
 
         query.first()

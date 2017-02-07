@@ -127,19 +127,23 @@ Page({
     // 查询Student2Room
     var query = new AV.Query('Student2Room');
     var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
-
+    console.log('createWithoutData' + getApp().globalData.room_now.room.objectId);
     // 查询当前登录用户加入的room
     query.equalTo('room', room);
     query.include('student');
     // query.descending('createdAt');
     that.showLoading('加载中');
+    console.log('showLoading');
     // 执行查询
     query.find().then(function (student2Rooms) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
+      console.log('response', student2Rooms);
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
           //组件
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
+          //结果必须转为jsonobj，不然获取不到scm.student
+          scm=JSON.parse(JSON.stringify(scm));
           that.data.nicknamemap[scm.student.objectId] = scm;
 
         });
@@ -153,9 +157,12 @@ Page({
         //加载文章list
         that.refeshArticle();
 
+      } else {
+        console.log('student2Rooms' + student2Rooms);
+        that.hideLoading('加载中');
       }
-    }, function (error) {
-      console.log(error);
+    }).catch(function (error) {
+      console.log('error' + error);
       that.hideLoading('加载中');
     });
   },
@@ -320,7 +327,7 @@ Page({
 
     wx.previewImage({
       current: current,
-      urls:itempics
+      urls: itempics
     })
   },
 
