@@ -121,7 +121,7 @@ Page({
     query.descending('createdAt');
     query.limit(pageSize);
     query.include('creater');
-    query.lessThanOrEqualTo('createdAt', new Date());
+    // query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
     query.find().then(function (results) {

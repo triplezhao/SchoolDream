@@ -131,7 +131,7 @@ Page({
     // 查询当前登录用户加入的room
     query.equalTo('room', room);
     query.include('student');
-    // query.descending('createdAt');
+   
     that.showLoading('加载中');
     console.log('showLoading');
     // 执行查询
@@ -188,7 +188,7 @@ Page({
     query.descending('createdAt');
     query.limit(pageSize);
     query.include('creater,room,comments,zans');
-    query.lessThanOrEqualTo('createdAt', new Date());
+    // query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
     query.find().then(function (results) {
