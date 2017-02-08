@@ -51,7 +51,7 @@ Page({
     wx.hideNavigationBarLoading();
     this.setData({
       student: getApp().globalData.logined_student,
-      jioned_room_map:getApp().globalData.jioned_room_map
+      jioned_room_map: getApp().globalData.jioned_room_map
     })
     this.refesh();
 
@@ -126,8 +126,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-      that.hideLoading();
-      wx.stopPullDownRefresh();
+
       if (results) {
 
         var maxtime = that.data.maxtime;
@@ -158,6 +157,8 @@ Page({
         })
 
       }
+      that.hideLoading();
+      wx.stopPullDownRefresh();
     });
   },
 
@@ -204,7 +205,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-      that.hideLoading();
+
       if (results) {
 
         console.log('after JSON.parse', results);
@@ -234,6 +235,7 @@ Page({
         })
 
       }
+      that.hideLoading();
     });
   },
   // 显示loading提示
@@ -278,9 +280,9 @@ Page({
     let that = this;
     let room = e.currentTarget.dataset.obj;
 
-    if(this.data.jioned_room_map[room.objectId]){
+    if (this.data.jioned_room_map[room.objectId]) {
       this.showToast("您已经加入这个班级");
-      return ;
+      return;
     }
     wx.navigateTo({
       url: '../jionroom/jionroom?isshare=false&name=' + room.name + '&objectId=' + room.objectId
@@ -324,8 +326,8 @@ Page({
   cascadePopup: function (e) {
     console.log('cascadePopup');
     var animation = wx.createAnimation({
-		    duration: 500,
-		    timingFunction: 'ease-in-out',
+      duration: 500,
+      timingFunction: 'ease-in-out',
     });
     this.animation = animation;
     animation.translateY(-285).step();

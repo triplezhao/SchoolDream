@@ -13,41 +13,41 @@ class Comment extends AV.Object {
     // creater   Pointer 本条回复的发布者
 
   
-    set content(value) {
-        this.set('content', value);
-    }
-    get content() {
-        return this.get('content');
-    }
+    // set content(value) {
+    //     this.set('content', value);
+    // }
+    // get content() {
+    //     return this.get('content');
+    // }
 
-    set toarticle(value) {
-        this.set('toarticle', value);
-    }
-    get toarticle() {
-        return this.get('toarticle');
-    }
+    // set toarticle(value) {
+    //     this.set('toarticle', value);
+    // }
+    // get toarticle() {
+    //     return this.get('toarticle');
+    // }
 
-    set tocomment(value) {
-        this.set('tocomment', value);
-    }
-    get tocomment() {
-        return this.get('tocomment');
-    }
+    // set tocomment(value) {
+    //     this.set('tocomment', value);
+    // }
+    // get tocomment() {
+    //     return this.get('tocomment');
+    // }
 
-    set touser(value) {
-        this.set('touser', value);
-    }
-    get touser() {
-        return this.get('touser');
-    }
+    // set touser(value) {
+    //     this.set('touser', value);
+    // }
+    // get touser() {
+    //     return this.get('touser');
+    // }
 
 
-    set creater(value) {
-        this.set('creater', value);
-    }
-    get creater() {
-        return this.get('creater');
-    }
+    // set creater(value) {
+    //     this.set('creater', value);
+    // }
+    // get creater() {
+    //     return this.get('creater');
+    // }
 
 
 

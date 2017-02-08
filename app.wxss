@@ -349,7 +349,7 @@ page {
   font-size: 26rpx;
 }
 .divider{
-  background:#bbb;
+  background:#ddd;
   padding-top: 8rpx;
   padding-bottom: 8rpx;
 }

@@ -91,3 +91,12 @@
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
 }
+
+
+.weui-cells__title {
+  padding-left: 15px;
+  padding-right: 15px;
+  color: #673ab7;
+  background-color:#fff;
+  font-size: 14px;
+}

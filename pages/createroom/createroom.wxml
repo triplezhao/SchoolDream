@@ -1,46 +1,47 @@
     <view class="container-absolute">
-  <form bindsubmit="formSubmit" bindreset="formReset">
-    <view class="divider"></view>
-    <view class="weui-cells__title">班级信息</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">名称:</view>
+  <scroll-view  scroll-y="true"  style="width: 100%"  >
+    <form bindsubmit="formSubmit" bindreset="formReset">
+      <view class="divider"></view>
+      <view class="weui-cells__title" >班级信息</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">名称:</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input name="name" class="weui-input" bindinput="bindKeyInputName" placeholder="请输入名称"  />
+          </view>
         </view>
-        <view class="weui-cell__bd">
-          <input name="name" class="weui-input" bindinput="bindKeyInputName" placeholder="请输入名称"  />
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">简介:</view>
+          </view>
+          <view class="weui-cell__bd">
+            <input name="desc" class="weui-input" bindinput="bindKeyInputDesc" placeholder="请输入简介"  />
+          </view>
         </view>
-      </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">简介:</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input name="desc" class="weui-input" bindinput="bindKeyInputDesc" placeholder="请输入简介"  />
-        </view>
-      </view>
-      <view class="weui-cell">
-        <view class="weui-cell__bd">
-          <view class="weui-uploader">
-            <view class="weui-uploader__hd">
-              <view class="weui-uploader__title">图片上传</view>
-              <view class="weui-uploader__info">{{tempFilePaths.length}}/1（最多1张）</view>
-            </view>
-            <view class="weui-uploader__bd">
-              <view class="weui-uploader__files" id="uploaderFiles">
-                <block wx:for-items="{{tempFilePaths}}" wx:key="{{index}}">
-                  <view class="weui-uploader__file" data-src="{{item}}" bindtap="previewImage" id="{{item}}">
-                    <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"  />
-                  </view>
-                </block>
+        <view class="weui-cell">
+          <view class="weui-cell__bd">
+            <view class="weui-uploader">
+              <view class="weui-uploader__hd">
+                <view class="weui-uploader__title">图片上传</view>
+                <view class="weui-uploader__info">{{tempFilePaths.length}}/1（最多1张）</view>
               </view>
-              <view class="weui-uploader__input-box">
-                <view class="weui-uploader__input" bindtap="chooseImage"></view>
+              <view class="weui-uploader__bd">
+                <view class="weui-uploader__files" id="uploaderFiles">
+                  <block wx:for-items="{{tempFilePaths}}" wx:key="{{index}}">
+                    <view class="weui-uploader__file" data-src="{{item}}" bindtap="previewImage" id="{{item}}">
+                      <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"  />
+                    </view>
+                  </block>
+                </view>
+                <view class="weui-uploader__input-box">
+                  <view class="weui-uploader__input" bindtap="chooseImage"></view>
+                </view>
               </view>
             </view>
           </view>
         </view>
-      </view>
         <view class="weui-cell weui-cell_select">
           <view class="weui-cell__hd weui-cell__hd_in-select-after">
             <view class="weui-label">类型：</view>
@@ -61,75 +62,76 @@
               <view class="weui-select weui-select_in-select-after">{{date}}</view>
             </picker>
           </view>
+        </view>
+        <view class="divider"></view>
+        <view class="weui-cells__title" style="color:#673ab7">地区选择</view>
+        <view class="weui-cells weui-cells_after-title">
+          <view class="weui-cell weui-cell_select">
+            <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">省：</view>
+            </view>
+            <view class="weui-cell__bd">
+              <picker bindchange="bindProvChange" value="{{indexs[0]}}" range="{{areas}}" range-key="areaName">
+                <view class="weui-select weui-select_in-select-after">{{areas[indexs[0]].areaName}}</view>
+              </picker>
+            </view>
+          </view>
+          <view class="weui-cell weui-cell_select">
+            <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">市：</view>
+            </view>
+            <view class="weui-cell__bd">
+              <picker bindchange="bindCityChange" value="{{indexs[1]}}" range="{{areas[indexs[0]].cities}}"
+                      range-key="areaName">
+                <view class="weui-select weui-select_in-select-after">{{areas[indexs[0]].cities[indexs[1]].areaName}}</view>
+              </picker>
+            </view>
+          </view>
+          <view class="weui-cell weui-cell_select">
+            <view class="weui-cell__hd weui-cell__hd_in-select-after">
+              <view class="weui-label">区/县：</view>
+            </view>
+            <view class="weui-cell__bd">
+              <picker bindchange="bindDistChange" value="{{indexs[2]}}"
+                      range="{{areas[indexs[0]].cities[indexs[1]].counties}}" range-key="areaName">
+                <view class="weui-select weui-select_in-select-after">
+                {{areas[indexs[0]].cities[indexs[1]].counties[indexs[2]].areaName}}
+                </view>
+              </picker>
+            </view>
+          </view>
+        </view>
       </view>
       <view class="divider"></view>
-      <view class="weui-cells__title">地区选择</view>
+      <view class="weui-cells__title" style="color:#673ab7">加入班级的验证问题</view>
       <view class="weui-cells weui-cells_after-title">
-        <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-            <view class="weui-label">省：</view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">设置问题：</view>
           </view>
           <view class="weui-cell__bd">
-            <picker bindchange="bindProvChange" value="{{indexs[0]}}" range="{{areas}}" range-key="areaName">
-              <view class="weui-select weui-select_in-select-after">{{areas[indexs[0]].areaName}}</view>
-            </picker>
+            <input name="name" value="{{question}}" class="weui-input  " bindinput="bindKeyInputQuestion"
+                   placeholder="手动输入或者选择常用"  />
           </view>
+          <picker bindchange="bindQuestionChange" value="{{questionIndex}}" range="{{questions}}">
+            <view class="weui-select "></view>
+          </picker>
         </view>
-        <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-            <view class="weui-label">市：</view>
-          </view>
-          <view class="weui-cell__bd">
-            <picker bindchange="bindCityChange" value="{{indexs[1]}}" range="{{areas[indexs[0]].cities}}"
-                    range-key="areaName">
-              <view class="weui-select weui-select_in-select-after">{{areas[indexs[0]].cities[indexs[1]].areaName}}</view>
-            </picker>
-          </view>
-        </view>
-        <view class="weui-cell weui-cell_select">
-          <view class="weui-cell__hd weui-cell__hd_in-select-after">
-            <view class="weui-label">区/县：</view>
+        <view class="weui-cell weui-cell_input">
+          <view class="weui-cell__hd">
+            <view class="weui-label">设置答案：</view>
           </view>
           <view class="weui-cell__bd">
-            <picker bindchange="bindDistChange" value="{{indexs[2]}}"
-                    range="{{areas[indexs[0]].cities[indexs[1]].counties}}" range-key="areaName">
-              <view class="weui-select weui-select_in-select-after">
-              {{areas[indexs[0]].cities[indexs[1]].counties[indexs[2]].areaName}}
-              </view>
-            </picker>
+            <input name="name" class="weui-input" bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
           </view>
         </view>
+        <view class="divider"></view>
       </view>
-    </view>
-    <view class="divider"></view>
-    <view class="weui-cells__title">加入班级的验证问题：</view>
-    <view class="weui-cells weui-cells_after-title">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">设置问题：</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input name="name" value="{{question}}" class="weui-input  " bindinput="bindKeyInputQuestion"
-                 placeholder="手动输入或者选择常用"  />
-        </view>
-        <picker bindchange="bindQuestionChange" value="{{questionIndex}}" range="{{questions}}">
-          <view class="weui-select "></view>
-        </picker>
+      <view class="weui-btn-area">
+        <button formType="submit" disabled="{{disabled}}" type="primary" >提交</button>
       </view>
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">设置答案：</view>
-        </view>
-        <view class="weui-cell__bd">
-          <input name="name" class="weui-input" bindinput="bindKeyInputAnswer" placeholder="输入答案"  />
-        </view>
-      </view>
-      <view class="divider"></view>
-    </view>
-    <view class="weui-btn-area">
-      <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>
-    </view>
-  </form>
+    </form>
+  </scroll-view>
 </view>
    
 

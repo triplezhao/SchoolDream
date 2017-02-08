@@ -8,7 +8,7 @@ const Article = require('../../model/Article');
 const Comment = require('../../model/Comment');
 const Zan = require('../../model/Zan');
 const Player = require('../../template/player/player');
-const pageSize = 5;
+const pageSize = 10;
 // import { Player } from '../../template/player/player';
 Page({
   data: {
@@ -143,7 +143,7 @@ Page({
           //组件
           scm.set('student', JSON.parse(JSON.stringify(scm.get('student'))));
           //结果必须转为jsonobj，不然获取不到scm.student
-          scm=JSON.parse(JSON.stringify(scm));
+          scm = JSON.parse(JSON.stringify(scm));
           that.data.nicknamemap[scm.student.objectId] = scm;
 
         });
@@ -193,8 +193,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-      that.hideLoading();
-      wx.stopPullDownRefresh();
+     
       if (results) {
 
         var maxtime = that.data.maxtime;
@@ -205,9 +204,11 @@ Page({
             scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
 
             if (scm.get('comments')) {
-              scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+              // scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+              scm.set('comments', JSON.parse(JSON.stringify(scm.get('comments'))));
+              // console.log('comments', JSON.stringify(scm.get('comments')));
               let danmulist = [];
-              scm.comments.forEach(function (cmt, i, a) {
+              scm.get('comments').forEach(function (cmt, i, a) {
                 danmulist[i] = {
                   text: cmt.content,
                   color: '#ff0000',
@@ -217,8 +218,10 @@ Page({
               scm.set('danmulist', JSON.parse(JSON.stringify(danmulist)));
             }
             if (scm.get('zans')) {
-              scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
+              // scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
+              scm.set('zans', JSON.parse(JSON.stringify(scm.get('zans'))));
             }
+            // scm = JSON.parse(JSON.stringify(scm));
 
           });
           console.log('before JSON.parse', results);
@@ -241,6 +244,8 @@ Page({
         })
 
       }
+       that.hideLoading();
+       wx.stopPullDownRefresh();
     });
   },
   //加载更多
@@ -269,7 +274,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-      that.hideLoading();
+    
       if (results) {
 
         console.log('after JSON.parse', results);
@@ -281,10 +286,11 @@ Page({
 
 
             if (scm.get('comments')) {
-              scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
-
+              // scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
+              scm.set('comments', JSON.parse(JSON.stringify(scm.get('comments'))));
+              // console.log('comments', JSON.stringify(scm.get('comments')));
               let danmulist = [];
-              scm.comments.forEach(function (cmt, i, a) {
+              scm.get('comments').forEach(function (cmt, i, a) {
                 danmulist[i] = {
                   text: cmt.content,
                   color: '#ff0000',
@@ -294,8 +300,10 @@ Page({
               scm.set('danmulist', JSON.parse(JSON.stringify(danmulist)));
             }
             if (scm.get('zans')) {
-              scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
+              // scm.zans = JSON.parse(JSON.stringify(scm.get('zans')));
+              scm.set('zans', JSON.parse(JSON.stringify(scm.get('zans'))));
             }
+            // scm = JSON.parse(JSON.stringify(scm));
           });
           console.log('before JSON.parse', results);
           // //解析成json标准对象存储
@@ -316,6 +324,7 @@ Page({
         })
 
       }
+        that.hideLoading();
     });
   },
 
@@ -514,19 +523,22 @@ Page({
     zan.save()
       //保存评论
       .then(function (res) {
-
+        // console.log('article1:======== ');
         var article1 = new Article(current_article, { parse: true });
-
+        // console.log('article1:======== ', article1);
         // //指针类的，需要转换成av对象指针。
         article1.set('creater', AV.Object.createWithoutData('Student', current_article.creater.objectId));
         article1.set('room', AV.Object.createWithoutData('Room', current_article.room.objectId));
         article1.increment('zannum', 1);
         article1.add('zans', res);
         //  article1.addUnique('zans', res);
-        article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
+        // article1.fetchWhenSave(true); //这样，存储成功后，直接返回最新的数据
         // article1.include('creater,room,zans');
 
-        return article1.save();
+        return article1.save(null, {
+          
+          fetchWhenSave: true,
+        });
       })
       //保存文章，为文章添加评论数组，和评论数
       .then(function (res) {

@@ -48,7 +48,7 @@
     </view>
     <view class="weui-search-bar__cancel-btn appcolor"  bindtap="searchRoom">搜索</view>
   </view>
-  <view class="divider"></view>
+  <!--<view class="divider"></view>-->
   <scroll-view wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
                bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
     <block wx:if="{{list}}" wx:for="{{list}}">
