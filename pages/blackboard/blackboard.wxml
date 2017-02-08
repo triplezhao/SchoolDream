@@ -5,7 +5,7 @@
       <button bindtap="tapCreateVoice" style="font-size:12px;">发录音</button>
       <button bindtap="tapCreateVideo" style="font-size:12px;">发视频</button>
     </View>-->
-    <scroll-view class="container" wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
+    <view class="container" wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
                  bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
       <block wx:for="{{list}}" wx:for-index="idx" wx:for-item="item" data-idx="{{idx}}">
         <view class="feed-item">
@@ -75,9 +75,9 @@
         <view class="weui-loadmore__tips weui-loadmore__tips_in-line">上拉加载更多</view>
       </view>
       <view wx:if="{{!hasMore&&!showLoading}}" class="weui-loadmore weui-loadmore_line">
-        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无更多数据</view>
+        <view class="weui-loadmore__tips weui-loadmore__tips_in-line">到底了别拉了</view>
       </view>
-    </scroll-view>
+    </view>
     <!--<loading wx:if="{{showLoading}}" bindchange="hideLoading">{{loadingMessage}}</loading>-->
   </view>
   <view class="absolute-center-comment" wx:if="{{isShowComment}}">

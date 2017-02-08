@@ -97,7 +97,7 @@ Page({
             fileUrls[0] = res.url();
 
             //如果大于1张，则继续去保存第二张
-            if (1 != picPaths.length) {
+            if (1 < picPaths.length) {
               //第2步，先上传数据
               let picfile = new AV.File(picPaths[1], {
                 blob: {
@@ -112,7 +112,7 @@ Page({
               fileUrls[1] = res.url();
             }
             //如果大于2张，则继续save
-            if (2 != picPaths.length) {
+            if (2 < picPaths.length) {
               let picfile = new AV.File(picPaths[2], {
                 blob: {
                   uri: picPaths[2],

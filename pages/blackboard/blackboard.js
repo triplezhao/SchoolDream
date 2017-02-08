@@ -8,7 +8,7 @@ const Article = require('../../model/Article');
 const Comment = require('../../model/Comment');
 const Zan = require('../../model/Zan');
 const Player = require('../../template/player/player');
-const pageSize = 10;
+const pageSize = 8;
 // import { Player } from '../../template/player/player';
 Page({
   data: {
@@ -112,7 +112,7 @@ Page({
   /**
    * 滚动到底部时加载下一页
    */
-  bindscrolltolower: function () {
+  onReachBottom: function () {
     console.log('到底部')
     this.loadMore();
 
@@ -362,11 +362,14 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
+  wx.showNavigationBarLoading() //在标题栏中显示加载
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 隐藏loading提示
   hideLoading() {
+       wx.hideNavigationBarLoading() //完成停止加载
+    wx.stopPullDownRefresh() //停止下拉刷新
     this.setData({ showLoading: false, loadingMessage: '' });
   },
 
