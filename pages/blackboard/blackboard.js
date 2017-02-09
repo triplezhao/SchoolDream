@@ -57,6 +57,12 @@ Page({
 
     // 页面初始化 options为页面跳转所带来的参数
     // this.refesh();
+
+    //如果是根据roomid进入的，则需要先拉取student2room对象
+    // if(options.roomid){
+        
+    // }
+
     this.setData({
       room_now: getApp().globalData.room_now,
       student: getApp().globalData.logined_student,

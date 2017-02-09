@@ -1,28 +1,32 @@
 @import "../../template/player/player.wxss";
 .container-relative {
   position: relative;
+   width: 100vw;
+    height: 100vh;
 }
 .container-absolute {
   position: absolute;
   top: 0; left: 0; bottom: 0; right: 0;
 }
 .absolute-center-comment {
-  position: absolute;
+  /*position: absolute;*/
+  position: fixed;
   width: 100vw;
   height: 30vh;
   top: 30vh; 
   left: 0; 
   right: 0;
   bottom: 0; 
+
 }
 .absolute-plus {
-  position: absolute;
+  /*position: relative;*/
+  position: fixed;
   width: 5vw;
   height: 5vw;
-  top: 80vh; 
   left: 80vw; 
   right: 5vw;
-  bottom: 5vw; 
+  bottom: 15vw; 
 }
 
 

@@ -282,6 +282,7 @@ Page({
 
     if (this.data.jioned_room_map[room.objectId]) {
       this.showToast("您已经加入这个班级");
+      that.enter2Room(e);
       return;
     }
     wx.navigateTo({
@@ -290,6 +291,21 @@ Page({
     })
   },
 
+ enter2Room: function (e) {
+   let that = this;
+    let room = e.currentTarget.dataset.obj;
+    //改全局内存
+    
+    getApp().globalData.room_now = {
+        room:room,
+        student:that.data.student,
+    }
+
+    wx.navigateTo({
+      url: '../blackboard/blackboard'
+    })
+
+  },
 
   bindDateChange: function (e) {
 
