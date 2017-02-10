@@ -60,7 +60,7 @@ Page({
 
     //如果是根据roomid进入的，则需要先拉取student2room对象
     // if(options.roomid){
-        
+
     // }
 
     this.setData({
@@ -137,7 +137,7 @@ Page({
     // 查询当前登录用户加入的room
     query.equalTo('room', room);
     query.include('student');
-   
+
     that.showLoading('加载中');
     console.log('showLoading');
     // 执行查询
@@ -199,7 +199,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-     
+
       if (results) {
 
         var maxtime = that.data.maxtime;
@@ -250,8 +250,8 @@ Page({
         })
 
       }
-       that.hideLoading();
-       wx.stopPullDownRefresh();
+      that.hideLoading();
+      wx.stopPullDownRefresh();
     });
   },
   //加载更多
@@ -280,7 +280,7 @@ Page({
     // 执行查询
     query.find().then(function (results) {
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
-    
+
       if (results) {
 
         console.log('after JSON.parse', results);
@@ -330,7 +330,7 @@ Page({
         })
 
       }
-        that.hideLoading();
+      that.hideLoading();
     });
   },
 
@@ -358,6 +358,27 @@ Page({
     })
   },
 
+  tap_edit_cover: function (e) {
+    //可以统一到班级管理页面。 改班级封面，改昵称，改自己的头像。
+    let that = this;
+
+    //如果是管理员，则进入班级管理页面
+    if (that.data.room_now.room.creater.objectId == that.data.student.objectId) {
+      wx.navigateTo({
+        url: '../roomsetting/roomsetting'
+      })
+    } else {
+      var current = e.currentTarget.dataset.src
+      var itempics = e.currentTarget.dataset.itempics
+      if (!itempics) itempics = [current];
+      wx.previewImage({
+        current: current,
+        urls: itempics
+      })
+    }
+
+  },
+
   playVoiceUrl: function (e) {
     var voiceurl = e.currentTarget.dataset.voiceurl;
     var httpsurl = QN.genHttpsDownUrl(voiceurl);
@@ -379,13 +400,13 @@ Page({
   },
   // 显示loading提示
   showLoading(loadingMessage) {
-  wx.showNavigationBarLoading() //在标题栏中显示加载
+    wx.showNavigationBarLoading() //在标题栏中显示加载
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 隐藏loading提示
   hideLoading() {
-       wx.hideNavigationBarLoading() //完成停止加载
+    wx.hideNavigationBarLoading() //完成停止加载
     wx.stopPullDownRefresh() //停止下拉刷新
     this.setData({ showLoading: false, loadingMessage: '' });
   },
@@ -556,7 +577,7 @@ Page({
         // article1.include('creater,room,zans');
 
         return article1.save(null, {
-          
+
           fetchWhenSave: true,
         });
       })

@@ -123,6 +123,7 @@ Page({
           room.set('yyyymmdd', utils.yyyymmdd(room.get('createdAt')));
           room=JSON.parse(JSON.stringify(room));
           scm.set('room',room );
+          // scm=JSON.parse(JSON.stringify(room));
           // getApp().globalData.jioned_room_map[room.objectId] = scm;
          that.data.jioned_room_map[room.objectId] = scm;
          getApp().globalData.jioned_room_map = that.data.jioned_room_map;

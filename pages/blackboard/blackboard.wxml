@@ -3,7 +3,7 @@
 
   <view class="container-relative" style="height:44vh">
       <image class="image-header" src="{{room_now.room.coverurl}}" data-src="{{room_now.room.coverurl}}"
-             bindtap="previewImage"></image>
+             bindtap="tap_edit_cover"></image>
       <image class="image-header-user" src="{{student.avatarurl}}" data-src="{{student.avatarurl}}"
              bindtap="tap_edit_user"></image>
   </view>
