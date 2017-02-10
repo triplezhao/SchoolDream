@@ -1,8 +1,7 @@
 @import "../../template/player/player.wxss";
 .container-relative {
   position: relative;
-   width: 100vw;
-    height: 100vh;
+  
 }
 .container-absolute {
   position: absolute;
@@ -229,6 +228,29 @@
   transform: translate(-50%, -50%);
 }
 
+.image-header {
+  position: absolute;
+  width: 100%;
+  height: 40vh;
+}
+.image-header-user {
+  position: absolute;
+  width: 8vh;
+  height: 8vh;
+  left: 80vw; 
+  right: 5vw;
+  bottom: 0vh; 
+  border-radius: 4vh;
+  border: 2px solid antiquewhite;
+}
+.header-user-name {
+  position: absolute;
+  width: auto;
+  height: 2vh;
+  left: 74vw; 
+  right: 5vw;
+  bottom: 8vh; 
+}
 
 
 

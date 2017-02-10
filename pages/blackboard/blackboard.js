@@ -346,6 +346,17 @@ Page({
     })
   },
 
+  tap_edit_user: function (e) {
+    //去编辑页面，修改头像、修改昵称
+    var current = e.currentTarget.dataset.src
+    var itempics = e.currentTarget.dataset.itempics
+    if (!itempics) itempics = [current];
+
+    wx.previewImage({
+      current: current,
+      urls: itempics
+    })
+  },
 
   playVoiceUrl: function (e) {
     var voiceurl = e.currentTarget.dataset.voiceurl;
