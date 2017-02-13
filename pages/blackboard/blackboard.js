@@ -8,7 +8,7 @@ const Article = require('../../model/Article');
 const Comment = require('../../model/Comment');
 const Zan = require('../../model/Zan');
 const Player = require('../../template/player/player');
-const pageSize = 8;
+const pageSize = 10;
 // import { Player } from '../../template/player/player';
 Page({
   data: {
@@ -193,7 +193,7 @@ Page({
 
     query.descending('createdAt');
     query.limit(pageSize);
-    query.include('creater,room,comments,zans');
+    query.include('creater,comments,zans');
     // query.lessThanOrEqualTo('createdAt', new Date());
 
     // 执行查询
@@ -207,7 +207,7 @@ Page({
 
           results.forEach(function (scm, i, a) {
             scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
-            scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+            scm.set('room', that.data.room_now.room);
 
             if (scm.get('comments')) {
               // scm.comments = JSON.parse(JSON.stringify(scm.get('comments')));
@@ -272,7 +272,7 @@ Page({
 
     query.descending('createdAt');
     query.limit(pageSize);
-    query.include('creater,room,comments,zans');
+    query.include('creater,comments,zans');
 
     var oldest = new Date(that.data.maxtime);
     query.lessThanOrEqualTo('createdAt', oldest);
@@ -288,7 +288,8 @@ Page({
         if (results.length > 0) {
           results.forEach(function (scm, i, a) {
             scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
-            scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+            // scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
+             scm.set('room', that.data.room_now.room);
 
 
             if (scm.get('comments')) {

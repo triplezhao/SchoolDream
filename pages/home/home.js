@@ -231,6 +231,13 @@ Page({
     })
 
   },
+  //搜索班级页面
+  tapCheck: function () {
+    wx.navigateTo({
+      url: '../check/check'
+    })
+
+  },
   // 显示loading提示
   showLoading(loadingMessage) {
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });

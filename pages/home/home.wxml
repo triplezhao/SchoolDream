@@ -53,9 +53,25 @@
   </view>
   </view>
 </view>
-<view class="divider_eee" >
-  
+
+<view wx:if="{{student.usertype==1}}" class="chat-item flex-wrp " bindtap="tapCheck" data-index="{{index}}">
+  <view class="flex-item avatar ">
+    <view class="typesearch center">
+      <text>审</text>
+    </view>
+  </view>
+  <view class="chat-content flex-item">
+    <view class="chat-source">
+      <text class="chatmate">审查内容</text>
+    </view>
+    <text class="chat-txt">审查所有内容</text>
+  </view>
+  <view class="center ">
+    <view class="weui-select "></view>
+  </view>
 </view>
+<view class="divider_eee" >
+  </view>
 <block wx:if="{{list}}" wx:for="{{list}}">
   <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
     <view class="avatar flex-item">
