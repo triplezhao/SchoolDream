@@ -36,6 +36,7 @@ Page({
     that.setData({
       room_now: getApp().globalData.room_now,
       student: getApp().globalData.logined_student,
+      tempFilePaths:[getApp().globalData.room_now.room.coverurl]
     })
     wx.setNavigationBarTitle({
       title: '当前班级：' + getApp().globalData.room_now.room.name,
@@ -236,7 +237,7 @@ Page({
   //保存昵称
   tapUpdateCover: function (e) {
     let that = this;
-    if (!that.data.tempFilePaths || that.data.tempFilePaths.length == 0) {
+    if (!that.data.tempFilePaths || that.data.tempFilePaths.length == 0|| that.data.tempFilePaths[0]==getApp().globalData.room_now.room.coverurl) {
       that.showToast('请先选择图片');
       return false;
     }
@@ -267,7 +268,7 @@ Page({
       getApp().globalData.room_now = that.data.room_now;
       that.setData({
         room_now: that.data.room_now,
-        tempFilePaths: []
+        tempFilePaths:[getApp().globalData.room_now.room.coverurl]
       })
       that.hideLoading();
       that.showToast("保存成功");
