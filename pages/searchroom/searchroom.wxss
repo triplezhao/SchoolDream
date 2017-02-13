@@ -45,7 +45,8 @@
   padding: 4rpx 0 8rpx 0;
 }
 .chat-item .chat-content .chat-source .chatmate{
-  font-size: 34rpx;
+  width: 60vw;
+  font-size: 28rpx;
   color: #000000;
   text-align: left;
 }

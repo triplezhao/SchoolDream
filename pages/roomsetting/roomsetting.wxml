@@ -15,53 +15,99 @@
         </view>
       </block>
       <!--<view class="images-image image-plus" bindtap="tapInvite">
-        <view class="image-plus-horizontal"></view>
-        <view class="image-plus-vertical"></view>
-      </view>-->
+      <view class="image-plus-horizontal"></view>
+      <view class="image-plus-vertical"></view>
+    </view>
+    -->
+  </view>
+</view>
+<view class="divider"></view>
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">昵称:</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input wx:if="{{room_now.nickname}}" class="weui-input" style="color:#666" bindinput="bindKeyInputNickname"
+           value="{{room_now.nickname}}"  />
+    <input wx:else class="weui-input" style="color:#666" bindinput="bindKeyInputNickname"
+           value="{{room_now.student.nickname}}"  />
+  </view>
+  <button class="wxui-button" size="mini" style="color:#333;" bindtap="tapUpdateNickname" type="default">保存</button>
+</view>
+<view class="divider"></view>
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">班级名称：</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="weui-input" style="color:#666"
+           bindinput="bindKeyInputName" value="{{room_now.room.name}}"  />
+    <text wx:else class="weui-input" style="color:#666">{{room_now.room.name}}</text>
+  </view>
+  <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" size="mini" style="color:#333;"
+          bindtap="tapUpdateName" type="default">保存</button>
+</view>
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">验证问题:</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="weui-input" style="color:#666"
+           bindinput="bindKeyInputQuestion" value="{{room_now.room.question}}"  />
+    <text wx:else class="weui-input" style="color:#666">{{room_now.room.question}}</text>
+  </view>
+  <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" size="mini" style="color:#333;"
+          bindtap="tapUpdateQuestion" type="default">保存</button>
+</view>
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">问题答案:</view>
+  </view>
+  <view class="weui-cell__bd">
+    <input wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="weui-input" style="color:#666"
+           bindinput="bindKeyInputAnswer" value="{{room_now.room.answer}}"  />
+    <text wx:else class="weui-input" style="color:#666">{{room_now.room.answer}}</text>
+  </view>
+  <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" size="mini" style="color:#333;"
+          bindtap="tapUpdateAnswer" type="default">保存</button>
+</view>
+<view wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="weui-cell">
+  <view class="weui-cell__bd">
+    <view class="weui-uploader">
+      <view class="weui-uploader__hd">
+        <view class="weui-uploader__title">修改班级封面</view>
+        <view class="weui-uploader__info">{{tempFilePaths.length}}/1（最多1张）</view>
+        <button size="mini" style="color:#333;" bindtap="tapUpdateCover" type="default">保存</button>
+      </view>
+      <view class="weui-uploader__bd">
+        <view class="weui-uploader__files" id="uploaderFiles">
+          <block wx:for-items="{{tempFilePaths}}" wx:key="{{index}}">
+            <view class="weui-uploader__file" data-src="{{item}}" bindtap="previewImage" id="{{item}}">
+              <image class="weui-uploader__img" src="{{item}}" mode="aspectFill"  />
+            </view>
+          </block>
+        </view>
+        <view class="weui-uploader__input-box">
+          <view class="weui-uploader__input" bindtap="chooseImage"></view>
+        </view>
+      </view>
     </view>
   </view>
-  <view class="divider">
+</view>
+<view class="divider"></view>
+<view class="weui-cell weui-cell_input">
+  <view class="weui-cell__hd">
+    <view class="weui-label">邀请同学:</view>
   </view>
-  <view class="my">
-    <view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text>修改班级名称：{{room_now.room.name}}</text>
-      </view>
-    </view>
-      <view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text wx:if="{{room_now.nickname}}">修改昵称：{{room_now.nickname}}</text>
-        <text wx:elif="{{room_now.student.nickname}}">修改昵称：{{room_now.student.nickname}}</text>
-      </view>
-    </view>
-    <!--<view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text>我的黑板</text>
-      </view>
-      <view class="center ">
-        <view class="weui-select "></view>
-      </view>
-    </view>-->
-    <view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text>修改验证问题：{{room_now.room.question}}</text>
-      </view>
-    </view>
-    <view class="my-item flex-wrp">
-      <view class="myitem-name flex-item">
-        <text>修改验证问题答案：{{room_now.room.answer}}</text>
-      </view>
-    </view>
-    <view class="my-item flex-wrp">
-      <view bindtap="tapInvite" class="myitem-name flex-item">
-        <text>邀请同学方法：</text>
-        <text style="color:green" >点击右上角分享给同学</text>
-      </view>
-    </view>
-  
+  <view class="weui-cell__bd">
+    <text class="weui-input" style="color:green">点击右上角分享给同学</text>
   </view>
-  <View  class="weui-btn-area">
-    <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="wxui-button" bindtap="tapDelRoom" type="warn" >解散班级</button>
-    <button wx:elif="{{room_now.student.objectId!=room_now.room.creater.objectId}}" class="wxui-button" bindtap="tapOutRoom" type="warn" >退出班级</button>
-  </View>
+</view>
+<view class="divider"></view>
+<view class="weui-btn-area">
+  <button wx:if="{{room_now.student.objectId==room_now.room.creater.objectId}}" class="wxui-button" bindtap="tapDelRoom"
+          type="warn">解散班级</button>
+  <button wx:elif="{{room_now.student.objectId!=room_now.room.creater.objectId}}" class="wxui-button" bindtap="tapOutRoom"
+          type="warn">退出班级</button>
+</view>
 </scroll-view>

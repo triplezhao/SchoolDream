@@ -69,6 +69,10 @@ Page({
       that.showToast('内容不能为空');
       return;
     }
+    if (content.length>300) {
+      that.showToast('内容不能超过300字');
+      return;
+    }
     if (!that.data.hasRecord) {
       that.showToast('还没有音频');
       return;

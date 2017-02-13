@@ -58,6 +58,10 @@ Page({
       that.showToast('内容不能为空');
       return;
     }
+    if (content.length>300) {
+      that.showToast('内容不能超过300字');
+      return;
+    }
     if (!that.data.tempFilePath_video) {
       that.showToast('还没有添加视频');
       return;

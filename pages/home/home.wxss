@@ -166,5 +166,18 @@
   font-size: 60rpx;
 }
 
+.usercount{
+  flex: 1;
+  font-size: 22rpx;
+  float: right;
+  vertical-align: text-bottom;
+
+  height: 30rpx;
+  border-radius: 5rpx;
+  color: white;
+  padding: 5rpx;
+  margin: 0rpx 5rpx;
+  background-color: green;
+}
 
 

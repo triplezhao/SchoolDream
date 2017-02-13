@@ -9,7 +9,7 @@ Page({
   data: {
     text: "Page createarticle",
     tempFilePaths: [],
-    disabled: true,
+    disabled: false,
 
     // 是否显示loading
     showLoading: false,
@@ -54,15 +54,19 @@ Page({
       that.showToast('内容不能为空');
       return;
     }
-    if (!picPaths) {
-      that.showToast('图片不能为空');
+    if (content.length>300) {
+      that.showToast('内容不能超过300字');
       return;
     }
+    // if (!picPaths) {
+    //   that.showToast('图片不能为空');
+    //   return;
+    // }
 
     that.showLoading('正在发布');
     //禁用发布按钮
     that.setData({
-      disabled: true
+      disabled: false
     })
 
     //  picPaths.forEach(function(element,i) {
@@ -73,60 +77,70 @@ Page({
 
     //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
 
+
     let fileUrls = [];
-    // for (let i = 0; i < picPaths.length; i++) {
-
-    let picfile = new AV.File(picPaths[0], {
-      blob: {
-        uri: picPaths[0],
-      }
-    })
-    picfile.save()
-      .then(res => {
-        console.log(res);
-        fileUrls[0] = res.url();
-
-        //如果大于1张，则继续去保存第二张
-        if (1 < picPaths.length) {
-          //第2步，先上传数据
-          let picfile = new AV.File(picPaths[1], {
-            blob: {
-              uri: picPaths[1],
-            }
-          })
-          return picfile.save();
+    if (!picPaths||picPaths.length==0) {
+      //如果没有值
+      let article = new Article();
+      article.set('title', 'title');
+      article.set('content', content);
+      article.set('pics', fileUrls);
+      that.save2Server(article);
+    } else {
+      let picfile = new AV.File(picPaths[0], {
+        blob: {
+          uri: picPaths[0],
         }
-      }).then(res => {
-        if (res) {
-          console.log(res);
-          fileUrls[1] = res.url();
-        }
-        //如果大于2张，则继续save
-        if (2 < picPaths.length) {
-          let picfile = new AV.File(picPaths[2], {
-            blob: {
-              uri: picPaths[2],
-            }
-          })
-          return picfile.save();
-        }
-      }).then(res => {
-        //如果是3张，则取值
-        if (res) {
-          console.log(res);
-          fileUrls[2] = res.url();
-        }
-        //如果没有值
-        let article = new Article();
-        article.set('title', 'title');
-        article.set('content', content);
-        article.set('pics', fileUrls);
-        that.save2Server(article);
       })
-      .catch((error) => {
-        console.log(error);
-        that.hideLoading();
-      });
+      picfile.save()
+        .then(res => {
+          console.log(res);
+          fileUrls[0] = res.url();
+
+          //如果大于1张，则继续去保存第二张
+          if (1 < picPaths.length) {
+            //第2步，先上传数据
+            let picfile = new AV.File(picPaths[1], {
+              blob: {
+                uri: picPaths[1],
+              }
+            })
+            return picfile.save();
+          }
+        }).then(res => {
+          if (res) {
+            console.log(res);
+            fileUrls[1] = res.url();
+          }
+          //如果大于2张，则继续save
+          if (2 < picPaths.length) {
+            let picfile = new AV.File(picPaths[2], {
+              blob: {
+                uri: picPaths[2],
+              }
+            })
+            return picfile.save();
+          }
+        }).then(res => {
+          //如果是3张，则取值
+          if (res) {
+            console.log(res);
+            fileUrls[2] = res.url();
+          }
+          //如果没有值
+          let article = new Article();
+          article.set('title', 'title');
+          article.set('content', content);
+          article.set('pics', fileUrls);
+          that.save2Server(article);
+        })
+        .catch((error) => {
+          console.log(error);
+          that.hideLoading();
+        });
+    }
+
+
     // };
 
 
@@ -180,7 +194,7 @@ Page({
 
         that.setData({
           tempFilePaths: arr,
-          disabled: false
+          // disabled: false
         })
       },
     });

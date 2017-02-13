@@ -83,6 +83,7 @@ Page({
       room.set('name', that.data.name);
       room.set('desc', that.data.desc);
       room.set('picurl', [res.url()]);
+      room.set('coverurl', res.url());
       room.set('province', that.data.selectedArea.prov);
       room.set('city', that.data.selectedArea.city);
       room.set('dist', that.data.selectedArea.dist);
@@ -277,16 +278,32 @@ Page({
       that.showToast('请填写名称');
       return false;
     }
+    if (that.data.name.length>20) {
+      that.showToast('名称不能超过20个字符');
+      return false;
+    }
     if (!that.data.desc) {
       that.showToast('请填写简介');
+      return false;
+    }
+    if (that.data.desc.length>100) {
+      that.showToast('简介不能超过100个字符');
       return false;
     }
     if (!that.data.question) {
       that.showToast('请填写问题');
       return false;
     }
-    if (!that.data.answer) {
+    if (that.data.question.length>30) {
+      that.showToast('问题不能超过30字符');
+      return false;
+    }
+    if (!that.data.answer.length) {
       that.showToast('请填写答案');
+      return false;
+    }
+    if (that.data.question.length>30) {
+      that.showToast('问题不能超过30字符');
       return false;
     }
     if (!that.data.tempFilePaths || that.data.tempFilePaths.length == 0) {

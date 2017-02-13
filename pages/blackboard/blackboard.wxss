@@ -239,9 +239,9 @@
   height: 8vh;
   left: 80vw; 
   right: 5vw;
-  bottom: 0vh; 
+  bottom: 1vh; 
   border-radius: 4vh;
-  border: 2px solid antiquewhite;
+  border: 4rpx solid white;
 }
 .header-user-name {
   position: absolute;
@@ -252,6 +252,36 @@
   bottom: 8vh; 
 }
 
+.header-contact {
+  position: absolute;
+  width: auto;
+  height: auto;
+  right: 2vw;
+  top:5vh;
+  background: #673ab7;
+  color:white;
+}
+.header-setting {
+  position: absolute;
+  width: auto;
+  height: auto;
+  right: 2vw;
+  top:12vh;
+  background: #673ab7;
+  color:white;
+}
+
+.header-bottom {
+  position: absolute;
+  width: 70vw;
+  height: 10vh;
+  left: 5vw; 
+  right: 25vw;
+  bottom: 0vh; 
+  border-radius: 4rpx;
+  border: 2rpx solid white;
+  background: #673ab7
+}
 
 
 		

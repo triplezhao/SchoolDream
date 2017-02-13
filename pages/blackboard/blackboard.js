@@ -378,6 +378,16 @@ Page({
     }
 
   },
+    tap_setting: function (e) {
+    //可以统一到班级管理页面。 改班级封面，改昵称，改自己的头像。
+    let that = this;
+
+    //如果是管理员，则进入班级管理页面
+      wx.navigateTo({
+        url: '../roomsetting/roomsetting'
+      })
+
+  },
 
   playVoiceUrl: function (e) {
     var voiceurl = e.currentTarget.dataset.voiceurl;

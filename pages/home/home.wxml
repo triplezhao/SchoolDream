@@ -73,6 +73,7 @@
       <text wx:if="{{item.room.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.room.schooltype}}</text>
       <text wx:if="{{item.room.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.room.schooltype}}</text>
       <text wx:if="{{item.room.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.room.schooltype}}</text>
+      <text  class="usercount">{{item.room.usercount}}位同学</text>
     </view>
   </view>
 </block>

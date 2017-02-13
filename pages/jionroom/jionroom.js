@@ -37,7 +37,7 @@ Page({
       question: options.question,
       answer: options.answer,
       picurl: options.picurl,
-      isshare: options.isshare=="true",
+      isshare: options.isshare == "true",
     })
 
     //如果是分享过来的，则需要先登录
@@ -169,18 +169,39 @@ Page({
           if (results == undefined) {
 
             console.log('go to create new student2room');
+            student2room.fetchWhenSave(true);
             student2room.save().then(function (data) {
               console.log('create new student2room succ');
-              that.showToast('加入成功');
-              that.hideLoading();
-              getApp().globalData.refesh_change_home = true;
-              if (that.data.isshare) {
-                wx.redirectTo({
-                  url: '/pages/home/home'
+
+              //更新班级人数
+              result.increment('usercount', 1);
+              result.fetchWhenSave(true);
+              result.save().then(function (res) {
+                // 成功
+                that.showToast('加入成功');
+                that.hideLoading();
+
+                data.set('student', getApp().globalData.logined_student);
+                data.set('room', JSON.parse(JSON.stringify(result)));
+                data = JSON.parse(JSON.stringify(data));
+
+                getApp().globalData.refesh_change_home = true;
+                getApp().globalData.room_now = data;
+
+                wx.navigateTo({
+                  url: '../blackboard/blackboard'
                 })
-              } else {
-                wx.navigateBack();
-              }
+                // if (that.data.isshare) {
+                //   // wx.redirectTo({
+                //   //   url: '/pages/home/home'
+                //   // })
+                // } else {
+                //   wx.navigateBack();
+                // }
+              }, function (error) {
+                // 异常处理
+                console.log('error ', error);
+              });
 
             });
           } else {
@@ -209,6 +230,7 @@ Page({
 
 
   },
+
   checkAnswer: function () {
     return this.data.input_answer == this.data.answer;
   },
@@ -228,8 +250,7 @@ Page({
     let that = this;
     //先查询是否存在这个room
     var room = AV.Object.createWithoutData('Room', that.data.objectId);
-    var query = new AV.Query('Room');
-    query.equalTo('objectId', that.data.objectId);
+
     var query1 = new AV.Query('Student2Room');
     query1.equalTo('room', room);
 
@@ -238,16 +259,16 @@ Page({
     query2.equalTo('student', student);
 
     var query = AV.Query.and(query1, query2);
-
+    query.include('student,room');
     //create a new Student2Room
-    var student2room = new AV.Object('Student2Room');
-    student2room.set('nickname', that.data.nickname);
-    student2room.set('student', student);
-    student2room.set('room', room);
+    // var student2room = new AV.Object('Student2Room');
+    // student2room.set('nickname', that.data.nickname);
+    // student2room.set('student', student);
+    // student2room.set('room', room);
 
-    query.first().then(function (results) {
-      console.log(results);
-      if (results == undefined) {
+    query.first().then(function (student2room) {
+      console.log(student2room);
+      if (student2room == undefined) {
 
         console.log('do nothing');
 
@@ -257,14 +278,23 @@ Page({
         that.showToast('您已经加入这个班级')
         that.hideLoading();
 
+        student2room.set('student',  JSON.parse(JSON.stringify(student2room.get("student"))));
+        student2room.set('room', JSON.parse(JSON.stringify(student2room.get("room"))));
+        student2room = JSON.parse(JSON.stringify(student2room));
         setTimeout(() => {
-          if (that.data.isshare) {
-            wx.redirectTo({
-              url: '/pages/home/home'
-            })
-          } else {
-            wx.navigateBack();
-          }
+          getApp().globalData.refesh_change_home = true;
+          getApp().globalData.room_now = data;
+
+          wx.navigateTo({
+            url: '../blackboard/blackboard'
+          })
+          // if (that.data.isshare) {
+          //   wx.redirectTo({
+          //     url: '/pages/home/home'
+          //   })
+          // } else {
+          //   wx.navigateBack();
+          // }
         }, 1000);
       }
 

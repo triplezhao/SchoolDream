@@ -19,7 +19,7 @@ Page({
     student: null,
     list: [],
     schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
-    jioned_room_map:{},
+    jioned_room_map: {},
   },
 
 
@@ -113,6 +113,11 @@ Page({
       //嵌套的子对象，需要JSON.parse(JSON.stringify 重新赋值成json对象。
 
       console.log('then===========', student2Rooms);
+      getApp().globalData.jioned_room_map = {};
+      that.data.jioned_room_map = {};
+      that.setData({
+        jioned_room_map: {}
+      })
       if (student2Rooms) {
         student2Rooms.forEach(function (scm, i, a) {
 
@@ -121,12 +126,12 @@ Page({
 
           let room = scm.get('room');
           room.set('yyyymmdd', utils.yyyymmdd(room.get('createdAt')));
-          room=JSON.parse(JSON.stringify(room));
-          scm.set('room',room );
+          room = JSON.parse(JSON.stringify(room));
+          scm.set('room', room);
           // scm=JSON.parse(JSON.stringify(room));
           // getApp().globalData.jioned_room_map[room.objectId] = scm;
-         that.data.jioned_room_map[room.objectId] = scm;
-         getApp().globalData.jioned_room_map = that.data.jioned_room_map;
+          that.data.jioned_room_map[room.objectId] = scm;
+          getApp().globalData.jioned_room_map = that.data.jioned_room_map;
           // scm=JSON.parse(JSON.stringify(scm)); 不起作用，去外面用数组的JSON.parse
           // scm=scm.toJSON();不起作用， 踏实用JSON.parse吧
         });
@@ -137,7 +142,7 @@ Page({
         // student2Rooms = student2Rooms.toJSON(); //数组没这个方法
 
         console.log('after JSON.parse', student2Rooms);
-        
+
 
         //更新界面
         that.setData({
@@ -170,34 +175,35 @@ Page({
     var index = e.currentTarget.dataset.index;
     console.log('点击了列表的：', index)
     var that = this;
-    wx.showActionSheet({
-      itemList: ['进入', '班级管理'],
-      success: function (res) {
-        if (!res.cancel) {
-          console.log(res.tapIndex)
-          switch (res.tapIndex) {
-            case 0:
-              that.enter2Room(that.data.list[index]);
-              break;
-            case 1:
-              //改全局内存
-              getApp().globalData.room_now = that.data.list[index];
-              wx.navigateTo({
-                url: '../roomsetting/roomsetting'
-              })
+    that.enter2Room(that.data.list[index]);
+    // wx.showActionSheet({
+    //   itemList: ['进入', '班级管理'],
+    //   success: function (res) {
+    //     if (!res.cancel) {
+    //       console.log(res.tapIndex)
+    //       switch (res.tapIndex) {
+    //         case 0:
+    //           that.enter2Room(that.data.list[index]);
+    //           break;
+    //         case 1:
+    //           //改全局内存
+    //           getApp().globalData.room_now = that.data.list[index];
+    //           wx.navigateTo({
+    //             url: '../roomsetting/roomsetting'
+    //           })
 
-              break;
-            case 2:
-              that.onShareAppMessage()
-              // that.showToast('真机分享不能用，通知好友使用搜索');
-              // wx.navigateTo({
-              //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
-              // })
-              break;
-          }
-        }
-      },
-    })
+    //           break;
+    //         case 2:
+    //           that.onShareAppMessage()
+    //           // that.showToast('真机分享不能用，通知好友使用搜索');
+    //           // wx.navigateTo({
+    //           //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
+    //           // })
+    //           break;
+    //       }
+    //     }
+    //   },
+    // })
   },
 
   onShareAppMessage: function () {

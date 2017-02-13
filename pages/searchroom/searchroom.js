@@ -5,7 +5,7 @@ const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
 const utils = require('../../utils/util.js');
 const Area = require('../../data/area.js');
-const pageSize = 10;
+const pageSize = 30;
 Page({
   data: {
     // 是否显示loading
@@ -135,7 +135,7 @@ Page({
           results.forEach(function (scm, i, a) {
             scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
             scm.set('yyyymmdd', utils.yyyymmdd(scm.get('createdAt')));
-            scm.set('room', JSON.parse(JSON.stringify(scm)));
+            // scm.set('room', JSON.parse(JSON.stringify(scm)));
           });
           console.log('before JSON.parse', results);
           // //解析成json标准对象存储
@@ -214,6 +214,7 @@ Page({
 
           results.forEach(function (scm, i, a) {
             scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
+            scm.set('yyyymmdd', utils.yyyymmdd(scm.get('createdAt')));
 
           });
           console.log('before JSON.parse', results);

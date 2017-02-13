@@ -1,14 +1,16 @@
 <view class="container-relative">
   <view class="container-absolute">
 
-  <view class="container-relative" style="height:44vh">
+  <view class="container-relative" style="height:45vh;margin: 0,0,100px,0;">
       <image class="image-header" src="{{room_now.room.coverurl}}" data-src="{{room_now.room.coverurl}}"
              bindtap="tap_edit_cover"></image>
+      <button class="header-contact"   bindtap="tap_setting" size="mini" type="default">通讯录({{room_now.room.usercount}}人)</button>
+      <button class="header-setting"   bindtap="tap_setting" size="mini" type="default">班级设置</button>
       <image class="image-header-user" src="{{student.avatarurl}}" data-src="{{student.avatarurl}}"
              bindtap="tap_edit_user"></image>
   </view>
   <view class="container" wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
-        bindscrolltoupper="bindscrolltoupper" style="height: 100vh">
+        bindscrolltoupper="bindscrolltoupper" style="height: 100vh;">
     <block wx:for="{{list}}" wx:for-index="idx" wx:for-item="item" data-idx="{{idx}}">
       <view class="feed-item">
         <!-- 作者信息 -->
@@ -16,9 +18,7 @@
           <view class="avatar">
             <image src="{{item.creater.avatarurl}}" data-src="{{item.creater.avatarurl}}" bindtap="previewImage"></image>
           </view>
-          <text>
-          {{nicknamemap[item.creater.objectId].nickname?nicknamemap[item.creater.objectId].nickname:nicknamemap[item.creater.objectId].student.nickname}}
-          </text>
+          <text>{{nicknamemap[item.creater.objectId].nickname?nicknamemap[item.creater.objectId].nickname:nicknamemap[item.creater.objectId].student.nickname}}</text>
         </view>
         <view class="feed-content">
           <!-- 文字内容 -->
@@ -56,9 +56,7 @@
           <view class="zanlist" wx:if="{{item.zans.length>0}}">
             <image src="../../image/heart.png" mode="aspectFit"></image>
             <block wx:for="{{item.zans}}" wx:for-index="zidx" wx:for-item="zitem" data-idx="{{zidx}}">
-              <text>
-              {{nicknamemap[zitem.creater.objectId].nickname?nicknamemap[zitem.creater.objectId].nickname:nicknamemap[zitem.creater.objectId].student.nickname}}
-              </text>
+              <text>{{nicknamemap[zitem.creater.objectId].nickname?nicknamemap[zitem.creater.objectId].nickname:nicknamemap[zitem.creater.objectId].student.nickname}}</text>
               <text wx:if="{{zidx!=item.zans.length-1}}">,</text>
             </block>
           </view>
@@ -66,9 +64,7 @@
           <view class="commentlist">
             <block wx:for="{{item.comments}}" wx:for-index="cidx" wx:for-item="citem" data-idx="{{cidx}}">
               <view>
-                <text class="name">
-                {{nicknamemap[citem.creater.objectId].nickname?nicknamemap[citem.creater.objectId].nickname:nicknamemap[citem.creater.objectId].student.nickname}}:
-                </text>
+                <text class="name">{{nicknamemap[citem.creater.objectId].nickname?nicknamemap[citem.creater.objectId].nickname:nicknamemap[citem.creater.objectId].student.nickname}}:</text>
                 <text>{{citem.content}}</text>
               </view>
             </block>
