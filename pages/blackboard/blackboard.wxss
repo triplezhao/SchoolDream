@@ -235,12 +235,12 @@
 }
 .image-header-user {
   position: absolute;
-  width: 8vh;
-  height: 8vh;
+  width: 10vh;
+  height: 10vh;
   left: 80vw; 
   right: 5vw;
-  bottom: 1vh; 
-  border-radius: 4vh;
+  bottom: 0vh; 
+  border-radius: 5vh;
   border: 4rpx solid white;
 }
 .header-user-name {
