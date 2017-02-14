@@ -1,84 +1,7 @@
 
-const AK = "Vu7wSzNFhyn2JxdvZ4VExCslx7lWNQUqsyC6XqRV";
-const SK = "5IJxAJr8d4-wLAuSVhm8f3W6zL4hJfk_ZVAtSrbH";
-const qiniuurl = "http://qiniu.yiwangxuan.com/";
-const qiniuupurl = "https://up-z1.qbox.me";
-const putPolicy = '{"scope":"pxquan","deadline":2480414056}';
-// const putPolicy = '{"scope":"cloudy","deadline":2480414056}';
-
-// const COSAK = 'AKIDaM7nIrpNKEAvUqS84rUDoDQQODqK4IrE'
-// const COSSK = 'I5jAPEtMekgZVIzYv660iEZifZHn8HE1'
-// const COSAPPIDE = '1251112994'
-// const BUCKET = 'pxq1'
-// const RANDOMNUM = '123456'
-
 
 module.exports = {
     base64encode: base64encode,
-    genUpToken() {
-        var accessKey = AK;
-        var secretKey = SK;
-        var put_policy = putPolicy;
-        //SETP 2
-        // var put_policy = JSON.stringify(putPolicy);
-
-        console && console.log("put_policy = ", put_policy);
-
-        //SETP 3
-        //         var encoded = base64encode(utf16to8(put_policy));
-        var encoded = base64encode(put_policy);
-        console && console.log("encoded = ", encoded);
-        //SETP 4
-        // var hash = CryptoJS.HmacSHA1(encoded, secretKey);
-        // var encoded_signed = hash.toString(CryptoJS.enc.Base64);
-        // var hash = b64_hmac_sha1(secretKey, encoded);
-        var hash = b64_hmac_sha1(secretKey, encoded);
-        // var hash='57a649d74c0f2a8931956551f3d5d63a30c43c2d';
-        console && console.log("hash=", hash)
-        // var encoded_signed = base64encode(hash);
-        var encoded_signed = hash;
-        console && console.log("encoded_signed=", encoded_signed)
-
-        //SETP 5
-        var upload_token = accessKey + ":" + safe64(encoded_signed) + ":" + encoded;
-        console && console.log("upload_token=", upload_token)
-        return upload_token;
-    },
-
-
-    //目前都是公共读权限，不需要下载token
-    genDownloadTokenUrl(downloadUrl) {
-        var accessKey = AK;
-        var secretKey = SK;
-        var TS = '2480414056';
-        TS = Date.parse(new Date()) / 1000 + 3600;
-
-        // 1.构造下载 URL：
-        // DownloadUrl = 'http://78re52.com1.z0.glb.clouddn.com/resource/flower.jpg'
-        // oi2hoq4f7.qnssl.com 
-        downloadUrl = 'https://' + downloadUrl.split('//')[1];
-
-        // 2.为下载 URL 加上过期时间 e 参数，Unix时间戳：
-        // DownloadUrl = 'http://78re52.com1.z0.glb.clouddn.com/resource/flower.jpg?e=1451491200'
-        downloadUrl = downloadUrl + '?e=' + TS;
-
-        // 3.对上一步得到的 URL 字符串计算HMAC-SHA1签名（假设SecretKey是 MY_SECRET_KEY），并对结果做URL安全的Base64编码：
-        // Sign = hmac_sha1(DownloadUrl, 'MY_SECRET_KEY')
-        // EncodedSign = urlsafe_base64_encode(Sign)
-        var basesign = b64_hmac_sha1(secretKey, downloadUrl);
-        var safeSign = safe64(basesign);
-
-        // 4.将AccessKey（假设是 MY_ACCESS_KEY）与上一步计算得到的结果用英文符号 : 连接起来：
-        // Token = 'MY_ACCESS_KEY:yN9WtB0lQheegAwva64yBuH3ZgU='
-        var token = accessKey + ':' + safeSign;
-
-        // 5.将上述 Token 拼接到含过期时间参数 e 的 DownloadUrl 之后，作为最后的下载 URL：
-        // RealDownloadUrl = 'http://78re52.com1.z0.glb.clouddn.com/resource/flower.jpg?e=1451491200&token=MY_ACCESS_KEY:yN9WtB0lQheegAwva64yBuH3ZgU='
-        // downloadUrl = 'https://' + downloadUrl.split('//')[1];
-        var realDownloadUrl = downloadUrl + '&token=' + token;
-        return realDownloadUrl;
-    },
-
 
     genHttpsDownUrl(downloadUrl) {
 
@@ -88,7 +11,6 @@ module.exports = {
         // oi2hoq4f7.qnssl.com 
         console.log(downloadUrl);
         downloadUrl = 'https://' + downloadUrl.split('//')[1];
-        console.log(downloadUrl);
 
         return downloadUrl;
     },
@@ -99,39 +21,9 @@ module.exports = {
         return qiniuupurl;
     },
 
-
-    // getCOSToken() {
-
-    //     var appid = COSAPPIDE;
-    //     var bucket = BUCKET;
-    //     var secret_id = COSAK;
-    //     var secret_key = COSSKT;
-    //     var expired = Date.parse(new Date()) / 1000 + 3600;;
-    //     var current = Date.parse(new Date());
-    //     var rdm = Math.round(Math.random() * 1000000);;
-    //     var multi_effect_signature = 'a=' + appid + '&b=' + bucket + '&k=' + secret_id + '&e=' + expired + '&t=' + current + '&r=' + rdm + '&f=';
-    //     multi_effect_signature = base64encode(b64_hmac_sha1(multi_effect_signature, secret_key)+$multi_effect_signature);
-
-    //     return multi_effect_signature;
-    // }
-
 };
 
 
-/* utf.js - UTF-8 <=> UTF-16 convertion
- *
- * Copyright (C) 1999 Masanao Izumo <iz@onicos.co.jp>
- * Version: 1.0
- * LastModified: Dec 25 1999
- * This library is free. You can redistribute it and/or modify it.
- */
-/*
- * Interfaces:
- * utf8 = utf16to8(utf16);
- * utf16 = utf8to16(utf8);
- */
-// var CryptoJS = require('../../utils/components/core.js');
-// var CryptoJS = require('../../utils/rollups/hmac-sha256.js');
 function utf16to8(str) {
     var out, i, len, c;
     out = "";

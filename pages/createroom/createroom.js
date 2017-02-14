@@ -1,5 +1,4 @@
 const AV = require('../../utils/leancloud-storage');
-const QN = require('../../utils/qiniuutil.js');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
@@ -31,7 +30,7 @@ Page({
     schooltypeIndex: 0,
     schooltypes: ['大学(专/本科/研究生/商学院)', '高中/中专', '初中', '小学', '幼儿园', '其他'],
     schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
-    
+
     name: '',
     desc: '',
     question: '',
@@ -71,6 +70,7 @@ Page({
 
     var picurls = that.data.tempFilePaths;
     //图片存储改用ld的avfile方式，其实也是七牛的。 不过不需要自己在七牛绑定https备案过的域名。
+    that.showLoading();
     new AV.File(picurls[0], {
       blob: {
         uri: picurls[0],
@@ -99,6 +99,7 @@ Page({
 
       return room.save();
     }).then(room => {
+      that.hideLoading();
       console.log('room created with id: ' + room.id);
       that.showToast('创建成功')
       getApp().globalData.refesh_change_home = true;
@@ -107,6 +108,7 @@ Page({
       .catch((error) => {
         console.log(error);
         that.showToast('失败')
+        that.hideLoading();
       });
   },
 
@@ -128,7 +130,7 @@ Page({
   },
 
   previewImage: function (e) {
-     var current = e.currentTarget.dataset.src
+    var current = e.currentTarget.dataset.src
 
     if (!current) {
       wx.showToast({
@@ -278,7 +280,7 @@ Page({
       that.showToast('请填写名称');
       return false;
     }
-    if (that.data.name.length>20) {
+    if (that.data.name.length > 20) {
       that.showToast('名称不能超过20个字符');
       return false;
     }
@@ -286,7 +288,7 @@ Page({
       that.showToast('请填写简介');
       return false;
     }
-    if (that.data.desc.length>100) {
+    if (that.data.desc.length > 100) {
       that.showToast('简介不能超过100个字符');
       return false;
     }
@@ -294,7 +296,7 @@ Page({
       that.showToast('请填写问题');
       return false;
     }
-    if (that.data.question.length>30) {
+    if (that.data.question.length > 30) {
       that.showToast('问题不能超过30字符');
       return false;
     }
@@ -302,7 +304,7 @@ Page({
       that.showToast('请填写答案');
       return false;
     }
-    if (that.data.question.length>30) {
+    if (that.data.question.length > 30) {
       that.showToast('问题不能超过30字符');
       return false;
     }

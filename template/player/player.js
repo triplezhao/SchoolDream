@@ -1,5 +1,5 @@
 const util = require('../../utils/util.js');
-const QN = require('../../utils/qiniuutil.js');
+// const QN = require('../../utils/qiniuutil.js');
 var playTimeInterval;
 var animationInterval;
 module.exports = {

@@ -229,7 +229,7 @@ Page({
 
     wx.previewImage({
       current: current,
-      urls: this.data.tempFilePaths
+      urls: [current]
     })
   },
 

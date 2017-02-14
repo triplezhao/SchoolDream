@@ -1,5 +1,4 @@
 const AV = require('../../utils/leancloud-storage.js');
-const QN = require('../../utils/qiniuutil.js');
 const utils = require('../../utils/util.js');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');

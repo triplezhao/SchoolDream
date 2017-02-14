@@ -1,10 +1,13 @@
 const AV = require('./utils/leancloud-storage');
+const CONFIG = require('config');
 const Student = require('./model/Student');
 
 const weixinappId = 'wx34116c4aee4ca248';
 AV.init({
-  appId: 'bystxyLIuetNkwb2uGz9WYd1-gzGzoHsz',
-  appKey: 'Yf3MMSSOWHSGI87ewfRNqd7E',
+  // appId: 'bystxyLIuetNkwb2uGz9WYd1-gzGzoHsz',
+  // appKey: 'Yf3MMSSOWHSGI87ewfRNqd7E',
+  appId: CONFIG.appId,
+  appKey: CONFIG.appKey,
 });
 
 

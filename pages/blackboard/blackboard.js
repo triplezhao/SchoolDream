@@ -1,5 +1,4 @@
 const AV = require('../../utils/leancloud-storage.js');
-const QN = require('../../utils/qiniuutil.js');
 const utils = require('../../utils/util.js');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
@@ -88,6 +87,9 @@ Page({
       wx.setNavigationBarTitle({
         title: '当前班级：' + getApp().globalData.room_now.room.name,
       });
+      this.setData({
+        room_now:getApp().globalData.room_now
+      })
       // 页面显示
       console.log("onShow");
       if (getApp().globalData.refesh_change_blackboard) {
@@ -392,7 +394,7 @@ Page({
 
   playVoiceUrl: function (e) {
     var voiceurl = e.currentTarget.dataset.voiceurl;
-    var httpsurl = QN.genHttpsDownUrl(voiceurl);
+    var httpsurl = voiceurl;
     wx.downloadFile({
       url: httpsurl,
       success: function (res) {
