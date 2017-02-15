@@ -84,9 +84,9 @@ Page({
 
   // 隐藏loading提示
   hideLoading() {
-    setTimeout(() => {
-      this.setData({ showLoading: false, loadingMessage: '' });
-    }, 200);
+    // setTimeout(() => {
+    this.setData({ showLoading: false, loadingMessage: '' });
+    // }, 200);
   },
 
   // 显示toast消息
@@ -130,13 +130,14 @@ Page({
     var room = AV.Object.createWithoutData('Room', that.data.objectId);
     var query = new AV.Query('Room');
     query.equalTo('objectId', that.data.objectId);
+    query.include('creater');
 
     that.showLoading('正在加载');
 
-    query.first().then(function (result) {
-      console.log(result);
+    query.first().then(function (res_room) {
+      console.log(res_room);
       //存在room，
-      if (result) {
+      if (res_room) {
 
         //验证答案
         if (!that.checkAnswer()) {
@@ -157,46 +158,49 @@ Page({
 
         var query = AV.Query.and(query1, query2);
 
-        //create a new Student2Room
-        var student2room = new AV.Object('Student2Room');
-        student2room.set('nickname', that.data.nickname);
-        student2room.set('student', student);
-        student2room.set('room', room);
+        query.include('room,student');
 
-        query.first().then(function (results) {
-          console.log(results);
-          if (results == undefined) {
+        query.first().then(function (res_student2room) {
+          console.log(res_student2room);
+          if (res_student2room == undefined) {
 
+            //create a new Student2Room
+            var newstudent2room = new AV.Object('Student2Room');
+            newstudent2room.set('nickname', that.data.nickname);
+            newstudent2room.set('student', student);
+            newstudent2room.set('room', room);
             console.log('go to create new student2room');
-            student2room.fetchWhenSave(true);
-            student2room.save().then(function (data) {
+            newstudent2room.fetchWhenSave(true);
+            newstudent2room.save().then(function (res_newstudent2room) {
               console.log('create new student2room succ');
 
               //更新班级人数
-              result.increment('usercount', 1);
-              result.fetchWhenSave(true);
-              result.save().then(function (res) {
+              res_room.increment('usercount', 1);
+              res_room.fetchWhenSave(true);
+              res_room.save().then(function (res) {
                 // 成功
                 that.showToast('加入成功');
                 that.hideLoading();
 
-                data.set('student', getApp().globalData.logined_student);
-                data.set('room', JSON.parse(JSON.stringify(result)));
-                data = JSON.parse(JSON.stringify(data));
+                res_newstudent2room.set('student', getApp().globalData.logined_student);
+                res_newstudent2room.set('room', JSON.parse(JSON.stringify(res_room)));
+                res_newstudent2room = JSON.parse(JSON.stringify(res_newstudent2room));
 
                 getApp().globalData.refesh_change_home = true;
-                getApp().globalData.room_now = data;
+                getApp().globalData.is_from_share = that.data.isshare;
+                getApp().globalData.room_now = res_newstudent2room;
 
-                wx.navigateTo({
-                  url: '../blackboard/blackboard'
-                })
-                // if (that.data.isshare) {
-                //   // wx.redirectTo({
-                //   //   url: '/pages/home/home'
-                //   // })
-                // } else {
-                //   wx.navigateBack();
-                // }
+
+                if (that.data.isshare) {
+                  wx.redirectTo({
+                    // url: '../blackboard/blackboard'
+                    url: '/pages/home/home'
+                  })
+                } else {
+                  wx.redirectTo({
+                    url: '../blackboard/blackboard'
+                  })
+                }
               }, function (error) {
                 // 异常处理
                 console.log('error ', error);
@@ -208,6 +212,24 @@ Page({
             //重复加入错误
             that.showToast('您已经加入这个班级')
             that.hideLoading();
+            res_student2room.set('student', getApp().globalData.logined_student);
+            res_student2room.set('room', JSON.parse(JSON.stringify(res_student2room.get('room'))));
+            res_student2room = JSON.parse(JSON.stringify(res_student2room));
+
+            getApp().globalData.refesh_change_home = true;
+            getApp().globalData.is_from_share = that.data.isshare;
+            getApp().globalData.room_now = res_student2room;
+
+            if (that.data.isshare) {
+              wx.redirectTo({
+                // url: '../blackboard/blackboard'
+                url: '/pages/home/home'
+              })
+            } else {
+              wx.redirectTo({
+                url: '../blackboard/blackboard'
+              })
+            }
           }
 
         }, function (error) {
@@ -264,37 +286,39 @@ Page({
     // student2room.set('nickname', that.data.nickname);
     // student2room.set('student', student);
     // student2room.set('room', room);
-
+    that.showLoading();
     query.first().then(function (student2room) {
       console.log(student2room);
       if (student2room == undefined) {
 
         console.log('do nothing');
-
+        that.hideLoading();
       } else {
 
         //重复加入错误
         that.showToast('您已经加入这个班级')
         that.hideLoading();
 
-        student2room.set('student',  JSON.parse(JSON.stringify(student2room.get("student"))));
+        student2room.set('student', JSON.parse(JSON.stringify(student2room.get("student"))));
         student2room.set('room', JSON.parse(JSON.stringify(student2room.get("room"))));
         student2room = JSON.parse(JSON.stringify(student2room));
         setTimeout(() => {
           getApp().globalData.refesh_change_home = true;
-          getApp().globalData.room_now = data;
+          getApp().globalData.is_from_share = that.data.isshare;
+          getApp().globalData.room_now = student2room;
 
-          wx.navigateTo({
-            url: '../blackboard/blackboard'
-          })
-          // if (that.data.isshare) {
-          //   wx.redirectTo({
-          //     url: '/pages/home/home'
-          //   })
-          // } else {
-          //   wx.navigateBack();
-          // }
-        }, 1000);
+            if (that.data.isshare) {
+              wx.redirectTo({
+                // url: '../blackboard/blackboard'
+                url: '/pages/home/home'
+              })
+            } else {
+              wx.redirectTo({
+                url: '../blackboard/blackboard'
+              })
+            }
+
+        }, 600);
       }
 
     }, function (error) {

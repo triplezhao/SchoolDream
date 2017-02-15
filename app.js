@@ -21,6 +21,7 @@ App({
     room_now: null,
     refesh_change_home: false,
     refesh_change_blackboard: false,
+    is_from_share: false,
 
   },
   onLaunch: function () {

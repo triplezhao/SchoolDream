@@ -416,12 +416,20 @@ Page({
     wx.showNavigationBarLoading() //在标题栏中显示加载
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
+  
 
   // 隐藏loading提示
   hideLoading() {
     wx.hideNavigationBarLoading() //完成停止加载
     wx.stopPullDownRefresh() //停止下拉刷新
     this.setData({ showLoading: false, loadingMessage: '' });
+    this.setData({ showProgress: false, loadingMessage: '' });
+  },
+
+  // 显示loading提示
+  showProgress(loadingMessage) {
+    wx.showNavigationBarLoading() //在标题栏中显示加载
+    this.setData({ showProgress: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
 
   // 显示toast消息
@@ -510,7 +518,7 @@ Page({
     // var tocomment = AV.Object.createWithoutData('Comment',current_article.objectId);
     // comment.set('tocomment', tocomment);
 
-    that.showLoading();
+    that.showProgress();
 
     comment.save()
       //保存评论
@@ -573,7 +581,7 @@ Page({
     zan.set('article', article);
     zan.fetchWhenSave(true);
 
-    that.showLoading();
+    that.showProgress();
     zan.save()
       //保存评论
       .then(function (res) {
@@ -625,7 +633,7 @@ Page({
     //第2步，新建一个赞的avzan
     var zan = AV.Object.createWithoutData('Zan', thisZan.objectId);
 
-    that.showLoading();
+    that.showProgress();
 
 
     zan.destroy().then(function (success) {
@@ -683,7 +691,7 @@ Page({
           console.log('current_article', e);
           var article = AV.Object.createWithoutData('Article', current_article.objectId);
 
-          that.showLoading();
+          that.showProgress();
 
           article.destroy().then((res) => {
             console.log('del succ ', res);
@@ -808,7 +816,7 @@ Page({
       + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl;
     console.log(path);
     return {
-      title: getApp().globalData.room_now.room.name,
+      title: that.data.room_now.student.nickname + '喊你加入' + getApp().globalData.room_now.room.name,
       desc: that.data.room_now.student.nickname + '喊你加入' + getApp().globalData.room_now.room.name,
       path: path
     }

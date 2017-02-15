@@ -36,7 +36,7 @@ Page({
     that.setData({
       room_now: getApp().globalData.room_now,
       student: getApp().globalData.logined_student,
-      tempFilePaths:[getApp().globalData.room_now.room.coverurl]
+      tempFilePaths: [getApp().globalData.room_now.room.coverurl]
     })
     wx.setNavigationBarTitle({
       title: '当前班级：' + getApp().globalData.room_now.room.name,
@@ -122,60 +122,79 @@ Page({
   //退出班级
   tapOutRoom: function (e) {
     var that = this;
-    var student2Room = AV.Object.createWithoutData('Student2Room', that.data.room_now.objectId);
-    student2Room.destroy().then(function (success) {
-      console.log(success);
-      // 删除成功,云函数会处理 关联的删除操作
-      getApp().globalData.refesh_change_home = true;
+    wx.showModal({
+      title: '退出班级',
+      content: '确认退出班级吗',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+          var student2Room = AV.Object.createWithoutData('Student2Room', that.data.room_now.objectId);
+          student2Room.destroy().then(function (success) {
+            console.log(success);
+            // 删除成功,云函数会处理 关联的删除操作
+            getApp().globalData.refesh_change_home = true;
 
-      // //更新班级人数
-      var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
-      room.increment('usercount', -1);
-      room.save().then(function (res) {
-        // 成功
-        console.log('usercount ' + res);
-         getApp().globalData.refesh_change_home = true;
-        getApp().globalData.jioned_room_map = {};
+            // //更新班级人数
+            var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
+            room.increment('usercount', -1);
+            room.save().then(function (res) {
+              // 成功
+              console.log('usercount ' + res);
+              getApp().globalData.refesh_change_home = true;
+              getApp().globalData.jioned_room_map = {};
 
-        // wx.navigateBack();
-        // wx.redirectTo({
-        //   url: '../home/home'
-        // })
-         wx.navigateBack({
-            delta: 10
-          })
-      }, function (error) {
-        // 异常处理
-        console.log('error ', error);
-      });
+              // wx.navigateBack();
+              // wx.redirectTo({
+              //   url: '../home/home'
+              // })
+              wx.navigateBack({
+                delta: 10
+              })
+            }, function (error) {
+              // 异常处理
+              console.log('error ', error);
+            });
 
 
-    }, function (error) {
-      // 删除失败
-      console.log(error);
-    });
+          }, function (error) {
+            // 删除失败
+            console.log(error);
+          });
+        }
+      }
+    })
+
 
   },
   //解散房间
   tapDelRoom: function (e) {
     var that = this;
-    var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
-    room.destroy().then(function (success) {
-      console.log(success);
-      // 删除成功,云函数会处理 关联的删除操作
-      getApp().globalData.refesh_change_home = true;
-      getApp().globalData.jioned_room_map = {};
-      // wx.redirectTo({
-      //   url: '../home/home'
-      // })
-       wx.navigateBack({
-            delta: 10
-          })
+    wx.showModal({
+      title: '删除班级',
+      content: '删除班级，班级相册等内容会一并删除',
+      success: function (res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+          var room = AV.Object.createWithoutData('Room', that.data.room_now.room.objectId);
+          room.destroy().then(function (success) {
+            console.log(success);
+            // 删除成功,云函数会处理 关联的删除操作
+            getApp().globalData.refesh_change_home = true;
+            getApp().globalData.jioned_room_map = {};
+            // wx.redirectTo({
+            //   url: '../home/home'
+            // })
+            wx.navigateBack({
+              delta: 10
+            })
 
-    }, function (error) {
-      // 删除失败
-      console.log(error);
-    });
+          }, function (error) {
+            // 删除失败
+            console.log(error);
+          });
+        }
+      }
+    })
 
   },
   // 显示loading提示
@@ -237,7 +256,7 @@ Page({
   //保存昵称
   tapUpdateCover: function (e) {
     let that = this;
-    if (!that.data.tempFilePaths || that.data.tempFilePaths.length == 0|| that.data.tempFilePaths[0]==getApp().globalData.room_now.room.coverurl) {
+    if (!that.data.tempFilePaths || that.data.tempFilePaths.length == 0 || that.data.tempFilePaths[0] == getApp().globalData.room_now.room.coverurl) {
       that.showToast('请先选择图片');
       return false;
     }
@@ -268,7 +287,7 @@ Page({
       getApp().globalData.room_now = that.data.room_now;
       that.setData({
         room_now: that.data.room_now,
-        tempFilePaths:[getApp().globalData.room_now.room.coverurl]
+        tempFilePaths: [getApp().globalData.room_now.room.coverurl]
       })
       that.hideLoading();
       that.showToast("保存成功");
@@ -447,7 +466,7 @@ Page({
       + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl;
     console.log(path);
     return {
-      title: getApp().globalData.room_now.room.name,
+      title: that.data.room_now.student.nickname + '喊你加入' + getApp().globalData.room_now.room.name,
       desc: that.data.room_now.student.nickname + '喊你加入' + getApp().globalData.room_now.room.name,
       path: path
     }

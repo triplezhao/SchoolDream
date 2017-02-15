@@ -83,9 +83,9 @@
       <view class="weui-loadmore__tips weui-loadmore__tips_in-line">到底了别拉了</view>
     </view>
   </view>
-  <!--<loading wx:if="{{showLoading}}" bindchange="hideLoading">
+  <loading wx:if="{{showProgress}}" bindchange="hideLoading">
   {{loadingMessage}}</loading>
-  -->
+  
 </view>
 <view class="absolute-center-comment" wx:if="{{isShowComment}}">
   <view class="weui-search-bar">

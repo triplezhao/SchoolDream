@@ -148,7 +148,18 @@ Page({
         that.setData({
           list: student2Rooms,
         })
+        
         that.hideLoading();
+
+         console.log('is_from_share='+getApp().globalData.is_from_share);
+        if (getApp().globalData.is_from_share) {
+  
+          getApp().globalData.is_from_share = false;
+          wx.navigateTo({
+            url: '../blackboard/blackboard'
+          })
+        }
+
       } else {
         that.hideLoading();
       }
@@ -208,11 +219,9 @@ Page({
 
   onShareAppMessage: function () {
     return {
-      title: '朋小圈校友录',
+      title: getApp().globalData.logined_student.nickname + '喊你加入校友录',
       desc: getApp().globalData.logined_student.nickname + '喊你加入校友录',
       path: '/pages/home/home'
-      // path: '/pages/jionroom/jionroom?name=' + getApp().globalData.room_now.room.name + '&objectId=' + getApp().globalData.room_now.room.objectId
-      // + '&question=' + getApp().globalData.room_now.room.question + '&answer=' + getApp().globalData.room_now.room.answer + '&picurl=' + getApp().globalData.room_now.room.picurl
     }
   },
 
