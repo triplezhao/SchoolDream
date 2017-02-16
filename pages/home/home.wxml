@@ -49,11 +49,9 @@
     <text class="chat-txt">创建一个新的班级</text>
   </view>
   <view class="center ">
-    <view class="weui-select ">
-  </view>
+    <view class="weui-select "></view>
   </view>
 </view>
-
 <view wx:if="{{student.usertype==1}}" class="chat-item flex-wrp " bindtap="tapCheck" data-index="{{index}}">
   <view class="flex-item avatar ">
     <view class="typesearch center">
@@ -70,31 +68,37 @@
     <view class="weui-select "></view>
   </view>
 </view>
-<view class="divider_eee" >
-  </view>
+
+<view class="divider_eee"></view>
+<view class="divider_line"></view>
 <block wx:if="{{list}}" wx:for="{{list}}">
-  <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
-    <view class="avatar flex-item">
-      <image src="{{item.room.picurl[0]}}"></image>
-    </view>
-    <view class="chat-content flex-item">
-      <view class="chat-source">
-        <text class="chatmate">{{item.room.name}}</text>
-        <text class="lasttime">{{item.room.yyyymmdd}}</text>
+  <view class="container-relative">
+    <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
+      <view class="avatar flex-item">
+        <image src="{{item.room.picurl[0]}}"></image>
       </view>
-      <text class="chat-txt">{{item.room.desc}}</text>
-      <text wx:if="{{item.room.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.room.schooltype}}</text>
-      <text wx:if="{{item.room.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.room.schooltype}}</text>
-      <text wx:if="{{item.room.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.room.schooltype}}</text>
-      <text wx:if="{{item.room.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.room.schooltype}}</text>
-      <text wx:if="{{item.room.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.room.schooltype}}</text>
-      <text wx:if="{{item.room.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.room.schooltype}}</text>
-      <text  class="usercount">{{item.room.usercount}}位同学</text>
+      <view class="chat-content flex-item">
+        <view class="chat-source">
+          <text class="chatmate">{{item.room.name}}</text>
+          <text class="lasttime">{{item.room.yyyymmdd}}</text>
+        </view>
+        <text class="chat-txt">{{item.room.desc}}</text>
+        <text wx:if="{{item.room.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.room.schooltype}}</text>
+        <text wx:if="{{item.room.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.room.schooltype}}</text>
+        <text wx:if="{{item.room.schooltype==schooltypes_short[2]}}" class="schooltype schooltype2">{{item.room.schooltype}}</text>
+        <text wx:if="{{item.room.schooltype==schooltypes_short[3]}}" class="schooltype schooltype3">{{item.room.schooltype}}</text>
+        <text wx:if="{{item.room.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.room.schooltype}}</text>
+        <text wx:if="{{item.room.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.room.schooltype}}</text>
+        <text class="usercount">{{item.room.usercount}}位同学</text>
+      </view>
     </view>
+    <form wx:if="{{queue_count<5}}" class="itemform" report-submit="true" bindsubmit="showActionSheet">
+      <input class="form_bt" name="index" value="{{index}}" style="display:none;"  />
+      <button form-type="submit" class="form_bt" ></button>
+    </form>
   </view>
 </block>
-<view class="divider_eee" >
-</view>
+<view class="divider_eee"></view>
 </scroll-view>
 <view wx:if="{{!student&&!showLoading}}" class="weui-msg">
 <view class="weui-msg__icon-area">

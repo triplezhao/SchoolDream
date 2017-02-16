@@ -4,6 +4,7 @@ const Student2Room = require('../../model/Student2Room');
 const utils = require('../../utils/util.js');
 
 var a = '1111111111111'
+
 Page({
   data: {
 
@@ -20,6 +21,7 @@ Page({
     list: [],
     schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
     jioned_room_map: {},
+    queue_count: 0,
   },
 
 
@@ -58,6 +60,9 @@ Page({
     // 页面渲染完成
   },
   onShow: function () {
+
+    var that = this;
+
     if (!getApp().globalData.logined_student) {
       return;
     }
@@ -67,6 +72,22 @@ Page({
       getApp().globalData.refesh_change_home = false;
       this.loadRooms();
     }
+
+
+    //加载我的通知总数
+    var query = new AV.Query('WxPushQueue');
+    query.equalTo('studentid', that.data.student.objectId);
+    query.equalTo('pushtype', 'newarticle');
+    query.count().then(function (count) {
+      console.log(count);
+      that.setData({
+        queue_count: count
+      });
+      that.hideLoading();
+    }, function (error) {
+      console.log(error);
+      that.hideLoading();
+    });
   },
   onHide: function () {
     // 页面隐藏
@@ -148,12 +169,10 @@ Page({
         that.setData({
           list: student2Rooms,
         })
-        
-        that.hideLoading();
 
-         console.log('is_from_share='+getApp().globalData.is_from_share);
+        console.log('is_from_share=' + getApp().globalData.is_from_share);
         if (getApp().globalData.is_from_share) {
-  
+
           getApp().globalData.is_from_share = false;
           wx.navigateTo({
             url: '../blackboard/blackboard'
@@ -167,6 +186,24 @@ Page({
       that.hideLoading();
       console.log(error);
     })
+  },
+
+  loadQueueCount: function () {
+    // var that = this;
+    // var query = new AV.Query('WxPushQueue');
+    // query.equalTo('studentid', student.objectId);
+    // query.equalTo('pushtype', 'newarticle');
+    // query.count().then(function (count) {
+
+    //   console.log(count);
+
+    //   that.setData({
+    //     queue_count: count
+    //   });
+
+    // }, function (error) {
+    //   console.log(count);
+    // });
   },
 
   enter2Room: function (student2room) {
@@ -183,38 +220,45 @@ Page({
 
   showActionSheet: function (e) {
 
-    var index = e.currentTarget.dataset.index;
+    // var index = e.currentTarget.dataset.index;
+    var index = '';
+    if (e.detail.formId) {
+      index = e.detail.value.index;
+    } else {
+      index = e.currentTarget.dataset.index;
+    }
+
+    var formId = e.detail.formId;
     console.log('点击了列表的：', index)
     var that = this;
     that.enter2Room(that.data.list[index]);
-    // wx.showActionSheet({
-    //   itemList: ['进入', '班级管理'],
-    //   success: function (res) {
-    //     if (!res.cancel) {
-    //       console.log(res.tapIndex)
-    //       switch (res.tapIndex) {
-    //         case 0:
-    //           that.enter2Room(that.data.list[index]);
-    //           break;
-    //         case 1:
-    //           //改全局内存
-    //           getApp().globalData.room_now = that.data.list[index];
-    //           wx.navigateTo({
-    //             url: '../roomsetting/roomsetting'
-    //           })
 
-    //           break;
-    //         case 2:
-    //           that.onShareAppMessage()
-    //           // that.showToast('真机分享不能用，通知好友使用搜索');
-    //           // wx.navigateTo({
-    //           //   url: '../invite/invite?invitecode=' + that.data.list[index].room.objectId
-    //           // })
-    //           break;
-    //       }
-    //     }
-    //   },
-    // })
+    if (formId && !isNaN(formId)) {
+      //获取openid,利用leancloud的云函数.https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数
+      //注册一个接收通知
+      var data = {
+        touser: getApp().globalData.logined_student.openid,
+        // template_id: "def",
+        page: "pages/home/home",
+        form_id: formId,
+        data: {}
+      }
+      var wxPushQueue = new AV.Object('WxPushQueue');
+      wxPushQueue.set('studentid', getApp().globalData.logined_student.objectId);//注册的人objectId
+      wxPushQueue.set('pushtype', 'newarticle');//注册一个 加入房间提醒，其他人加入房间后，我会收到一次推送消息
+      wxPushQueue.set('pushkey', that.data.list[index].room.objectId);//这种类型的key为房间id
+      wxPushQueue.set('pushdata', JSON.stringify(data));
+      wxPushQueue.save().then(function (res_wxPushQueue) {
+        console.log('wxPushQueue succ');
+
+      }, function (error) {
+        // 异常处理
+        console.log('error ', error);
+      });
+      //注册一个接收通知end
+    }
+
+
   },
 
   onShareAppMessage: function () {

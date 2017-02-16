@@ -2,6 +2,7 @@ const AV = require('../../utils/leancloud-storage');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
+const WxPushQueue = require('../../model/WxPushQueue');
 
 Page({
   data: {
@@ -98,7 +99,12 @@ Page({
   },
 
   //跳转到加入页面
+  // tapJionRoom: function (e) {
   tapJionRoom: function (e) {
+    console.log('form发生了submit事件，携带数据为：', e.detail.value);
+    // var content = e.detail.value.content;
+    var formId = e.detail.formId;
+    console.log('form发生了submit事件，携带数据为formId：', e.detail.formId);
 
     let that = this;
     if (!getApp().globalData.logined_student) {
@@ -189,6 +195,79 @@ Page({
                 getApp().globalData.refesh_change_home = true;
                 getApp().globalData.is_from_share = that.data.isshare;
                 getApp().globalData.room_now = res_newstudent2room;
+
+                //本地拼好，发到server
+                // {
+                //   "touser": "OPENID",  
+                //   "template_id": "TEMPLATE_ID", 
+                //   "page": "index",          
+                //   "form_id": "FORMID",         
+                //   "data": {
+                //       "keyword1": {
+                //           "value": "339208499", 
+                //           "color": "#173177"
+                //       }, 
+                //       "keyword2": {
+                //           "value": "2015年01月05日 12:30", 
+                //           "color": "#173177"
+                //       }, 
+                //       "keyword3": {
+                //           "value": "粤海喜来登酒店", 
+                //           "color": "#173177"
+                //       } , 
+                //       "keyword4": {
+                //           "value": "广州市天河区天河路208号", 
+                //           "color": "#173177"
+                //       } 
+                //   },
+                //   "emphasis_keyword": "keyword1.DATA" 
+                // }
+                //获取openid,利用leancloud的云函数.https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数
+                var paramsJson = {
+                  pushkey: res_room.id,
+                  pushtype: 'newstudent',
+                  template_id: "oAa6Ylf-8pdIHnj5uKKWj6fR63ZUL1eY1lHxHti3tIo",
+                  data: {
+                    keyword1: {
+                      value: that.data.nickname,
+                      color: "#173177"
+                    },
+                    keyword2: {
+                      value: that.data.nickname + "加入了班级:" + res_room.get("name"),
+                      color: "#173177"
+                    }
+                  }
+                };
+
+                getApp().sendtplsms_new_student(
+                  function (success) {
+                    //注册一个接收通知end
+                    var data = {
+                      touser: getApp().globalData.logined_student.openid,
+                      // template_id: "def",
+                      page: "pages/home/home",
+                      form_id: formId,
+                      data: {}
+                    }
+                    var wxPushQueue = new AV.Object('WxPushQueue');
+                    wxPushQueue.set('studentid', getApp().globalData.logined_student.objectId);//注册的人objectId
+                    wxPushQueue.set('pushtype', 'newstudent');//注册一个 加入房间提醒，其他人加入房间后，我会收到一次推送消息
+                    wxPushQueue.set('pushkey', res_room.id);//这种类型的key为房间id
+                    wxPushQueue.set('pushdata', JSON.stringify(data));
+                    wxPushQueue.save().then(function (res_wxPushQueue) {
+                      console.log('wxPushQueue succ');
+
+                    }, function (error) {
+                      // 异常处理
+                      console.log('error ', error);
+                    });
+                    //注册一个接收通知end
+                  },
+                  function (error) {
+                    // 异常处理
+                    console.log('error ', error);
+                  }
+                );
 
 
                 if (that.data.isshare) {
@@ -307,16 +386,16 @@ Page({
           getApp().globalData.is_from_share = that.data.isshare;
           getApp().globalData.room_now = student2room;
 
-            if (that.data.isshare) {
-              wx.redirectTo({
-                // url: '../blackboard/blackboard'
-                url: '/pages/home/home'
-              })
-            } else {
-              wx.redirectTo({
-                url: '../blackboard/blackboard'
-              })
-            }
+          if (that.data.isshare) {
+            wx.redirectTo({
+              // url: '../blackboard/blackboard'
+              url: '/pages/home/home'
+            })
+          } else {
+            wx.redirectTo({
+              url: '../blackboard/blackboard'
+            })
+          }
 
         }, 600);
       }

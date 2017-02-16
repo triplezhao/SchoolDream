@@ -353,6 +353,10 @@ page {
   padding-top: 8rpx;
   padding-bottom: 8rpx;
 }
+.divider_line{
+  background:#ebebeb;
+  height: 1px;
+}
 .divider_eee{
   background:#eee;
   padding-top: 10rpx;

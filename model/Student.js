@@ -3,14 +3,14 @@ const AV = require('../utils/leancloud-storage');
 
 class Student extends AV.Object {
     //  phone
-    // "openId": "OPENID",
-    // "nickName": "NICKNAME",
+    // "openid": "OPENID",
+    // "nickname": "NICKNAME",
     // "gender": GENDER,
     // "city": "CITY",
     // "province": "PROVINCE",
     // "country": "COUNTRY",
-    // "avatarUrl": "AVATARURL",
-    // "unionId": "UNIONID",
+    // "avatarurl": "AVATARURL",
+    // "unionid": "UNIONID",
 
     // set id(value) {
     //     this.set('id', value);

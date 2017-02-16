@@ -31,7 +31,9 @@
     </view>
     <view class="weui-cell"></view>
     <view class="weui-btn-area">
-      <button type="primary" bindtap="tapJionRoom">加入班级</button>
+      <form report-submit="true" bindsubmit="tapJionRoom">
+        <button form-type="submit" type="primary" >加入班级</button>
+      </form>
     </view>
   </view>
   <view wx:if="{{!student&&!showLoading}}" class="weui-msg">

@@ -53,7 +53,7 @@ Page({
       that.showToast('内容不能为空');
       return;
     }
-    if (content.length>300) {
+    if (content.length > 300) {
       that.showToast('内容不能超过300字');
       return;
     }
@@ -78,7 +78,7 @@ Page({
 
 
     let fileUrls = [];
-    if (!picPaths||picPaths.length==0) {
+    if (!picPaths || picPaths.length == 0) {
       //如果没有值
       let article = new Article();
       article.set('title', 'title');
@@ -162,6 +162,9 @@ Page({
         that.showToast('发布成功');
         getApp().globalData.refesh_change_blackboard = true;
         wx.navigateBack();
+
+       getApp().sendtplsms_new_article();
+
       } else {
         // 异常处理
         console.error('发布失败');
@@ -239,5 +242,5 @@ Page({
       title: toastMessage,
       duration: 1000
     })
-  },
+  }
 })

@@ -1,7 +1,6 @@
 const AV = require('./utils/leancloud-storage');
 const CONFIG = require('config');
 const Student = require('./model/Student');
-
 const weixinappId = 'wx34116c4aee4ca248';
 AV.init({
   // appId: 'bystxyLIuetNkwb2uGz9WYd1-gzGzoHsz',
@@ -16,7 +15,7 @@ const KEY_LOGINED_STUDENT = 'KEY_LOGINED_STUDENT';
 App({
 
   globalData: {
-    jioned_room_map:{},
+    jioned_room_map: {},
     logined_student: null,
     room_now: null,
     refesh_change_home: false,
@@ -92,10 +91,10 @@ App({
     try {
 
       that.weixinlogin((code, data) => {
-        console.log('收到回调', code+','+data);
+        console.log('收到回调', code + ',' + data);
         if (code == 0) {
-             cb(0, "登录失败");
-             return;
+          cb(0, "登录失败");
+          return;
         }
 
         //存储student到local
@@ -202,13 +201,78 @@ App({
       }).then((data) => {
         //成功
         console.log('服务器解密后 data: ', JSON.parse(data));
-        cb(1,JSON.parse(data));
+        cb(1, JSON.parse(data));
       }).catch((error) => {
         // 处理调用失败
         console.log("decode失败," + error);
         throw error;
         // cb('授权登录失败');
       });
+  },
+
+  sendtplsms_new_article: function(success,fail) {
+    var that = this;
+    var paramsJson = {
+      pushkey: that.globalData.room_now.room.objectId,
+      studentid: that.globalData.logined_student.objectId,
+      pushtype: 'newarticle',
+      template_id: "oAa6Ylf-8pdIHnj5uKKWj6fR63ZUL1eY1lHxHti3tIo",
+      data: {
+        keyword1: {
+          value: that.globalData.room_now.room.name,
+          color: "#173177"
+        },
+        keyword2: {
+          value: that.globalData.room_now.nickname + "发布了新内容",
+          color: "#173177"
+        }
+      }
+    };
+    AV.Cloud
+      .run('sendtplsms', paramsJson)
+      .then((res_sendtplsms) => {
+        // 调用成功，得到成功的应答 data
+        console.log('sendtplsms' + res_sendtplsms);
+        success(res_sendtplsms);
+      }).catch((error) => {
+        // 处理调用失败
+        console.log("sendtplsms失败," + error);
+        // cb('授权登录失败');
+        fail(error);
+      });
+  },
+
+  sendtplsms_new_student: function(success,fail) {
+    var that = this;
+    var paramsJson = {
+      pushkey: that.globalData.room_now.room.objectId,
+      studentid: that.globalData.logined_student.objectId,
+      pushtype: 'newstudent',
+      template_id: "oAa6Ylf-8pdIHnj5uKKWj6fR63ZUL1eY1lHxHti3tIo",
+      data: {
+        keyword1: {
+           value: that.globalData.room_now.room.name,
+          color: "#173177"
+        },
+        keyword2: {
+          value: that.globalData.room_now.nickname + "加入啦",
+          color: "#173177"
+        }
+      }
+    };
+    AV.Cloud
+      .run('sendtplsms', paramsJson)
+      .then((res_sendtplsms) => {
+        // 调用成功，得到成功的应答 data
+        console.log('sendtplsms' + res_sendtplsms);
+        success(res_sendtplsms);
+      }).catch((error) => {
+        // 处理调用失败
+        console.log("sendtplsms失败," + error);
+        // cb('授权登录失败');
+        fail(error);
+      });
+
   }
 
 })
