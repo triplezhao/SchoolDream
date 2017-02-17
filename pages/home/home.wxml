@@ -92,9 +92,9 @@
         <text class="usercount">{{item.room.usercount}}位同学</text>
       </view>
     </view>
-    <form wx:if="{{queue_count<5}}" class="itemform" report-submit="true" bindsubmit="showActionSheet">
+    <form wx:if="{{(!jioned_room_queue_map[item.room.objectId])||(jioned_room_queue_map[item.room.objectId]<5)}}" class="itemform" report-submit="true" bindsubmit="showActionSheet">
       <input class="form_bt" name="index" value="{{index}}" style="display:none;"  />
-      <button form-type="submit" class="form_bt" ></button>
+      <button form-type="submit" class="form_bt" >进入</button>
     </form>
   </view>
 </block>

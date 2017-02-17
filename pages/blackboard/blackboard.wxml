@@ -31,7 +31,7 @@
           </view>
           <!-- 如果有视频 -->
           <view class="answer-actions" wx:if="{{item.videourl}}">
-            <video style="max-width: 85vw;" src="{{item.videourl}}" danmu-list="{{item.danmulist}}"  enable-danmu danmu-btn ></video>
+            <video style="max-width: 90vw;" src="{{item.videourl}}" danmu-list="{{item.danmulist}}"  enable-danmu danmu-btn ></video>
           </view>
           <!-- 如果是多张图片 -->
           <view class="images-list" wx:if="{{item.pics.length>1}}">
@@ -41,7 +41,7 @@
           </view>
           <!-- 如果是1张图片 -->
           <view wx:if="{{item.pics.length==1}}">
-            <image class="images-image1" mode="aspectFill" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage">
+            <image class="images-image1" mode="aspectFit" src="{{item.pics[0]}}" data-src="{{item.pics[0]}}" bindtap="previewImage">
             
             </image>
           </view>

@@ -20,7 +20,8 @@ Page({
     student: null,
     list: [],
     schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
-    jioned_room_map: {},
+    jioned_room_map: {},//存储班级里匿名
+    jioned_room_queue_map: {},//存储每个班级的通知数
     queue_count: 0,
   },
 
@@ -43,7 +44,7 @@ Page({
     this.showLoading('加载中');
     setTimeout(() => {
       this.hideLoading();
-    }, 7000);
+    }, 15000);
     getApp().checkLoginStatus((code, data) => {
       if (code == 1) {
         this.setData({
@@ -73,21 +74,9 @@ Page({
       this.loadRooms();
     }
 
-
     //加载我的通知总数
-    var query = new AV.Query('WxPushQueue');
-    query.equalTo('studentid', that.data.student.objectId);
-    query.equalTo('pushtype', 'newarticle');
-    query.count().then(function (count) {
-      console.log(count);
-      that.setData({
-        queue_count: count
-      });
-      that.hideLoading();
-    }, function (error) {
-      console.log(error);
-      that.hideLoading();
-    });
+    that.loadQueueCount();
+
   },
   onHide: function () {
     // 页面隐藏
@@ -188,22 +177,30 @@ Page({
     })
   },
 
+  //加载每个房间的通知数
   loadQueueCount: function () {
-    // var that = this;
-    // var query = new AV.Query('WxPushQueue');
-    // query.equalTo('studentid', student.objectId);
-    // query.equalTo('pushtype', 'newarticle');
-    // query.count().then(function (count) {
-
-    //   console.log(count);
-
-    //   that.setData({
-    //     queue_count: count
-    //   });
-
-    // }, function (error) {
-    //   console.log(count);
-    // });
+    var that = this;
+    var query = new AV.Query('WxPushQueue');
+    query.equalTo('studentid', that.data.student.objectId);
+    query.equalTo('pushtype', 'newarticle');
+    query.find().then(function (results) {
+      console.log(results);
+      results.forEach(function (element) {
+        var pushkey = element.get('pushkey');
+        var counttmp = that.data.jioned_room_queue_map[pushkey];
+        if (!counttmp) {
+          counttmp = 0;
+        }
+        that.data.jioned_room_queue_map[pushkey] = counttmp + 1;
+      }, this);
+      that.setData({
+        jioned_room_queue_map: that.data.jioned_room_queue_map,
+      });
+      that.hideLoading();
+    }, function (error) {
+      console.log(error);
+      that.hideLoading();
+    });
   },
 
   enter2Room: function (student2room) {

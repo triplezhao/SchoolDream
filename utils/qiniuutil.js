@@ -13,13 +13,8 @@ module.exports = {
         downloadUrl = 'https://' + downloadUrl.split('//')[1];
 
         return downloadUrl;
-    },
-    getImageUrl(pickey) {
-        return qiniuurl + pickey;
-    },
-    getUploadUrl() {
-        return qiniuupurl;
-    },
+    }
+   
 
 };
 
