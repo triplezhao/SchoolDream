@@ -12,6 +12,7 @@ class Article extends AV.Object {
     // zans[]    
     // zannum    云函数处理
     // commentnum  云函数处理
+    // fromtype  0 代表系统建立，1代表用户
 
     //云端处理不了 array，在评论的时候，是评论保存之后，这时候的文章只是个指针，无法获取到当前文章的obj。就没法增加数组。
    

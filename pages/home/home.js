@@ -22,6 +22,7 @@ Page({
     schooltypes_short: ['大学', '高中', '初中', '小学', '幼儿园', '其他'],
     jioned_room_map: {},//存储班级里匿名
     jioned_room_queue_map: {},//存储每个班级的通知数
+    jioned_room_unreadcount_map: {},//存储每个班级的通知数
     queue_count: 0,
   },
 
@@ -141,6 +142,7 @@ Page({
           // scm=JSON.parse(JSON.stringify(room));
           // getApp().globalData.jioned_room_map[room.objectId] = scm;
           that.data.jioned_room_map[room.objectId] = scm;
+          that.data.jioned_room_unreadcount_map[room.objectId] = 0;
           getApp().globalData.jioned_room_map = that.data.jioned_room_map;
           // scm=JSON.parse(JSON.stringify(scm)); 不起作用，去外面用数组的JSON.parse
           // scm=scm.toJSON();不起作用， 踏实用JSON.parse吧
@@ -153,7 +155,7 @@ Page({
 
         console.log('after JSON.parse', student2Rooms);
 
-
+        that.loadUnreadCount(student2Rooms, 0);
         //更新界面
         that.setData({
           list: student2Rooms,
@@ -193,6 +195,8 @@ Page({
         }
         that.data.jioned_room_queue_map[pushkey] = counttmp + 1;
       }, this);
+
+      console.log(that.data.jioned_room_queue_map);
       that.setData({
         jioned_room_queue_map: that.data.jioned_room_queue_map,
       });
@@ -203,14 +207,70 @@ Page({
     });
   },
 
+
+  //加载每个房间的未读数
+  loadUnreadCount: function (student2rooms, i, onlyone) {
+    var that = this;
+    var element = student2rooms[i];
+    var roomid = element.room.objectId;
+    var room = AV.Object.createWithoutData('Room', roomid);
+    var lasttime = element.lasttime;
+    console.log(lasttime);
+    console.log(new Date(lasttime));
+    console.log(element.room.updatedAt);
+    var query = new AV.Query('Article');
+    query.equalTo('room', room);
+    query.greaterThan('updatedAt', new Date(lasttime));
+    query.count().then(function (count) {
+      console.log('roomid=' + roomid + '，unreadcount=' + count);
+      that.data.jioned_room_unreadcount_map[roomid] = count;
+      that.setData({
+        jioned_room_unreadcount_map: that.data.jioned_room_unreadcount_map,
+      });
+      if (onlyone) {
+        return;
+      }
+      i++;
+      if (i < student2rooms.length) {
+        that.loadUnreadCount(student2rooms, i);
+      }
+    }, function (error) {
+      if (onlyone) {
+        return;
+      }
+      i++;
+      console.log(error);
+      if (i < student2rooms.length) {
+        that.loadUnreadCount(student2rooms, i);
+      }
+    });
+
+  },
+
   enter2Room: function (student2room) {
     var that = this;
     //改全局内存
     getApp().globalData.room_now = student2room;
+    // getApp().globalData.room_now.lasttime=Date.parse(new Date());
 
     wx.navigateTo({
       url: '../blackboard/blackboard'
     })
+
+  },
+
+  updateUnreadCount: function (student2rooms, index) {
+    var that = this;
+    var student2room = AV.Object.createWithoutData('Student2Room', that.data.list[index].objectId);
+    student2room.set('lasttime', Date.parse(new Date()));
+    student2room.fetchWhenSave(true);
+    student2room.save().then(function (student2room) {
+      // 使用了 fetchWhenSave 选项，save 成功之后即可得到最新的 views 值
+      that.data.list[index].lasttime = student2room.get('lasttime');
+      that.loadUnreadCount(that.data.list, index, true);
+    }, function (error) {
+      // 异常处理
+    });
 
   },
 
@@ -229,6 +289,9 @@ Page({
     console.log('点击了列表的：', index)
     var that = this;
     that.enter2Room(that.data.list[index]);
+
+    that.updateUnreadCount(that.data.list, index);
+
 
     if (formId && !isNaN(formId)) {
       //获取openid,利用leancloud的云函数.https://leancloud.cn/docs/leanengine_cloudfunction_guide-node.html#Hook_函数

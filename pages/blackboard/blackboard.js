@@ -243,6 +243,7 @@ Page({
         console.log('maxtime', maxtime);
         console.log('that.data.maxtime', that.data.maxtime);
 
+        
         //更新界面
         that.setData({
           // 拼接数组

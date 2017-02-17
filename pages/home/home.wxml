@@ -76,12 +76,15 @@
     <view class="chat-item flex-wrp " bindtap="showActionSheet" data-index="{{index}}">
       <view class="avatar flex-item">
         <image src="{{item.room.picurl[0]}}"></image>
+        
       </view>
       <view class="chat-content flex-item">
         <view class="chat-source">
+         
           <text class="chatmate">{{item.room.name}}</text>
           <text class="lasttime">{{item.room.yyyymmdd}}</text>
         </view>
+        
         <text class="chat-txt">{{item.room.desc}}</text>
         <text wx:if="{{item.room.schooltype==schooltypes_short[0]}}" class="schooltype schooltype0">{{item.room.schooltype}}</text>
         <text wx:if="{{item.room.schooltype==schooltypes_short[1]}}" class="schooltype schooltype1">{{item.room.schooltype}}</text>
@@ -90,9 +93,10 @@
         <text wx:if="{{item.room.schooltype==schooltypes_short[4]}}" class="schooltype schooltype4">{{item.room.schooltype}}</text>
         <text wx:if="{{item.room.schooltype==schooltypes_short[5]}}" class="schooltype schooltype5">{{item.room.schooltype}}</text>
         <text class="usercount">{{item.room.usercount}}位同学</text>
+        <text  wx:if="{{jioned_room_unreadcount_map[item.room.objectId]>0}}" class="unreadcount">{{jioned_room_unreadcount_map[item.room.objectId]}}未读</text>
       </view>
     </view>
-    <form wx:if="{{(!jioned_room_queue_map[item.room.objectId])||(jioned_room_queue_map[item.room.objectId]<5)}}" class="itemform" report-submit="true" bindsubmit="showActionSheet">
+    <form wx:if="{{(!jioned_room_queue_map[item.room.objectId])||(jioned_room_queue_map[item.room.objectId]<3)}}" class="itemform" report-submit="true" bindsubmit="showActionSheet">
       <input class="form_bt" name="index" value="{{index}}" style="display:none;"  />
       <button form-type="submit" class="form_bt" >进入</button>
     </form>
@@ -106,7 +110,7 @@
 </view>
 <view class="weui-msg__text-area">
   <view class="weui-msg__title">授权失败</view>
-  <view class="weui-msg__desc">需要您授权获取您的头像和昵称</view>
+  <view class="weui-msg__desc">需要授权头像和昵称</view>
 </view>
 <view class="weui-msg__opr-area">
   <view class="weui-btn-area">

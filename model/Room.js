@@ -14,6 +14,7 @@ class Room extends AV.Object {
     // teacher
     // question
     // answer
+    // usercount 班级人数
 
     
     // set name(value) {

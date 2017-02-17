@@ -7,7 +7,7 @@ class Student2Room extends AV.Object {
 
     // student Pointer
     // room Pointer
-
+    // lasttime  Date var testDate = new Date('2016-06-04'); 最后一次查看的时间，区别ts，使用的是date类型
 
     // set nickname(value) {
     //     this.set('nickname', value);

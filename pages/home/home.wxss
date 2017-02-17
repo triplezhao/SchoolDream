@@ -119,15 +119,44 @@
   font-size: 22rpx;
   line-height: 26rpx;
 }
-.chat-item .chat-content  .schooltype{
-  flex: 1;
-  font-size: 20rpx;
+.unreadcount {
+   flex: 1;
+  font-size: 22rpx;
   float: right;
   vertical-align: text-bottom;
 
-  height: 30rpx;
+  line-height: 26rpx;
   border-radius: 5rpx;
   color: white;
+  padding: 5rpx;
+  margin: 0rpx 5rpx;
+  background-color: red;
+
+}
+.usercount {
+  flex: 1;
+  font-size: 22rpx;
+  float: right;
+  vertical-align: text-bottom;
+
+  line-height: 26rpx;
+  border-radius: 5rpx;
+  color: white;
+  padding: 5rpx;
+  margin: 0rpx 5rpx;
+  background-color: slateblue;
+
+}
+.schooltype{
+  flex: 1;
+  font-size: 22rpx;
+  float: right;
+  vertical-align: text-bottom;
+
+  line-height: 26rpx;
+  border-radius: 5rpx;
+  color: white;
+  margin: 0rpx 0rpx 0 5rpx;
   padding: 5rpx;
 }
 .schooltype0{
@@ -143,7 +172,7 @@
   background-color: saddlebrown;
 }
 .schooltype4{
-  background-color: slateblue;
+  background-color: green;
 }
 .schooltype5{
   background-color: darkblue;
@@ -167,19 +196,7 @@
   font-size: 60rpx;
 }
 
-.usercount{
-  flex: 1;
-  font-size: 20rpx;
-  float: right;
-  vertical-align: text-bottom;
 
-  height: 30rpx;
-  border-radius: 5rpx;
-  color: white;
-  padding: 5rpx;
-  margin: 0rpx 5rpx;
-  background-color: green;
-}
 .container-relative {
   position: relative;
   
