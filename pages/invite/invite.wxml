@@ -1,9 +1,0 @@
-<view class="container">
-  <view class="textContainer">
-     <text class="textStyle  ">复制下面的邀请码，可用此码加入到这个班级</text>
-     <view class="b_gray">
-     <textarea  style="padding:10px;" auto-focus="true" value="{{code}}" auto-height="true"	  />
-     </view>
-  </view>
-</view>
-

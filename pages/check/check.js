@@ -67,16 +67,21 @@ Page({
     // }
 
   },
-
+  playVoice: function (e) {
+    Player.playVoice(this, e);
+  },
+  pauseVoice: function (e) {
+    Player.pauseVoice(this, e);
+  },
+  stopVoice: function (e) {
+    Player.stopVoice(this, e);
+  },
   onReady: function () {
     // 页面渲染完成
     console.log("onReady");
     // this.onShow();
   },
   onShow: function () {
-
-
-
 
   },
   onHide: function () {

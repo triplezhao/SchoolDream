@@ -211,7 +211,13 @@ App({
   },
 
   sendtplsms_new_article: function(success,fail) {
+    
     var that = this;
+
+    var nickname=that.globalData.room_now.nickname;
+    if(!nickname){
+        that.globalData.room_now.student.nickName;
+    }
     var paramsJson = {
       pushkey: that.globalData.room_now.room.objectId,
       studentid: that.globalData.logined_student.objectId,
@@ -223,7 +229,7 @@ App({
           color: "#173177"
         },
         keyword2: {
-          value: that.globalData.room_now.nickname + "发布了新内容",
+          value: nickname+ "发布了新内容",
           color: "#173177"
         }
       }

@@ -150,6 +150,7 @@ Page({
         that.showToast('发布成功');
         getApp().globalData.refesh_change_blackboard = true;
         wx.navigateBack();
+         getApp().sendtplsms_new_article();
       } else {
         // 异常处理
         console.error('发布失败: ' + error.message);

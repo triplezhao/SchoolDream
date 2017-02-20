@@ -10,8 +10,7 @@
     "pages/createvoice/createvoice",
     "pages/createvideo/createvideo",
     "pages/jionroom/jionroom",
-    "pages/check/check",
-    "pages/invite/invite"
+    "pages/check/check"
   ],
 
    "window":{

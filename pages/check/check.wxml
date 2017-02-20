@@ -1,8 +1,8 @@
 <view class="container-relative">
   <view class="container-absolute">
 
-  <view class="container" wx:if="{{list}}" scroll-y="true" bindscrolltolower="bindscrolltolower"
-        bindscrolltoupper="bindscrolltoupper" style="height: 100vh;">
+  <scroll-view class="container" wx:if="{{list}}" scroll-y="true" bindscrolltolower="onPullDownRefresh"
+        bindscrolltoupper="onReachBottom" style="height: 100vh;">
     <block wx:for="{{list}}" wx:for-index="idx" wx:for-item="item" data-idx="{{idx}}">
       <view class="feed-item">
         <!-- 作者信息 -->
@@ -74,7 +74,7 @@
     <view wx:if="{{!hasMore&&!showLoading}}" class="weui-loadmore weui-loadmore_line">
       <view class="weui-loadmore__tips weui-loadmore__tips_in-line">到底了别拉了</view>
     </view>
-  </view>
+  </scroll-view>
   <!--<loading wx:if="{{showLoading}}" bindchange="hideLoading">
   {{loadingMessage}}</loading>
   -->
