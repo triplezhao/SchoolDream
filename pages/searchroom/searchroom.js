@@ -7,6 +7,9 @@ const Area = require('../../data/area.js');
 const pageSize = 30;
 Page({
   data: {
+    // 是否进行内容审查
+    assessor: false,
+
     // 是否显示loading
     showLoading: false,
     // loading提示语
@@ -47,8 +50,12 @@ Page({
   onLoad: function (options) {
     console.log('onLoad', 'searchroom');
     // 页面初始化 options为页面跳转所带来的参数
+    let that = this;
+    that.data.assessor = (options.assessor == "true");
+
     wx.hideNavigationBarLoading();
     this.setData({
+      assessor: that.data.assessor,
       student: getApp().globalData.logined_student,
       jioned_room_map: getApp().globalData.jioned_room_map
     })
@@ -280,6 +287,11 @@ Page({
     let that = this;
     let room = e.currentTarget.dataset.obj;
 
+    if (that.data.assessor) {
+      that.enter2Room(e);
+      return;
+    }
+
     if (this.data.jioned_room_map[room.objectId]) {
       this.showToast("您已经加入这个班级");
       that.enter2Room(e);
@@ -291,18 +303,22 @@ Page({
     })
   },
 
- enter2Room: function (e) {
-   let that = this;
+  enter2Room: function (e) {
+    let that = this;
     let room = e.currentTarget.dataset.obj;
     //改全局内存
-    
+
     getApp().globalData.room_now = {
-        room:room,
-        student:that.data.student,
+      room: room,
+      student: that.data.student,
     }
 
+    // if(that.data.assessor){
+    //   that.enter2Room(e);
+    //   return;
+    // }
     wx.navigateTo({
-      url: '../blackboard/blackboard'
+      url: '../blackboard/blackboard?assessor=' + that.data.assessor
     })
 
   },

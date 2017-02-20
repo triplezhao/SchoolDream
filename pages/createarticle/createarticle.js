@@ -3,6 +3,8 @@ const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
 const Article = require('../../model/Article');
+const utils = require('../../utils/util');
+const config = require('../../config');
 
 Page({
   data: {
@@ -48,6 +50,12 @@ Page({
 
     var content = e.detail.value.content;
     var picPaths = that.data.tempFilePaths;
+
+    //如果不是当天或者，当前发送次数小于
+    if (utils.isToday(getApp().globalData.logined_student.lastsendedtime)&&getApp().globalData.logined_student.todaysended>config.onedaymax) {
+      that.showToast('今天发布次数达到上限');
+      return;
+    }
 
     if (!content) {
       that.showToast('内容不能为空');
@@ -153,7 +161,6 @@ Page({
 
     var room = AV.Object.createWithoutData('Room', getApp().globalData.room_now.room.objectId);
     article.set('room', room);
-
     article.save().then(function (res) {
       // 成功保存之后，执行其他逻辑.
       that.hideLoading();
@@ -163,7 +170,11 @@ Page({
         getApp().globalData.refesh_change_blackboard = true;
         wx.navigateBack();
 
-       getApp().sendtplsms_new_article();
+        //触发动态更新通知
+        getApp().sendtplsms_new_article();
+        //更新24小时内的发送数
+        getApp().updateUserSended();
+       
 
       } else {
         // 异常处理

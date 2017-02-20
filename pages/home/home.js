@@ -52,6 +52,9 @@ Page({
           student: data,
         });
         this.loadRooms();
+
+
+
       } else {
         console.log('studentLogin', data);
         this.hideLoading();
@@ -77,6 +80,7 @@ Page({
 
     //加载我的通知总数
     that.loadQueueCount();
+    that.fetchUser(getApp().globalData.logined_student);
 
   },
   onHide: function () {
@@ -259,6 +263,22 @@ Page({
 
   },
 
+  fetchUser: function (studentdata) {
+    var that = this;
+    // 第一个参数是 className，第二个参数是 objectId
+    var student = AV.Object.createWithoutData('Student', studentdata.objectId);
+    student.fetch().then(function (res) {
+      getApp().globalData.logined_student.todaysended = res.get('todaysended');// 读取 今天的发送数
+      getApp().globalData.logined_student.lastsendedtime = res.get('lastsendedtime');// 读取发送时间
+      getApp().saveStudent2Local(getApp().globalData.logined_student);
+      that.setData({
+        student:getApp().globalData.logined_student
+      })
+    }, function (error) {
+      // 异常处理
+    });
+  },
+
   updateUnreadCount: function (student2rooms, index) {
     var that = this;
     var student2room = AV.Object.createWithoutData('Student2Room', that.data.list[index].objectId);
@@ -346,8 +366,33 @@ Page({
   },
   //搜索班级页面
   tapCheck: function () {
-    wx.navigateTo({
-      url: '../check/check'
+
+
+    wx.showActionSheet({
+      itemList: ['内容列表', '房间列表', '清空限制'],
+      // itemList: ['点赞', '评论'],
+      success: function (res) {
+        if (!res.cancel) {
+          console.log(res.tapIndex)
+          switch (res.tapIndex) {
+            case 0:
+              wx.navigateTo({
+                url: '../check/check'
+              })
+              break;
+            case 1:
+              wx.navigateTo({
+                url: '../searchroom/searchroom?assessor=true'
+              })
+              break;
+            case 2:
+              //清除发帖条数限制
+              getApp().updateUserSended(true);
+              
+              break;
+          }
+        }
+      },
     })
 
   },

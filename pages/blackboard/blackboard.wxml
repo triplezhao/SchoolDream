@@ -48,7 +48,7 @@
           <!-- 赞评论数展示 -->
           <view class="answer-actions">
             <text>{{item.zannum}}赞 • {{item.commentnum}}评论</text>
-            <text class="del-bt" wx:if="{{item.creater.objectId==student.objectId}}" style="color:#576b95;" data-index="{{idx}}"
+            <text class="del-bt" wx:if="{{item.creater.objectId==student.objectId||assessor}}" style="color:#576b95;" data-index="{{idx}}"
                   bindtap="delArticle">删除</text>
             <image class="commentbt" src="../../image/comment.png" data-index="{{idx}}" bindtap="showActionSheet"></image>
           </view>

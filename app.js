@@ -1,6 +1,7 @@
 const AV = require('./utils/leancloud-storage');
 const CONFIG = require('config');
 const Student = require('./model/Student');
+const utils = require('./utils/util');
 const weixinappId = 'wx34116c4aee4ca248';
 AV.init({
   // appId: 'bystxyLIuetNkwb2uGz9WYd1-gzGzoHsz',
@@ -78,6 +79,7 @@ App({
       var student = that.getStudentInfoFromLocal();
       this.globalData.logined_student = student;
       cb(1, student);
+
     } else {
       that.studentLogin(cb);
     }
@@ -210,13 +212,13 @@ App({
       });
   },
 
-  sendtplsms_new_article: function(success,fail) {
-    
+  sendtplsms_new_article: function (success, fail) {
+
     var that = this;
 
-    var nickname=that.globalData.room_now.nickname;
-    if(!nickname){
-        that.globalData.room_now.student.nickName;
+    var nickname = that.globalData.room_now.nickname;
+    if (!nickname) {
+      that.globalData.room_now.student.nickName;
     }
     var paramsJson = {
       pushkey: that.globalData.room_now.room.objectId,
@@ -229,7 +231,7 @@ App({
           color: "#173177"
         },
         keyword2: {
-          value: nickname+ "发布了新内容",
+          value: nickname + "发布了新内容",
           color: "#173177"
         }
       }
@@ -248,7 +250,7 @@ App({
       });
   },
 
-  sendtplsms_new_student: function(success,fail) {
+  sendtplsms_new_student: function (success, fail) {
     var that = this;
     var paramsJson = {
       pushkey: that.globalData.room_now.room.objectId,
@@ -257,7 +259,7 @@ App({
       template_id: "oAa6Ylf-8pdIHnj5uKKWj6fR63ZUL1eY1lHxHti3tIo",
       data: {
         keyword1: {
-           value: that.globalData.room_now.room.name,
+          value: that.globalData.room_now.room.name,
           color: "#173177"
         },
         keyword2: {
@@ -279,6 +281,38 @@ App({
         fail(error);
       });
 
+  },
+  updateUserSended: function (isClear) {
+    var that = this;
+    var creater = AV.Object.createWithoutData('Student', that.globalData.logined_student.objectId);
+    //如果是24小时内之前发送的,则更新累加发送条数，但是不更新最后发送时间。
+    if (!isClear&&utils.isToday(that.globalData.logined_student.lastsendedtime)) {
+      //更新登录用户的当天发帖次数
+      creater.increment('todaysended', 1);
+      // creater.set('lastsendedtime', Date.parse(new Date()));
+      creater.fetchWhenSave(true);
+      creater.save().then(function (res) {
+        that.globalData.logined_student.todaysended = res.get('todaysended');
+        // that.globalData.logined_student.lastsendedtime= res.get('lastsendedtime');
+        console.log('todaysended succ: ' + res.get('todaysended'));
+      }, function (error) {
+        // 异常处理
+        console.error('fale: ' + error);
+      })
+    } else {
+      //如果超过了24小时的，则清零次数和并且发送时间
+      creater.set('todaysended', 1);
+      creater.set('lastsendedtime', new Date());
+      creater.fetchWhenSave(true);
+      creater.save().then(function (res) {
+        that.globalData.logined_student.todaysended = res.get('todaysended');
+        that.globalData.logined_student.lastsendedtime = res.get('lastsendedtime');
+        console.log('todaysended succ: ' + res.get('todaysended'));
+      }, function (error) {
+        // 异常处理
+        console.error('fale: ' + error);
+      })
+    }
   }
 
 })

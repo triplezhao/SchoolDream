@@ -11,7 +11,8 @@ const pageSize = 10;
 // import { Player } from '../../template/player/player';
 Page({
   data: {
-
+    // 是否进行内容审查
+    assessor: false,
     inputShowed: false,
     isShowComment: false,
     inputVal: "",
@@ -61,6 +62,14 @@ Page({
     // if(options.roomid){
 
     // }
+    let that = this;
+
+    //如果是审查员来到这个班级查看
+    if (options.assessor) {
+      this.setData({
+        assessor : options.assessor == "true",
+      })
+    }
 
     this.setData({
       room_now: getApp().globalData.room_now,
@@ -68,7 +77,7 @@ Page({
     })
 
 
-    Player.load(this);
+    // Player.load(this);
 
     if (getApp().globalData.room_now) {
       this.refesh();
@@ -88,7 +97,7 @@ Page({
         title: '当前班级：' + getApp().globalData.room_now.room.name,
       });
       this.setData({
-        room_now:getApp().globalData.room_now
+        room_now: getApp().globalData.room_now
       })
       // 页面显示
       console.log("onShow");
@@ -193,7 +202,8 @@ Page({
     // 查询当前登录用户加入的room
     query.equalTo('room', room);
 
-    query.descending('createdAt');
+    // query.descending('createdAt');
+    query.descending('updatedAt');
     query.limit(pageSize);
     query.include('creater,comments,zans');
     // query.lessThanOrEqualTo('createdAt', new Date());
@@ -243,7 +253,7 @@ Page({
         console.log('maxtime', maxtime);
         console.log('that.data.maxtime', that.data.maxtime);
 
-        
+
         //更新界面
         that.setData({
           // 拼接数组
@@ -292,7 +302,7 @@ Page({
           results.forEach(function (scm, i, a) {
             scm.set('creater', JSON.parse(JSON.stringify(scm.get('creater'))));
             // scm.set('room', JSON.parse(JSON.stringify(scm.get('room'))));
-             scm.set('room', that.data.room_now.room);
+            scm.set('room', that.data.room_now.room);
 
 
             if (scm.get('comments')) {
@@ -382,14 +392,14 @@ Page({
     }
 
   },
-    tap_setting: function (e) {
+  tap_setting: function (e) {
     //可以统一到班级管理页面。 改班级封面，改昵称，改自己的头像。
     let that = this;
 
     //如果是管理员，则进入班级管理页面
-      wx.navigateTo({
-        url: '../roomsetting/roomsetting'
-      })
+    wx.navigateTo({
+      url: '../roomsetting/roomsetting'
+    })
 
   },
 
@@ -417,7 +427,7 @@ Page({
     wx.showNavigationBarLoading() //在标题栏中显示加载
     this.setData({ showLoading: true, loadingMessage: loadingMessage ? loadingMessage : '加载中' });
   },
-  
+
 
   // 隐藏loading提示
   hideLoading() {
@@ -677,7 +687,6 @@ Page({
   //点击发送按钮，先隐藏键盘/评论框，再发送评论数据
   delArticle: function (e) {
     var that = this;
-
 
     wx.showModal({
       title: '删除',

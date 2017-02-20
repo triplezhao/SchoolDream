@@ -72,6 +72,7 @@ Page({
   },
 
   loadStudents: function () {
+    wx.showNavigationBarLoading() //在标题栏中显示加载
     var that = this;
     // 查询Student2Room
     var query = new AV.Query('Student2Room');
@@ -104,20 +105,12 @@ Page({
           islogin: true,
         })
       }
+      wx.hideNavigationBarLoading(); //在标题栏中显示加载
     }, function (error) {
       console.log(error);
+      wx.hideNavigationBarLoading(); //在标题栏中显示加载
     });
   },
-  //跳转到加入页面
-  tapInvite: function () {
-    // var that = this;
-    // wx.navigateTo({
-    //   url: '../invite/invite?invitecode=' + getApp().globalData.room_now.room.objectId
-    // })
-    this.showToast('点击右上角的分享，将本班级发送给同学');
-
-  },
-
 
   //退出班级
   tapOutRoom: function (e) {
@@ -250,6 +243,61 @@ Page({
       current: current,
       urls: [current]
     })
+  },
+
+  //保存昵称点击成员头像事件
+  tapUserIcon: function (e) {
+    //这里的成员是  student2room
+    let that = this;
+    var current = e.currentTarget.dataset.src
+    var item = e.currentTarget.dataset.item;
+    console.log(item);
+
+    //如果当前登录是管理员。
+    if (that.data.student.objectId == item.room.creater.objectId) {
+      //如果点击的是自己，则只显示图像图片
+      if (item.student.objectId == that.data.student.objectId) {
+
+        that.previewImage(e);
+        return;
+      }
+      //当前登录时管理员，并且点击的是其他人，则提示是否踢出
+      wx.showModal({
+        title: '踢出操作',
+        content: '踢出这个同学吗',
+        success: function (res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+            that.showLoading("加载中");
+            var student2Room = AV.Object.createWithoutData('Student2Room', item.objectId);
+            student2Room.destroy().then(function (success) {
+              console.log(success);
+              // //更新班级人数
+              var room = AV.Object.createWithoutData('Room', item.room.objectId);
+              room.increment('usercount', -1);
+              room.save().then(function (res) {
+                // 成功
+                console.log('usercount ' + res);
+                that.loadStudents();
+
+              }, function (error) {
+                // 异常处理
+                console.log('error ', error);
+                that.hideLoading();
+              });
+
+            }, function (error) {
+              // 删除失败
+              that.hideLoading();
+              console.log(error);
+            });
+          }
+        }
+      })
+    } else {
+      that.previewImage(e);
+    }
+
   },
 
 

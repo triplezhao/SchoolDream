@@ -16,7 +16,7 @@ module.exports = {
       _this.setData({
         animationtime: i
       });
-    }, 500);
+    }, 800);
 
     that.setData({
       animationtime:0,

@@ -41,8 +41,29 @@ function getTs(stringTime) {
   return timestamp2;
 }
 
+function isToday(date) {
+  if(!date){
+    return false;
+  }
+  var today = new Date();
+   //获取从今天0点开始到现在的时间
+   var todayTime = today.getTime()%(1000*60*60*24);
+    //获取要判断的日期和现在时间的偏差
+   var offset = date.getTime() - today.getTime();
+    //获取要判断日期距离今天0点有多久
+   var dateTime = offset + todayTime;
+
+  if (dateTime < 0 || dateTime > 1000 * 60 * 60 * 24) {
+    return false;
+  } else {
+    return true;
+  }
+ 
+}
+
 module.exports = {
   yyyymmdd: yyyymmdd,
   formatTime: formatTime,
-  getTs: getTs
+  getTs: getTs,
+  isToday: isToday
 }
