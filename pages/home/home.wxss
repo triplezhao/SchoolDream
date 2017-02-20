@@ -21,7 +21,7 @@
   display: inline-block;
   width: 100rpx;
   height: 100rpx;
-  border-radius: 80rpx;
+  border-radius: 100rpx;
 }
 .user .user-info{
   flex: 5;
@@ -75,20 +75,21 @@
 .chat-item{
   width: 725rpx;
   background: #ffffff;
-  padding: 20rpx 20rpx 10rpx 0;
+  padding: 20rpx 20rpx 20rpx 0;
   border-bottom: solid 1px #ebebeb;
 }
 
 .chat-item  image{
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 5rpx;
 }
 .chat-item .avatar{
   flex: 1;
   display:flex;
-   justify-content: center;
-  align-items: center;
+  justify-content: center;
+  padding: 10rpx 0 0 0;
+  /*align-items: center;*/
 }
 .chat-item .chat-content{
   flex: 4;
@@ -100,7 +101,7 @@
 .chat-item .chat-content .chat-source{
   color: #666;
   font-size: 28rpx;
-  padding: 4rpx 0 8rpx 0;
+  padding: 10rpx 0 8rpx 0;
 }
 .chat-item .chat-content .chat-source .chatmate{
   font-size: 30rpx;
@@ -178,22 +179,25 @@
   background-color: darkblue;
 }
 .typesearch{
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 5rpx;
   background-color: green;
 
   color: white;
   font-size: 60rpx;
+  margin-left: 10rpx;
+  
 }
 .typecreate{
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 5rpx;
   background-color: red;
 
   color: white;
   font-size: 60rpx;
+  margin-left: 10rpx;
 }
 
 
