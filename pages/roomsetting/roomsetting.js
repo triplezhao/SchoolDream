@@ -277,6 +277,7 @@ Page({
               room.increment('usercount', -1);
               room.save().then(function (res) {
                 // 成功
+                getApp().globalData.room_now.room.usercount=res.get('usercount');
                 console.log('usercount ' + res);
                 that.loadStudents();
 
