@@ -4,12 +4,12 @@ const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
 const Article = require('../../model/Article');
-
+const utils = require('../../utils/util');
 var playTimeInterval
 
 Page({
   data: {
-
+    textcount: 0,
     // 是否显示loading
     showLoading: false,
     // loading提示语
@@ -64,11 +64,17 @@ Page({
     var content = e.detail.value.content;
     var picurl = that.data.tempFilePathsPic;
 
+    //如果不是当天或者，当前发送次数小于
+    if (utils.isToday(getApp().globalData.logined_student.lastsendedtime) && getApp().globalData.logined_student.todaysended > config.onedaymax) {
+      that.showToast('今天发布次数达到上限');
+      return;
+    }
+
     if (!content) {
       that.showToast('内容不能为空');
       return;
     }
-    if (content.length>300) {
+    if (content.length > 300) {
       that.showToast('内容不能超过300字');
       return;
     }
@@ -243,7 +249,10 @@ Page({
         that.showToast('发布成功');
         getApp().globalData.refesh_change_blackboard = true;
         wx.navigateBack();
-         getApp().sendtplsms_new_article();
+        //触发动态更新通知
+        getApp().sendtplsms_new_article();
+        //更新24小时内的发送数
+        getApp().updateUserSended();
       } else {
         // 异常处理
         console.error('发布失败: ' + error.message);
@@ -298,7 +307,7 @@ Page({
   },
 
   // 一下是录音代码
-  startRecord: function () {
+   startRecord: function () {
     var that = this
     this.setData({ recording: true })
 
@@ -475,4 +484,9 @@ Page({
       duration: 1000
     })
   },
+  bindKeyInput: function (e) {
+    this.setData({
+      textcount: e.detail.value.length
+    });
+  }
 })

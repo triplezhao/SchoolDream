@@ -1,19 +1,19 @@
 
   <view style="margin:5rpx;">
     <form bindsubmit="formSubmit" bindreset="formReset">
-      <view class="weui-cell weui-cell_input">
-        <view class="weui-cell__hd">
-          <view class="weui-label">内容:</view>
-        </view>
+      <view class="weui-cell">
         <view class="weui-cell__bd">
-          <input name="content" class="weui-input" bindinput="bindKeyInputName" placeholder="请输入内容"  />
+          <textarea name="content" class="weui-textarea" style="min-height: 5.3em" placeholder="这一刻的想法..."
+                    auto-height="true" maxlength="800" auto-focus="true" bindinput="bindKeyInput"  />
+          <view class="weui-textarea-counter">{{textcount}}/800</view>
         </view>
       </view>
+      
       <view class="weui-cell">
         <view class="weui-cell__bd">
           <view class="weui-uploader">
             <view class="weui-uploader__hd">
-              <view class="weui-uploader__title">图片上传</view>
+              <view class="weui-uploader__title">图片</view>
               <view class="weui-uploader__info">{{tempFilePaths.length}}/3（最多3张）</view>
             </view>
             <view class="weui-uploader__bd">
@@ -32,7 +32,7 @@
         </view>
       </view>
       <view class="weui-btn-area">
-        <button formType="submit" disabled="{{disabled}}" type="primary">提交</button>
+        <button formType="submit" disabled="{{disabled}}" type="primary">发送</button>
       </view>
     </form>
   </view>

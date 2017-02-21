@@ -64,7 +64,7 @@
 .page-body-wrapper {
   justify-content: space-between;
   flex-grow: 1;
-  margin-bottom: 100rpx;
+  margin-bottom: 20rpx;
 }
 .page-body-time {
   display: flex;

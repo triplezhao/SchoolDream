@@ -8,6 +8,7 @@ const config = require('../../config');
 
 Page({
   data: {
+    textcount: 0,
     text: "Page createarticle",
     tempFilePaths: [],
     disabled: false,
@@ -253,5 +254,10 @@ Page({
       title: toastMessage,
       duration: 1000
     })
+  },
+   bindKeyInput: function (e) {
+    this.setData({
+      textcount: e.detail.value.length
+    });
   }
 })

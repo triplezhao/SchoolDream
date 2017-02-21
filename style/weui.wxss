@@ -181,6 +181,7 @@ icon {
   background-color: #E64340;
 }
 .weui-textarea {
+  color:#333;
   display: block;
   width: 100%;
 }
