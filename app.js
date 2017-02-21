@@ -218,7 +218,7 @@ App({
 
     var nickname = that.globalData.room_now.nickname;
     if (!nickname) {
-      that.globalData.room_now.student.nickName;
+      nickName=that.globalData.room_now.student.nickName;
     }
     var paramsJson = {
       pushkey: that.globalData.room_now.room.objectId,
@@ -252,6 +252,10 @@ App({
 
   sendtplsms_new_student: function (success, fail) {
     var that = this;
+     var nickname = that.globalData.room_now.nickname;
+    if (!nickname) {
+      nickName=that.globalData.room_now.student.nickName;
+    }
     var paramsJson = {
       pushkey: that.globalData.room_now.room.objectId,
       studentid: that.globalData.logined_student.objectId,
@@ -263,7 +267,7 @@ App({
           color: "#173177"
         },
         keyword2: {
-          value: that.globalData.room_now.nickname + "加入啦",
+          value: nickName + "加入啦",
           color: "#173177"
         }
       }
