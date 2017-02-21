@@ -62,8 +62,8 @@ Page({
       that.showToast('内容不能为空');
       return;
     }
-    if (content.length > 300) {
-      that.showToast('内容不能超过300字');
+    if (content.length > config.textmax) {
+      that.showToast('内容不能超过'+textmax+'字');
       return;
     }
     // if (!picPaths) {

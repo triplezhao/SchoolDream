@@ -94,7 +94,7 @@ Page({
 
     if (getApp().globalData.room_now) {
       wx.setNavigationBarTitle({
-        title: '当前班级：' + getApp().globalData.room_now.room.name,
+        title: '黑板报：' + getApp().globalData.room_now.room.name,
       });
       this.setData({
         room_now: getApp().globalData.room_now

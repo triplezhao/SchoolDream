@@ -5,6 +5,7 @@ const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
 const Article = require('../../model/Article');
 const utils = require('../../utils/util');
+const config = require('../../config');
 var playTimeInterval
 
 Page({
@@ -62,8 +63,8 @@ Page({
       that.showToast('内容不能为空');
       return;
     }
-    if (content.length > 300) {
-      that.showToast('内容不能超过300字');
+    if (content.length > config.textmax) {
+      that.showToast('内容不能超过'+textmax+'字');
       return;
     }
     if (!that.data.tempFilePath_video) {
