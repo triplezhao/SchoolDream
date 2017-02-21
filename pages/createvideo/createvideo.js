@@ -59,9 +59,11 @@ Page({
       return;
     }
 
+    
     if (!content) {
-      that.showToast('内容不能为空');
-      return;
+      // that.showToast('内容不能为空');
+      // return;
+      content = '';
     }
     if (content.length > config.textmax) {
       that.showToast('内容不能超过'+textmax+'字');
