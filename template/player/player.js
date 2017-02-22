@@ -70,7 +70,7 @@ module.exports = {
       success: function (download_res) {
         console.log(download_res);
 
-        that.data.voiceurlmap[QN.base64encode(httpsurl)] = download_res.tempFilePath;
+        
 
         if (that.data.playing == true && that.data.playingindex == index) {
           return;
@@ -86,14 +86,16 @@ module.exports = {
                 key: QN.base64encode(httpsurl),
                 data: savedFilePath
               })
+               //2.再播放
+            that.data.voiceurlmap[QN.base64encode(httpsurl)] = savedFilePath;
+            player_that.play(that, savedFilePath, index);
             } catch (e) {
 
             }
           }
         })
 
-        //2.再播放
-        player_that.play(that, download_res.tempFilePath, index);
+       
 
       },
       fail(error) {
