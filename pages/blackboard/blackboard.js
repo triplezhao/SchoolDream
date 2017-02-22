@@ -229,7 +229,7 @@ Page({
               scm.get('comments').forEach(function (cmt, i, a) {
                 danmulist[i] = {
                   text: cmt.content,
-                  color: '#ff0000',
+                  color: '#673ab7',
                   time: i
                 }
               });
