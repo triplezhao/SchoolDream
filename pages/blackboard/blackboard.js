@@ -67,7 +67,7 @@ Page({
     //如果是审查员来到这个班级查看
     if (options.assessor) {
       this.setData({
-        assessor : options.assessor == "true",
+        assessor: options.assessor == "true",
       })
     }
 
@@ -77,7 +77,7 @@ Page({
     })
 
 
-    // Player.load(this);
+    Player.load(this);
 
     if (getApp().globalData.room_now) {
       this.refesh();
@@ -880,3 +880,4 @@ function removeZan(zans, zanId) {
   }
   return false;
 }
+

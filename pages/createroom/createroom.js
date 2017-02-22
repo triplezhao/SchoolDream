@@ -3,7 +3,7 @@ const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
 const Room = require('../../model/Room');
 const Area = require('../../data/area.js');
-
+const utils = require('../../utils/util.js');
 Page({
   data: {
     // 是否显示loading
@@ -82,8 +82,8 @@ Page({
       var room = new Room();
       room.set('name', that.data.name);
       room.set('desc', that.data.desc);
-      room.set('picurl', [res.url()]);
-      room.set('coverurl', res.url());
+      room.set('picurl', [utils.getNoHttps(res.url())]);
+      room.set('coverurl', utils.getNoHttps(res.url()));
       room.set('province', that.data.selectedArea.prov);
       room.set('city', that.data.selectedArea.city);
       room.set('dist', that.data.selectedArea.dist);

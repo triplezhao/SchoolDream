@@ -8,18 +8,18 @@ module.exports = {
     let that = _this;
     let i = 1;
     animationInterval = setInterval(function () {
-      i++; 
-      if(i>65500){
-          i=0;
+      i++;
+      if (i > 65500) {
+        i = 0;
       }
-      i = i % 3;  
+      i = i % 3;
       _this.setData({
         animationtime: i
       });
     }, 800);
 
     that.setData({
-      animationtime:0,
+      animationtime: 0,
       playTime: 0,
       playingindex: -1,
       playing: false,
@@ -39,9 +39,25 @@ module.exports = {
     if (that.data.playing == true && that.data.playingindex == index) {
       return;
     }
+
+    //内存中如果有这个音频，直接播放
     if (that.data.voiceurlmap[QN.base64encode(httpsurl)]) {
       player_that.play(that, that.data.voiceurlmap[QN.base64encode(httpsurl)], index);
       return;
+    } else {
+      try {
+        var value = wx.getStorageSync(QN.base64encode(httpsurl));
+        //本地中如果有这个音频，直接播放
+        if (value) {
+          // Do something with return value
+          that.data.voiceurlmap[QN.base64encode(httpsurl)] = value;
+          player_that.play(that, that.data.voiceurlmap[QN.base64encode(httpsurl)], index);
+          return;
+        }
+      } catch (e) {
+        // Do something when catch error
+      }
+
     }
 
     that.setData({
@@ -59,6 +75,22 @@ module.exports = {
         if (that.data.playing == true && that.data.playingindex == index) {
           return;
         }
+
+        //存储到本地
+        wx.saveFile({
+          tempFilePath: download_res.tempFilePath,
+          success: function (res) {
+            var savedFilePath = res.savedFilePath;
+            try {
+              wx.setStorage({
+                key: QN.base64encode(httpsurl),
+                data: savedFilePath
+              })
+            } catch (e) {
+
+            }
+          }
+        })
 
         //2.再播放
         player_that.play(that, download_res.tempFilePath, index);
@@ -97,7 +129,7 @@ module.exports = {
         formatedPlayTime: util.formatTime(that.data.playTime)
       }
       )
-    }, 1000)
+    }, 500)
 
     setTimeout(() => {
       wx.playVoice({

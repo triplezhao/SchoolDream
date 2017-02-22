@@ -61,9 +61,20 @@ function isToday(date) {
  
 }
 
+function getNoHttps(httpsurl) {
+        // 1.构造下载 URL：
+        // DownloadUrl = 'http://78re52.com1.z0.glb.clouddn.com/resource/flower.jpg'
+        // oi2hoq4f7.qnssl.com 
+        console.log(httpsurl);
+        let nohttps = 'http://' + httpsurl.split('//')[1];
+
+        return nohttps;
+    }
+
 module.exports = {
   yyyymmdd: yyyymmdd,
   formatTime: formatTime,
   getTs: getTs,
-  isToday: isToday
+  isToday: isToday,
+  getNoHttps: getNoHttps
 }

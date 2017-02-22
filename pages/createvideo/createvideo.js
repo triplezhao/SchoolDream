@@ -1,4 +1,3 @@
-var util = require('../../utils/util.js')
 const AV = require('../../utils/leancloud-storage');
 const Student = require('../../model/Student');
 const Student2Room = require('../../model/Student2Room');
@@ -130,7 +129,7 @@ Page({
         article.set('content', content);
         // article.set('pics', that.data.tempFilePaths);
         // article.set('voiceurl', QN.getImageUrl(data.key));
-        article.set('videourl', res.url());
+        article.set('videourl', utils.getNoHttps(res.url()));
         that.save2Server(article);
       })
       .catch((error) => {

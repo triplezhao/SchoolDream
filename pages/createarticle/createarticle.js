@@ -58,9 +58,11 @@ Page({
       return;
     }
 
+    if (!content&&picPaths.length<1) {
+      that.showToast('内容不能为空');
+      return;
+    }
     if (!content) {
-      // that.showToast('内容不能为空');
-      // return;
       content = '';
     }
     if (content.length > config.textmax) {
@@ -104,7 +106,7 @@ Page({
       picfile.save()
         .then(res => {
           console.log(res);
-          fileUrls[0] = res.url();
+          fileUrls[0] = utils.getNoHttps(res.url());
 
           //如果大于1张，则继续去保存第二张
           if (1 < picPaths.length) {
@@ -119,7 +121,7 @@ Page({
         }).then(res => {
           if (res) {
             console.log(res);
-            fileUrls[1] = res.url();
+            fileUrls[1] = utils.getNoHttps(res.url());
           }
           //如果大于2张，则继续save
           if (2 < picPaths.length) {
@@ -134,7 +136,7 @@ Page({
           //如果是3张，则取值
           if (res) {
             console.log(res);
-            fileUrls[2] = res.url();
+            fileUrls[2] = utils.getNoHttps(res.url());
           }
           //如果没有值
           let article = new Article();
